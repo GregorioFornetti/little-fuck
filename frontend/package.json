@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "socket.io-client": "^4.7.4",
     "vue": "^3.4.15"
   },
   "devDependencies": {
