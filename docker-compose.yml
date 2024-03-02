@@ -1,0 +1,22 @@
+version: "3"
+services:
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        server_path: ${SERVER_PATH}
+        vite_server_path: ${SERVER_PATH}
+    command: "npm run start"
+    working_dir: /home/node/app/backend
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT}
+      SERVER_PATH: ${SERVER_PATH}
+      TZ: America/Sao_Paulo
+    expose:
+      - "${PORT}"
+    ports:
+      - "${PORT}:${PORT}"
+    restart: always

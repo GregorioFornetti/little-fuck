@@ -1,9 +1,16 @@
 <script setup lang="ts">
   import { io } from "socket.io-client"
 
-  const URL = process.env.NODE_ENV === "production" ? undefined : "http://localhost:3000";
-
-  const socket = io(URL)
+  const rootUrl: string = process.env.NODE_ENV === 'development' ?
+                        'localhost:3000' :
+                         window.location.host
+  const socket = io(
+    rootUrl, {
+      autoConnect: false,
+      path: `${import.meta.env.VITE_SERVER_PATH || ''}/socket.io/`
+    }
+  )
+  socket.connect()
 
   socket.on("message", (msg) => {
     alert(msg)
