@@ -41,3 +41,50 @@ Uma rodada consiste em todos os jogadores jogarem uma das suas cartas. Ao final 
 ### Partida especial (apenas uma carta)
 
 A partida com apenas uma carta é especial. Nessa partida, os jogadores não poderão ver as suas próprias cartas, mas poderão ver as cartas de todos os outros jogadores. Os palpites e a mesma mecânica se mantém, apenas essa visualização das cartas que é modificado nesse caso especial.
+
+## Instalação e execução
+
+Existem duas formas de executar o projeto, e cada uma com uma finalidade. Uma forma de execução é o modo produção, para colocar no ar o jogo para que o público possa jogar. A outra forma é desenvolvimento, para conseguir visualizar o resultado das modificações do código ao vivo.
+
+### Como executar - Modo produção
+
+Para subir o servidor, é preciso ter instalado o `Docker` e o `Docker Compose`. O docker disponibiliza um [tutorial para sua instalação](https://docs.docker.com/desktop/).
+
+Com tudo instalado, para colocar o jogo no ar em modo de produção, siga os passos abaixo:
+
+1 - Criar arquivo `.env`
+
+As principais variáveis que devem ser modificadas são:
+
+  - `SERVER_PATH`: endpoint para acessar o jogo. Para acessar a página, a URL final será: `<endereço_servidor>/<SERVER_PATH>`.
+  - `PORT`: porta em que toda a aplicação ficará exposta.
+
+2 - `docker-compose up`
+
+Esse comando irá subir o servidor no ar (esse comando funciona para o Windows, mas pode ser diferente para outro OS). Isso pode levar um tempo considerável, já que irá instalar todas as bibliotecas necessárias. Mas, uma vez feito isso, é esperado que não seja mais tão demorado para executar novamente.
+
+### Como executar - Modo desenvolvimento
+
+Para instalar as bibliotecas, é neceessário ter o Node.js instalado. Pode ser instalado pelo [próprio site do Node.js](https://nodejs.org/en).
+
+Com tudo instalado, para começar a desenvolver, siga os passos abaixo:
+
+1 - Na pasta `backend`, executar comando `npm install`
+
+Instalará as bibliotecas necessárias para subir o servidor do backend.
+
+2 - Na mesma pasta, executar comando `npm run dev`
+
+Este comando irá subir o servidor localmente, e sempre irá re-executar após alguma modificação dos arquivos do backend.
+Deixar esse terminal aberto e não cancelar a execução, caso contrário, o servidor irá cair.
+O servidor ficará exposto na porta 3000 (http://localhost:3000)
+
+3- Na pasta `frontend`, agora em outro terminal, executar o comando `npm install`
+
+Instalará as bibliotecas necessárias para subir o servidor do frontend.
+
+4 - Na mesma pasta, executar comando `npm run dev`
+
+Este comando irá subir o servidor localmente, e sempre irá re-executar após alguma modificação dos arquivos do frontend.
+Deixar esse terminal aberto e não cancelar a execução, caso contrário, o servidor irá cair.
+O servidor ficará exposto na porta 5173 (http://localhost:5173)
