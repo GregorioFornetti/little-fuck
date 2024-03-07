@@ -26,9 +26,51 @@ Abaixo, estão definidos todos os eventos que estão sendo utilizados no sistema
 
 ## Sala (Lobby)
 
+### create-lobby
+
+### join-lobby
+
+### join-lobby-success
+
+### join-lobby-error
+
+### player-join
+
+### logout
+
+### player-logout
+
+### ready
+
+### player-ready
+
+### unready
+
+### player-unready
+
+### start-game-request
+
+### start-game-error
+
+### reconnect
+
 ## Jogo (Game)
 
+### start-game
+
+### end-game
+
 ## Partida (Match)
+
+### start-match
+
+### win-rounds-number-response
+
+### win-rounds-number-update
+
+### win-rounds-number-error
+
+### end-match
 
 ## Rodada (Round)
 
