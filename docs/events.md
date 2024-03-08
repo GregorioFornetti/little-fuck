@@ -278,7 +278,7 @@ TEXTO
 
 ## Jogo (Game)
 
-TEXTO
+Um jogo completo de "Little Fuck" consiste de diversas partidas. Todos os jogadores iniciam com uma quantidade de vida, e vão perdendo elas ao decorrer das partidas. O jogo acaba quando restar apenas um jogador com vidas.
 
 ---
 
@@ -291,9 +291,11 @@ TEXTO
 
 ### start-game
 
+Servidor ----> Lobby (servidor envia para todos clientes do lobby)
+
 #### Descrição
 
-#### Parâmetros
+Evento indicando o início de um jogo completo de "Little Fuck"
 
 ---
 
@@ -307,9 +309,16 @@ TEXTO
 
 ### end-game
 
+Servidor ----> Lobby (servidor envia para todos clientes do lobby)
+
 #### Descrição
 
+Evento indicando o final de um jogo completo de "Little Fuck".
+
 #### Parâmetros
+
+- playersRanks: uma lista de strings de ids de jogadores ordenadas. A primeira posição é o jogador que ganhou (único sobrevivente), o segundo ficou na segunda posição (sendo o último a ser eliminado), até a última posição, a qual possui o id do último jogador (o primeiro a ser eliminado).
+
 
 ---
 
@@ -323,7 +332,7 @@ TEXTO
 
 ## Partida (Match)
 
-O jogo possui diversas partidas até que sobre apenas um jogador com vidas. No começo de cada partida, cartas aleatórias do baralho serão distribuídas aos jogadores. Na primeira partida, será distribuído apenas uma carta a cada um dos jogadores, na segunda partida, duas cartas, e assim por diante. Quando o número de cartas do baralho não for suficiente para entregar cartas para todos jogadores, voltará a ser distribuido apenas uma carta.
+No começo de cada partida, cartas aleatórias do baralho serão distribuídas aos jogadores. Na primeira partida, será distribuído apenas uma carta a cada um dos jogadores, na segunda partida, duas cartas, e assim por diante. Quando o número de cartas do baralho não for suficiente para entregar cartas para todos jogadores, voltará a ser distribuido apenas uma carta.
 
 No começo de cada partida, os jogadores verão as suas próprias cartas recebidas e deverão fazer os seus palpites. O palpite consiste em dizer quantas rodadas você acredita ganhar com as cartas que está em mão. Por exemplo, se você estiver com cartas “altas” (como alguma manilha), palpitar alguma vitória pode ser uma boa ideia. Agora, se você está com cartas “fracas”, poderá não ganhar muitas rodadas. Dependendo da sua posição na fila de palpites, você terá informação dos palpites dos outros jogadores, o que pode te ajudar a fazer o seu próprio palpite.
 
@@ -449,7 +458,7 @@ Servidor ----> Lobby (servidor envia para todos clientes do lobby)
 
 #### Descrição
 
-Evento enviado para indicar o fim da partida.
+Evento enviado para indicar o fim da partida. Uma partida acaba quando todos os jogadores já jogaram todas as suas cartas, ou seja, todas as rodadas dessa partida foram finalizadas, podendo atualizar as vidas dos jogadores dependendo das vitórias e palpites feitos.
 
 #### Parâmetros
 
@@ -622,7 +631,7 @@ Servidor ----> Lobby (servidor envia para todos clientes do lobby)
 
 #### Descrição
 
-Evento enviado para indicar o fim da rodada.
+Evento enviado para indicar o fim da rodada. Uma rodada acaba quando todos os jogadores já jogaram as suas cartas.
 
 #### Parâmetros
 
