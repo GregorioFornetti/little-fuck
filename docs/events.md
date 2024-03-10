@@ -40,9 +40,15 @@ TEXTO
 
 ### create-lobby
 
+Cliente ----> Servidor (cliente envia a mensagem ao servidor)
+
 #### Descrição
 
+Evento chamado quando um usuário deseja criar um lobby. O lobby é uma sala em que vários jogadores podem se conectar, a partir de um código. O jogador que criar a sala será o lider da mesma. Caso o usuário escolha um nome válido (com pelo menos um caractere) e ele mesmo não esteja em uma outra sala, este irá criar a sala, recebendo a mensgem `join-lobby-sucess`. Caso contrário, ocorrerá um erro, recebendo a mensagem `join-lobby-error`
+
 #### Parâmetros
+
+- name: string indicando o nome que o jogador deseja utilizar no jogo.
 
 ---
 
@@ -57,9 +63,17 @@ TEXTO
 
 ### join-lobby
 
+Cliente ----> Servidor (cliente envia a mensagem ao servidor)
+
 #### Descrição
 
+Evento chamado quando um usuário deseja se conectar a um lobby. O código do lobby é fornecido ao criador da sala, e precisa ser utilizado para a conexão dos outros jogadores na mesma sala. Caso o usuário escolha um nome válido (não igual a nenhum outro do lobby e com pelo menos um caractere), tente entrar em uma sala existente e que não esteja em jogo, e ele mesmo não esteja em uma outra sala, este irá entrar na sala, recebendo a mensgem `join-lobby-sucess`. Caso contrário, ocorrerá um erro, recebendo a mensagem `join-lobby-error`
+
 #### Parâmetros
+
+- lobbyId: string contendo o código (identificador) da sala a qual o jogador deseja se conectar
+
+- name: string indicando o nome que o jogador deseja utilizar no jogo.
 
 ---
 
@@ -74,9 +88,15 @@ TEXTO
 
 ### join-lobby-success
 
+Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
+
 #### Descrição
 
+Indica ao usuário que ele conseguiu entrar na sala.
+
 #### Parâmetros
+
+
 
 ---
 
@@ -91,9 +111,15 @@ TEXTO
 
 ### join-lobby-error
 
+Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
+
 #### Descrição
 
+Indica ao usuário que ocorreu algum erro ao entrar na sala (ou cria-la). Isso pode ocorrer devido à um nome inválido (nenhum caractere ou nome repetido) ou um lobby inexistente ou em partida.
+
 #### Parâmetros
+
+- type: "lobby-in-game" | "inexistent-lobby" | "no-name" | "repeated-name" | "player-already-in-lobby"
 
 ---
 
@@ -107,6 +133,8 @@ TEXTO
 
 
 ### player-join
+
+Servidor ----> Lobby (servidor envia para todos clientes do lobby)
 
 #### Descrição
 
@@ -125,6 +153,8 @@ TEXTO
 
 ### logout
 
+Cliente ----> Servidor (cliente envia a mensagem ao servidor)
+
 #### Descrição
 
 #### Parâmetros
@@ -141,6 +171,8 @@ TEXTO
 
 
 ### player-logout
+
+Servidor ----> Lobby (servidor envia para todos clientes do lobby)
 
 #### Descrição
 
@@ -159,9 +191,11 @@ TEXTO
 
 ### ready
 
+Cliente ----> Servidor (cliente envia a mensagem ao servidor)
+
 #### Descrição
 
-#### Parâmetros
+Evento enviado quando o jogador está preparado para começar a partida. Caso o jogador não estivesse preparado antes, e este esteja em uma sala de um jogo que ainda não está em andamento e não seja o líder, será atualizado o status desse jogador para todos os outros integrantes da sala (chamando o evento `player-ready`). Caso contrário, o erro será informado para o cliente pelo evento `player-ready-error`.
 
 ---
 
@@ -176,9 +210,36 @@ TEXTO
 
 ### player-ready
 
+Servidor ----> Lobby (servidor envia para todos clientes do lobby)
+
 #### Descrição
 
+Indica que um jogador acaba de ficar preparado para um jogo. Este evento só é acionado caso o jogador que solicitou o "ready" ainda não estivesse pronto.
+
 #### Parâmetros
+
+- player: string do id do jogador que acaba de ficar pronto.
+
+---
+
+
+
+
+
+
+
+
+### player-ready-error
+
+Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
+
+#### Descrição
+
+Evento enviado ao cliente que tentou se preparar para a partida, mas falhou. Isso pode acontecer quando este cliente não estiver em uma sala, ou a sala dele já está com um jogo em andamento. Outro motivo pode ser que o líder tente se preparar, mas este não precisa fazer isso, ele só precisa iniciar a partida. OBS: caso o jogador solicite a preparação e este já está preparado, nada deve acontecer (este evento não deve ser acionado)
+
+#### Parâmetros
+
+- type: "in-game" | "not-in-lobby" | "leader"
 
 ---
 
@@ -191,9 +252,14 @@ TEXTO
 
 
 
+
 ### unready
 
+Cliente ----> Servidor (cliente envia a mensagem ao servidor)
+
 #### Descrição
+
+Evento enviado quando o jogador está se despreparando para começar a partida. Caso o jogador não estivesse despreparado antes, e este esteja em uma sala de um jogo que ainda não está em andamento e não seja o líder, será atualizado o status desse jogador para todos os outros integrantes da sala (chamando o evento `player-unready`). Caso contrário, o erro será informado para o cliente pelo evento `player-unready-error`.
 
 #### Parâmetros
 
@@ -210,9 +276,37 @@ TEXTO
 
 ### player-unready
 
+Servidor ----> Lobby (servidor envia para todos clientes do lobby)
+
 #### Descrição
 
+Indica que um jogador acaba de ficar despreparado para um jogo. Este evento só é acionado caso o jogador que solicitou o "unready" ainda não estivesse despreparado.
+
 #### Parâmetros
+
+- player: string do id do jogador que acaba de ficar despreparado.
+
+---
+
+
+
+
+
+
+
+
+
+### player-unready-error
+
+Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
+
+#### Descrição
+
+Evento enviado ao cliente que tentou se despreparar para a partida, mas falhou. Isso pode acontecer quando este cliente não estiver em uma sala, ou a sala dele já está com um jogo em andamento. Outro motivo pode ser que o líder tente se despreparar, mas este não precisa fazer isso, ele só precisa iniciar a partida. OBS: caso o jogador solicite a despreparação e este já está despreparado, nada deve acontecer (este evento não deve ser acionado).
+
+#### Parâmetros
+
+- type: "in-game" | "not-in-lobby" | "leader"
 
 ---
 
@@ -226,6 +320,8 @@ TEXTO
 
 
 ### start-game-request
+
+Cliente ----> Servidor (cliente envia a mensagem ao servidor)
 
 #### Descrição
 
@@ -244,6 +340,8 @@ TEXTO
 
 ### start-game-error
 
+Servidor ----> Lobby (servidor envia para todos clientes do lobby)
+
 #### Descrição
 
 #### Parâmetros
@@ -260,6 +358,8 @@ TEXTO
 
 
 ### reconnect
+
+Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
 
 #### Descrição
 
