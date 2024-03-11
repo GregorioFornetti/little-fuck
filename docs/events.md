@@ -92,11 +92,22 @@ Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
 
 #### Descrição
 
-Indica ao usuário que ele conseguiu entrar na sala.
+Indica ao usuário que ele conseguiu entrar na sala. Este receberá uma lista de todos os outros jogadores da sala e suas informações. Logo após isso, será enviado para todos os outros jogadores o evento `player-join`, para que todos adicionem este jogador ao lobby também (incluindo ele mesmo).
 
 #### Parâmetros
 
-
+- playersInfo: lista de objetos com informações sobre os jogadores
+```javascript
+[
+    {
+        id: ..., // string - id do jogador
+        name: ..., // string - nome do jogador
+        leader: ..., // bool - verdadeiro se for o líder da sala
+        ready: ... // bool | null - true se o jogador estiver pronto. Pode ser null caso jogo esteja em andamento
+    } 
+    ...
+]
+```
 
 ---
 
@@ -138,7 +149,13 @@ Servidor ----> Lobby (servidor envia para todos clientes do lobby)
 
 #### Descrição
 
+Evento enviado para todos os jogadores indicando que um novo jogador entrou na sala. 
+
 #### Parâmetros
+
+- id: string contendo o id do jogador que acaba de entrar na sala
+
+- name: string contendo o nome do jogador que acaba de entrar na sala
 
 ---
 
@@ -157,7 +174,29 @@ Cliente ----> Servidor (cliente envia a mensagem ao servidor)
 
 #### Descrição
 
+Evento criado quando um jogador deseja sair de uma sala. O jogador sairá da sala caso ele esteja em uma, sendo enviado o evento `player-logout` (que será enviado para todos os outros da sala, para que removam ele da sala também), caso contrário será enviado o evento `logout-error` (apenas para o jogador que tentou sair).
+
+---
+
+
+
+
+
+
+
+
+
+### logout-error
+
+Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
+
+#### Descrição
+
+Evento indicando que ocorreu um erro ao sair de uma sala. Isso pode acontecer caso o cliente não estivesse em uma sala.
+
 #### Parâmetros
+
+- type: "not-in-lobby"
 
 ---
 
@@ -176,7 +215,11 @@ Servidor ----> Lobby (servidor envia para todos clientes do lobby)
 
 #### Descrição
 
+Evento indicando que um jogador acaba de sair da sala.
+
 #### Parâmetros
+
+- id: string indicando o jogador que saiu.
 
 ---
 
@@ -325,7 +368,7 @@ Cliente ----> Servidor (cliente envia a mensagem ao servidor)
 
 #### Descrição
 
-#### Parâmetros
+Evento para tentativa de inicio de jogo. Para que o jogo comece, é preciso que o solicitante esteja em uma sala que não esteja em andamento e seja o líder dela, além de que todos os jogadores precisam estar prontos. Caso todas essas condições sejam atendidas, o evento `start-game` será acionado, para que o jogo comece, caso contrário, será enviado ao solicitante o evento `start-game-error`
 
 ---
 
@@ -340,11 +383,15 @@ Cliente ----> Servidor (cliente envia a mensagem ao servidor)
 
 ### start-game-error
 
-Servidor ----> Lobby (servidor envia para todos clientes do lobby)
+Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
 
 #### Descrição
 
+Evento indicando que ocorreu um erro ao iniciar a partida. Esse erro pode ocorrer caso o solicitante não esteja em um sala, ou que está já está em jogo. Outro possível erro pode ocorrer caso ele não seja o líder ou se nem todos jogadores estão prontos para começar.
+
 #### Parâmetros
+
+- type: "not-leader" | "not-all-ready" | "not-in-lobby" | "already-in-game"
 
 ---
 
@@ -363,7 +410,66 @@ Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
 
 #### Descrição
 
+Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a conexão em algum momento, seja por causa de queda na internet, ou por ter saído da página do jogo.
+
 #### Parâmetros
+
+- info:
+```javascript
+{
+    players: [
+        {
+            id: ..., // string: id do jogador
+            name: ..., // string: nome do jogador
+            leader: ..., // bool: verdadeiro se for o líder da sala
+            ready: ... // bool | null: true se o jogador estiver pronto. Pode ser null caso jogo esteja em andamento
+        } ...
+    ],
+    gameInfo: {  // Pode ser null caso não esteja em jogo
+        playersHealth: {  // objeto mapeando jogadores às suas vidas
+            id: ... // int: health,
+            ...
+        },
+        currentWaitTime: ..., // int: tempo máximo em segundos até a ocorrência do próximo evento automático: ex: começar uma rodada, selecionar a carta aleatória de um jogdor que demorou muito para jogar, etc
+        matchNumber: ...,  // int: número da partida atual
+        roundNumber: ...,  // int: número da rodada atual
+        matchInfo: {  // Pode ser null caso não esteja ocorrendo uma partida
+            players: {  // informações de cada jogadores na partida
+                id: {
+                    numWonRounds: ... // int: quantidade de rodadas ganhas até o momento pelo usuário em questão
+                    numWinsNeeded: ... // int: quantidade de vitórias palpitadas pelo jogador
+                    numCards: ... // int: número de cartas que este jogador possui no momento
+                },
+                ...
+            },
+            currentPlayerCards: [  // lista de cartas que o jogador contém
+                {
+                    type: ...,  // string: tipo da carta. Ex: common, joker, etc
+                    value: ...  // inteiro: poder da carta
+                }
+            ],
+            numRounds: ..., // int: quantidade de rodadas que devem ocorrer nessa partida (número de cartas que foram dadas à cada jogador).
+            nextPlayer: ..., // string | null: id do jogador que deve palpitar atualmente
+            roundInfo: {  // Pode ser null caso não esteja ocorrendo uma partida
+                cards: {
+                    onMatch: [  // Todas as cartas que foram que ainda não foram anuladas ou empatadas. Essa lista está ordenada da carta mais forte para a mais fraca.
+                        {
+                            cardInfo: {
+                                type: ...,  // string: tipo da carta. Ex: common, joker, etc
+                                value: ...  // inteiro: poder da carta
+                            },
+                            player: ...  // string: id do player que jogou a carta
+                        },
+                        ...  // São vários objetos deste tipo
+                    ],
+                    anulledCards: [ ... ]  // Uma lista de cartas e seus donos (igual o onMatch). Nesse caso, as cartas estão anuladas (por causa de empate, por exemplo), e não serão contadas na disputa.
+                },
+                nextPlayer: ...  // string | null: id do jogador que deve jogar a carta atualmente
+            }
+        }
+    }
+}
+```
 
 ---
 
