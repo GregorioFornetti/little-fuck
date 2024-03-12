@@ -22,11 +22,19 @@ socket.on("test", handleTest);
 
 Nele, toda vez que o evento `teste` for recebido, será chamado a função `handleTest`, recebendo como parâmetros `arg1` e `arg2`, que foram enviados pelo próprio evento, pelo emissor.
 
-Abaixo, estão definidos todos os eventos que estão sendo utilizados no sistema do jogo "Little Fuck". Nele é definido os nomes dos eventos, qual é o emissor e receptor, os parâmetros que podem ser passados e uma descrição.
+Abaixo, estão definidos todos os eventos que estão sendo utilizados no sistema do jogo "Little Fuck". É definido os nomes dos eventos, qual é o emissor e receptor, os parâmetros que podem ser passados e uma descrição.
+
+
+
+
+
+
+
+
 
 ## Sala (Lobby)
 
-TEXTO
+Uma sala consiste em um conjunto de jogadores que desejam jogar juntos o jogo "Little fuck". Os eventos desta categoria estão ligados à criação de salas, entrar em salas, sistema de preparação, etc.
 
 ---
 
@@ -44,7 +52,7 @@ Cliente ----> Servidor (cliente envia a mensagem ao servidor)
 
 #### Descrição
 
-Evento chamado quando um usuário deseja criar um lobby. O lobby é uma sala em que vários jogadores podem se conectar, a partir de um código. O jogador que criar a sala será o lider da mesma. Caso o usuário escolha um nome válido (com pelo menos um caractere) e ele mesmo não esteja em uma outra sala, este irá criar a sala, recebendo a mensgem `join-lobby-sucess`. Caso contrário, ocorrerá um erro, recebendo a mensagem `join-lobby-error`
+Evento chamado quando um usuário deseja criar um lobby. O lobby é uma sala em que vários jogadores podem se conectar a partir de um código. O jogador que criar a sala será o lider da mesma. Caso o usuário escolha um nome válido (com pelo menos um caractere) e ele mesmo não esteja em uma outra sala, este irá criar a sala, recebendo a mensgem `join-lobby-sucess`. Caso contrário, ocorrerá um erro, recebendo a mensagem `join-lobby-error`
 
 #### Parâmetros
 
@@ -67,7 +75,7 @@ Cliente ----> Servidor (cliente envia a mensagem ao servidor)
 
 #### Descrição
 
-Evento chamado quando um usuário deseja se conectar a um lobby. O código do lobby é fornecido ao criador da sala, e precisa ser utilizado para a conexão dos outros jogadores na mesma sala. Caso o usuário escolha um nome válido (não igual a nenhum outro do lobby e com pelo menos um caractere), tente entrar em uma sala existente e que não esteja em jogo, e ele mesmo não esteja em uma outra sala, este irá entrar na sala, recebendo a mensgem `join-lobby-sucess`. Caso contrário, ocorrerá um erro, recebendo a mensagem `join-lobby-error`
+Evento chamado quando um usuário deseja se conectar a um lobby. O código do lobby é fornecido ao criador da sala, e precisa ser utilizado para a conexão dos outros jogadores na mesma sala. Caso o usuário escolha um nome válido (não igual a nenhum outro do lobby e com pelo menos um caractere), tente entrar em uma sala existente e que não esteja em jogo, e ele mesmo não esteja em uma outra sala, este irá entrar na sala, recebendo a mensagem `join-lobby-sucess`. Caso contrário, ocorrerá um erro, recebendo a mensagem `join-lobby-error`
 
 #### Parâmetros
 
@@ -96,17 +104,20 @@ Indica ao usuário que ele conseguiu entrar na sala. Este receberá uma lista de
 
 #### Parâmetros
 
-- playersInfo: lista de objetos com informações sobre os jogadores
+- lobbyInfo: 
 ```javascript
-[
-    {
-        id: ..., // string - id do jogador
-        name: ..., // string - nome do jogador
-        leader: ..., // bool - verdadeiro se for o líder da sala
-        ready: ... // bool | null - true se o jogador estiver pronto. Pode ser null caso jogo esteja em andamento
-    } 
-    ...
-]
+{
+    lobbyId: ..., // string - id do lobby
+    players: [  // lista de objetos com informações sobre os jogadores
+        {
+            id: ..., // string - id do jogador
+            name: ..., // string - nome do jogador
+            leader: ..., // bool - verdadeiro se for o líder da sala
+            ready: ... // bool | null - true se o jogador estiver pronto. Pode ser null caso jogo esteja em andamento
+        } 
+        ...
+    ]
+}
 ```
 
 ---
@@ -126,7 +137,7 @@ Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
 
 #### Descrição
 
-Indica ao usuário que ocorreu algum erro ao entrar na sala (ou cria-la). Isso pode ocorrer devido à um nome inválido (nenhum caractere ou nome repetido) ou um lobby inexistente ou em partida.
+Indica ao usuário que ocorreu algum erro ao entrar na sala (ou criá-la). Isso pode ocorrer devido à um nome inválido (nenhum caractere ou nome repetido), um lobby inexistente ou em partida, ou o jogador já estar em um outro lobby.
 
 #### Parâmetros
 
@@ -278,7 +289,7 @@ Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
 
 #### Descrição
 
-Evento enviado ao cliente que tentou se preparar para a partida, mas falhou. Isso pode acontecer quando este cliente não estiver em uma sala, ou a sala dele já está com um jogo em andamento. Outro motivo pode ser que o líder tente se preparar, mas este não precisa fazer isso, ele só precisa iniciar a partida. OBS: caso o jogador solicite a preparação e este já está preparado, nada deve acontecer (este evento não deve ser acionado)
+Evento enviado ao cliente que tentou se preparar para a partida, mas falhou. Isso pode acontecer quando este cliente não estiver em uma sala, ou a sala dele já está com um jogo em andamento. Outro motivo pode ser que o líder tente se preparar, mas este não precisa fazer isso, ele só precisa iniciar a partida. OBS: caso o jogador solicite a preparação e este já está preparado, nada deve acontecer (este evento não deve ser acionado).
 
 #### Parâmetros
 
@@ -303,8 +314,6 @@ Cliente ----> Servidor (cliente envia a mensagem ao servidor)
 #### Descrição
 
 Evento enviado quando o jogador está se despreparando para começar a partida. Caso o jogador não estivesse despreparado antes, e este esteja em uma sala de um jogo que ainda não está em andamento e não seja o líder, será atualizado o status desse jogador para todos os outros integrantes da sala (chamando o evento `player-unready`). Caso contrário, o erro será informado para o cliente pelo evento `player-unready-error`.
-
-#### Parâmetros
 
 ---
 
@@ -437,7 +446,7 @@ Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a
             players: {  // informações de cada jogadores na partida
                 id: {
                     numWonRounds: ... // int: quantidade de rodadas ganhas até o momento pelo usuário em questão
-                    numWinsNeeded: ... // int: quantidade de vitórias palpitadas pelo jogador
+                    numWinsNeeded: ... // int | null: quantidade de vitórias palpitadas pelo jogador. Pode ser null caso não tenha palpitado ainda
                     numCards: ... // int: número de cartas que este jogador possui no momento
                 },
                 ...
@@ -445,11 +454,11 @@ Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a
             currentPlayerCards: [  // lista de cartas que o jogador contém
                 {
                     type: ...,  // string: tipo da carta. Ex: common, joker, etc
-                    value: ...  // inteiro: poder da carta
+                    value: ...  // int: poder da carta
                 }
             ],
             numRounds: ..., // int: quantidade de rodadas que devem ocorrer nessa partida (número de cartas que foram dadas à cada jogador).
-            nextPlayer: ..., // string | null: id do jogador que deve palpitar atualmente
+            nextPlayer: ..., // string | null: id do jogador que deve palpitar atualmente. Null caso todos já tenham palpitado
             roundInfo: {  // Pode ser null caso não esteja ocorrendo uma partida
                 cards: {
                     onMatch: [  // Todas as cartas que foram que ainda não foram anuladas ou empatadas. Essa lista está ordenada da carta mais forte para a mais fraca.
@@ -464,7 +473,7 @@ Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a
                     ],
                     anulledCards: [ ... ]  // Uma lista de cartas e seus donos (igual o onMatch). Nesse caso, as cartas estão anuladas (por causa de empate, por exemplo), e não serão contadas na disputa.
                 },
-                nextPlayer: ...  // string | null: id do jogador que deve jogar a carta atualmente
+                nextPlayer: ...  // string | null: id do jogador que deve jogar a carta atualmente. Null caso todas já tenham jogado suas cartas
             }
         }
     }
