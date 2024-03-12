@@ -532,7 +532,7 @@ Evento indicando o final de um jogo completo de "Little Fuck".
 
 #### Parâmetros
 
-- playersRanks: uma lista de strings de ids de jogadores ordenadas. A primeira posição é o jogador que ganhou (único sobrevivente), o segundo ficou na segunda posição (sendo o último a ser eliminado), até a última posição, a qual possui o id do último jogador (o primeiro a ser eliminado).
+- playersRanks: uma lista de strings de ids de jogadores ordenadas. A primeira posição é o jogador que ganhou (único sobrevivente), o último a ser eliminado fica na segunda posição, até a última posição que tem o primeiro a ser eliminado.
 
 
 ---
@@ -607,9 +607,9 @@ Cliente ----> Servidor (cliente envia a mensagem ao servidor)
 
 #### Descrição
 
-Mensagem que o cliente enviará para indicar o seu palpite. O palpite consiste em dizer, a partir das cartas ganhas e dos outros palpites préviso, quantas cartas que o jogador acha que irá vencer. Caso seja a vez do jogador palpitar, e o palpite for válido (não é negativo), este palpite será passado para todos os outros jogadores e o próximo na fila deve palpitar (o servidor chamará o evento `win-rounds-number-update`). Caso não seja um palpite válido ou não seja a vez do jogador, o servidor irá informar esse erro a partir do evento `win-rounds-number-error`
+Mensagem que o cliente enviará para indicar o seu palpite. O palpite consiste em dizer, a partir das cartas recebidas e dos outros palpites prévios, quantas rodadas que o jogador acha que irá vencer. Caso seja a vez do jogador palpitar, e o palpite for válido (não é negativo), este palpite será passado para todos os outros jogadores e o próximo na fila deve palpitar (o servidor chamará o evento `win-rounds-number-update`). Caso não seja um palpite válido ou não seja a vez do jogador, o servidor irá informar esse erro a partir do evento `win-rounds-number-error`
 
-OBS: também é considerado um palpite inválido no caso do último jogador palpitar um valor que gerará um somatório de vitórias igual ao número de cartas. Por exemplo, considerando uma partida com 5 cartas, e que no momento do palpite do último jogador já foram palpitadas 4 vitórias, o último jogador não poderá palpitar apena uma vitória, ele poderá apenas palpitar 0 vitórias ou 2 ou mais vitórias (para que o somatório não dê 5 (4 + 1 = 5)).
+OBS: também é considerado um palpite inválido no caso do último jogador palpitar um valor que gerará um somatório de vitórias igual ao número de cartas. Por exemplo, considerando uma partida com 5 cartas, e que no momento do palpite do último jogador já foram palpitadas 4 vitórias, o último jogador não poderá palpitar apenas uma vitória, e sim palpitar 0 vitórias ou 2 ou mais vitórias (para que o somatório não dê 5 (4 + 1 = 5)).
 
 #### Parâmetros
 
@@ -653,7 +653,7 @@ Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
 
 #### Descrição
 
-Mensagem enviada quando ocorrer algum erro na seleção de carta de um jogador. Este erro pode ocorrer quando um jogador palpitar um número negativo, não estiver em um lobby ou não for o turno do jogador.
+Mensagem enviada quando ocorrer algum erro no palpite escolhido pelo usuário. Este erro pode ocorrer quando um jogador palpitar um número negativo, não estiver em um lobby ou não for o turno do jogador.
 
 OBS: também é considerado um palpite inválido no caso do último jogador palpitar um valor que gerará um somatório de vitórias igual ao número de cartas. Por exemplo, considerando uma partida com 5 cartas, e que no momento do palpite do último jogador já foram palpitadas 4 vitórias, o último jogador não poderá palpitar apena uma vitória, ele poderá apenas palpitar 0 vitórias ou 2 ou mais vitórias (para que o somatório não dê 5 (4 + 1 = 5)).
 
@@ -738,7 +738,7 @@ Após todos os jogadores palpitarem, será acionado o evento `table-update`, mos
 
 ## Rodada (Round)
 
-Uma rodada consiste em todos os jogadores jogarem uma das suas cartas. Ao final da rodada, será verificado qual for a maior carta para definir um campeão daquela rodada.
+Uma rodada consiste em todos os jogadores jogarem uma das suas cartas. Ao final da rodada, será verificado qual for a maior carta para definir um campeão daquela rodada. Podem ocorrer empates também, caso todas as cartas empatem, nãa concedendo a vitória a nenhum dos jogadores.
 
 ---
 
@@ -767,19 +767,29 @@ Evento enviado para indicar o início da rodada.
 
 
 
+
+
+
+
 ### select-card
 
 Cliente ----> Servidor (cliente envia a mensagem ao servidor)
 
 #### Descrição
 
-Evento enviado para selecionar a carta que o jogador jogará na rodada atual. Caso seja de fato a vez do jogdor selecinar sua carta e ele fornecer um índice de carta válido, será colocado a nova carta na mesa para que todos possam vê-la (evento `table-update`). Caso contrário, o servidor informará ao cliente (evento `select-card-error`).
+Evento enviado para selecionar a carta que o jogador jogará na rodada atual. Caso seja de fato a vez do jogdor selecinar sua carta e ele fornecer um índice de carta válido, será colocado a nova carta na mesa para que todos possam vê-la (evento `table-update`). Caso contrário, o servidor informará o erro ao cliente (evento `select-card-error`).
 
 #### Parâmetros
 
 - cardIndex: um inteiro dizendo o índice da carta selecionada.
 
 ---
+
+
+
+
+
+
 
 
 
@@ -820,6 +830,11 @@ Após um jogador selecionar uma carta, essa mensagem será enviada para que todo
 
 
 
+
+
+
+
+
 ### select-card-error
 
 Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
@@ -833,6 +848,11 @@ Mensagem enviada quando ocorrer algum erro na seleção de carta de um jogador. 
 - type: "not-your-turn" | "invalid-index" | "not-in-lobby"
 
 ---
+
+
+
+
+
 
 
 
