@@ -41,14 +41,16 @@ export interface Match {
     /** Informações de cada jogadores na partida */
     players: {
         [playerId: string]: {
-            /** Cartas que o jogador possui para a partida */
-            cards: Card[],
+            /** Quantidade de cartas que o jogador possui */
+            numCards: number,
             /** Quantidade de rodadas ganhas até o momento pelo usuário em questão */
             numWonRounds: number,
             /** Quantidade de vitórias palpitadas pelo jogador. Pode ser undefined caso não tenha palpitado ainda */
             numWinsNeeded?: number
         }
     },
+    /** Cartas que o jogador atual possui */
+    currentPlayerCards: Card[],
     /** Quantidade de rodadas que devem ocorrer nessa partida (número de cartas que foram dadas à cada jogador). */
     numRounds: number,
     /** Id do jogador que deve palpitar atualmente. undefined caso todos já tenham palpitado */
