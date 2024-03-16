@@ -431,10 +431,10 @@ Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a
             id: ..., // string: id do jogador
             name: ..., // string: nome do jogador
             leader: ..., // bool: verdadeiro se for o líder da sala
-            ready: ... // bool | null: true se o jogador estiver pronto. Pode ser null caso jogo esteja em andamento
+            ready: ... // bool | undefined: true se o jogador estiver pronto. Pode ser undefined caso jogo esteja em andamento
         } ...
     ],
-    gameInfo: {  // Pode ser null caso não esteja em jogo
+    game: {  // Pode ser undefined caso não esteja em jogo
         playersHealth: {  // objeto mapeando jogadores às suas vidas
             id: ... // int: health,
             ...
@@ -442,11 +442,11 @@ Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a
         currentWaitTime: ..., // int: tempo máximo em segundos até a ocorrência do próximo evento automático: ex: começar uma rodada, selecionar a carta aleatória de um jogdor que demorou muito para jogar, etc
         matchNumber: ...,  // int: número da partida atual
         roundNumber: ...,  // int: número da rodada atual
-        matchInfo: {  // Pode ser null caso não esteja ocorrendo uma partida
+        match: {  // Pode ser undefined caso não esteja ocorrendo uma partida
             players: {  // informações de cada jogadores na partida
                 id: {
                     numWonRounds: ... // int: quantidade de rodadas ganhas até o momento pelo usuário em questão
-                    numWinsNeeded: ... // int | null: quantidade de vitórias palpitadas pelo jogador. Pode ser null caso não tenha palpitado ainda
+                    numWinsNeeded: ... // int | undefined: quantidade de vitórias palpitadas pelo jogador. Pode ser undefined caso não tenha palpitado ainda
                     numCards: ... // int: número de cartas que este jogador possui no momento
                 },
                 ...
@@ -458,12 +458,12 @@ Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a
                 }
             ],
             numRounds: ..., // int: quantidade de rodadas que devem ocorrer nessa partida (número de cartas que foram dadas à cada jogador).
-            nextPlayer: ..., // string | null: id do jogador que deve palpitar atualmente. Null caso todos já tenham palpitado
-            roundInfo: {  // Pode ser null caso não esteja ocorrendo uma partida
+            nextPlayerId: ..., // string | undefined: id do jogador que deve palpitar atualmente. undefined caso todos já tenham palpitado
+            round: {  // Pode ser undefined caso não esteja ocorrendo uma partida
                 cards: {
                     onMatch: [  // Todas as cartas que foram que ainda não foram anuladas ou empatadas. Essa lista está ordenada da carta mais forte para a mais fraca.
                         {
-                            cardInfo: {
+                            card: {
                                 type: ...,  // string: tipo da carta. Ex: common, joker, etc
                                 value: ...  // inteiro: poder da carta
                             },
@@ -473,7 +473,7 @@ Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a
                     ],
                     anulledCards: [ ... ]  // Uma lista de cartas e seus donos (igual o onMatch). Nesse caso, as cartas estão anuladas (por causa de empate, por exemplo), e não serão contadas na disputa.
                 },
-                nextPlayer: ...  // string | null: id do jogador que deve jogar a carta atualmente. Null caso todas já tenham jogado suas cartas
+                nextPlayerId: ...  // string | undefined: id do jogador que deve jogar a carta atualmente. undefined caso todas já tenham jogado suas cartas
             }
         }
     }
