@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { io } from "socket.io-client"
+  import { ref } from "vue";
 
   const rootUrl: string = process.env.NODE_ENV === 'development' ?
                         'localhost:3000' :
