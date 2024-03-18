@@ -3,32 +3,70 @@
     import Modal from "../modal/Modal.vue";
     import PrimaryModalBtn from "../modal/PrimaryModalBtn.vue";
     import SecundaryModalBtn from "../modal/SecundaryModalBtn.vue";
-import ModalInput from "../modal/ModalInput.vue";
+    import ModalInput from "../modal/ModalInput.vue";
+    import EventsEmitter from "@/events/Emitter";
+    import Spinner from "../Spinner.vue";
 
-    const showCreateLobbyModal = ref(false);
-    const showJoinLobbyModal = ref(false);
+    type JoinLobbyErrorType = "lobby-in-game"|"inexistent-lobby"|"no-name"|"repeated-name"|"player-already-in-lobby"
+
+    const createLobbyModalStatus = ref<'closed'|'input'|'loading'|'error'>('closed');
+    const joinLobbyModalStatus = ref<'closed'|'input'|'loading'|'error'>('closed');
 
     const createLobbyName = ref('');
     const joinLobbyCode = ref('');
     const joinLobbyName = ref('');
+    const errorType = ref<JoinLobbyErrorType>("inexistent-lobby");
+
+    const errorMessageMap: Record<JoinLobbyErrorType, string> = {
+        "lobby-in-game": "A sala já está em jogo",
+        "inexistent-lobby": "A sala não existe",
+        "no-name": "Digite um nome",
+        "repeated-name": "Nome já em uso",
+        "player-already-in-lobby": "Você já está em uma sala"
+    }
 
 
     const openCreateLobbyModal = () => {
-        showCreateLobbyModal.value = true;
+        createLobbyModalStatus.value = 'input';
     }
 
     const openJoinLobbyModal = () => {
-        showJoinLobbyModal.value = true;
+        joinLobbyModalStatus.value = 'input';
     }
 
 
     const closeCreateLobbyModal = () => {
-        showCreateLobbyModal.value = false;
+        createLobbyModalStatus.value = 'closed';
+        createLobbyName.value = '';
     }
 
     const closeJoinLobbyModal = () => {
-        showJoinLobbyModal.value = false;
+        joinLobbyModalStatus.value = 'closed';
+        joinLobbyCode.value = '';
+        joinLobbyName.value = '';
     }
+
+
+    const createLobby = () => {
+        EventsEmitter.Lobby.emitCreateLobby(createLobbyName.value);
+        createLobbyModalStatus.value = 'loading';
+    }
+
+    globalThis.socket.on('join-lobby-success', (lobbyInfo: any) => {
+        closeJoinLobbyModal()
+        closeCreateLobbyModal()
+        console.log('join-lobby-success')
+    })
+
+    globalThis.socket.on('join-lobby-error', (errorTypeParam: "lobby-in-game"|"inexistent-lobby"|"no-name"|"repeated-name"|"player-already-in-lobby") => {
+        if (joinLobbyModalStatus.value === 'loading') {
+            joinLobbyModalStatus.value = 'error';
+        } else if (createLobbyModalStatus.value === 'loading') {
+            createLobbyModalStatus.value = 'error';
+        }
+
+        errorType.value = errorTypeParam;
+    })
 </script>
 
 <template>
@@ -39,31 +77,78 @@ import ModalInput from "../modal/ModalInput.vue";
         </div>
     </div>
 
-    <Modal title="Criar uma sala" :show="showCreateLobbyModal" :close-modal="closeCreateLobbyModal">
+
+    <!-- CreateLobbyModal -->
+    <Modal title="Criar uma sala" :show="createLobbyModalStatus !== 'closed'" :close-modal="createLobbyModalStatus !== 'loading' ? closeCreateLobbyModal : undefined">
         <template #body>
-            <ModalInput label="Nome do jogador" v-model="createLobbyName" />
+            <!-- input -->
+            <div v-if="createLobbyModalStatus === 'input'">
+                <ModalInput label="Nome do jogador" v-model="createLobbyName" />
+            </div>
+            <!-- waiting response -->
+            <div v-if="createLobbyModalStatus === 'loading'" class="flex items-center justify-center">
+                <Spinner :size="50" />
+            </div>
+            <!-- error -->
+            <div v-if="createLobbyModalStatus === 'error'">
+                <p class="text-center">{{ errorMessageMap[errorType] }}</p>
+            </div>
         </template>
         
         <template #footer>
-            <PrimaryModalBtn @click="closeCreateLobbyModal">Criar sala</PrimaryModalBtn>
-            <SecundaryModalBtn @click="closeCreateLobbyModal">Fechar</SecundaryModalBtn>
+            <!-- input -->
+            <div v-if="createLobbyModalStatus === 'input'">
+                <PrimaryModalBtn @click="createLobby">Criar sala</PrimaryModalBtn>
+                <SecundaryModalBtn @click="closeCreateLobbyModal">Fechar</SecundaryModalBtn>
+            </div>
+            <!-- waiting response -->
+            <div v-if="createLobbyModalStatus === 'loading'">
+                
+            </div>
+            <!-- error -->
+            <div v-if="createLobbyModalStatus === 'error'">
+                <PrimaryModalBtn @click="openCreateLobbyModal">Voltar</PrimaryModalBtn>
+                <SecundaryModalBtn @click="closeCreateLobbyModal">Fechar</SecundaryModalBtn>
+            </div>
         </template>
     </Modal>
 
-    <Modal title="Entrar em uma sala" :show="showJoinLobbyModal" :close-modal="closeJoinLobbyModal">
+
+
+
+    <!-- JoinLobbyModal -->
+    <Modal title="Entrar em uma sala" :show="joinLobbyModalStatus !== 'closed'" :close-modal="joinLobbyModalStatus !== 'loading' ? closeJoinLobbyModal : undefined">
         <template #body>
-            <div class="flex gap-y-5 flex-col">
+            <!-- input -->
+            <div v-if="joinLobbyModalStatus === 'input'" class="flex gap-y-5 flex-col">
                 <ModalInput label="Código da sala" v-model="joinLobbyCode" />
-                <ModalInput label="Nome do jogador" v-model="createLobbyName" />
+                <ModalInput label="Nome do jogador" v-model="joinLobbyName" />
+            </div>
+            <!-- waiting response -->
+            <div v-if="joinLobbyModalStatus === 'loading'" class="flex items-center justify-center">
+                <Spinner :size="50" />
+            </div>
+            <!-- error -->
+            <div v-if="joinLobbyModalStatus === 'error'">
+                <p class="text-center">{{ errorMessageMap[errorType] }}</p>
             </div>
         </template>
 
         <template #footer>
-            <PrimaryModalBtn @click="closeJoinLobbyModal">Entrar na sala</PrimaryModalBtn>
-            <SecundaryModalBtn @click="closeJoinLobbyModal">Fechar</SecundaryModalBtn>
+            <!-- input -->
+            <div v-if="joinLobbyModalStatus === 'input'">
+                <PrimaryModalBtn @click="closeJoinLobbyModal">Entrar na sala</PrimaryModalBtn>
+                <SecundaryModalBtn @click="closeJoinLobbyModal">Fechar</SecundaryModalBtn>
+            </div>
+            <!-- waiting response -->
+            <div v-if="joinLobbyModalStatus === 'loading'">
+
+            </div>
+            <!-- error -->
+            <div v-if="joinLobbyModalStatus === 'error'">
+                <PrimaryModalBtn @click="openJoinLobbyModal">Voltar</PrimaryModalBtn>
+                <SecundaryModalBtn @click="closeJoinLobbyModal">Fechar</SecundaryModalBtn>
+            </div>
         </template>
     </Modal>
 </template>
-
-<style scoped>
-</style>
