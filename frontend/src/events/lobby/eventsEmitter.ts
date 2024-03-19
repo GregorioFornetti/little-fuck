@@ -8,7 +8,7 @@
  *  @param name Nome do jogador
  */
 export function emitCreateLobby(name: string) {
-    // globalThis.socket.emit('create-lobby', name);
+    globalThis.socket.emit('create-lobby', name);
 }
 
 

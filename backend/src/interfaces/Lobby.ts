@@ -81,6 +81,8 @@ export interface Game {
  *  Interface que contém as informações de um lobby, por exemplo, jogadores, informações do jogo em andamento, etc.
  */
 export default interface Lobby {
+    /** Identficador único do lobby atual */
+    lobbyId: string,
     /** Informações dos jogadores que estão no lobby */
     players: {
         /** Identificador único do jogador */

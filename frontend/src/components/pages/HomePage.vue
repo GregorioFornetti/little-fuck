@@ -58,7 +58,7 @@
         console.log('join-lobby-success')
     })
 
-    globalThis.socket.on('join-lobby-error', (errorTypeParam: "lobby-in-game"|"inexistent-lobby"|"no-name"|"repeated-name"|"player-already-in-lobby") => {
+    globalThis.socket.on('join-lobby-error', (errorTypeParam: JoinLobbyErrorType) => {
         if (joinLobbyModalStatus.value === 'loading') {
             joinLobbyModalStatus.value = 'error';
         } else if (createLobbyModalStatus.value === 'loading') {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SecundaryModalBtn from './SecundaryModalBtn.vue';
+    import SecundaryModalBtn from './SecundaryModalBtn.vue';
 
     
     defineProps<{

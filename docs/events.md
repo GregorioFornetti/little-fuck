@@ -426,6 +426,7 @@ Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a
 - info:
 ```javascript
 {
+    lobbyId: string,
     players: [
         {
             id: ..., // string: id do jogador
