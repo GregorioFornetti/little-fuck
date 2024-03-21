@@ -3,6 +3,7 @@ import express from 'express';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import dotenv from "dotenv";
+import addEventsListeners from './events/addEventsListeners';
 
 dotenv.config();
 
@@ -19,8 +20,7 @@ const port = process.env.PORT || 3000
 app.use(process.env.SERVER_PATH || '/', express.static('../frontend/dist'))
 
 io.on('connection', (socket) => {
-    console.log('a user connected')
-    socket.emit('message', 'Socket io is working')
+    addEventsListeners(io, socket)
 })
 
 server.listen(port, () => {

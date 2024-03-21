@@ -42,3 +42,8 @@ export function handleCreateLobby(player: Player, name: string) {
     players[player.playerId] = lobby
     player.eventsEmitter.Lobby.emitJoinLobbySuccess(lobby)
 }
+
+
+export default {
+    'create-lobby': handleCreateLobby
+}
