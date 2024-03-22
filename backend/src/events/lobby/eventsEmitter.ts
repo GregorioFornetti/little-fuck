@@ -1,5 +1,5 @@
 import Lobby from "../../interfaces/Lobby";
-import EmitterBase from "../emitterBase"
+import EmitterBase from "../EmitterBase"
 
 
 export default class LobbyEventsEmitter extends EmitterBase {
