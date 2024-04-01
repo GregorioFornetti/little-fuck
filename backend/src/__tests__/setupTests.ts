@@ -12,6 +12,7 @@ let io: Server;
 let clientSocket: ClientSocket;
 let serverSocket: ServerSocket;
 let player: Player;
+let eventsEmitter: EventsEmitter;
 
 beforeAll((done) => {
   io = new Server(httpServer);
@@ -20,6 +21,7 @@ beforeAll((done) => {
     clientSocket = ioc(`http://localhost:${port}`);
     io.on("connection", (socket) => {
       serverSocket = socket;
+      eventsEmitter = new EventsEmitter(io, serverSocket);
       player = {
         playerId: clientSocket.id as string,
         eventsEmitter: new EventsEmitter(io, serverSocket),
@@ -40,8 +42,9 @@ afterEach(() => {
 });
 
 afterAll(() => {
+  httpServer.close()
   io.close();
   clientSocket.disconnect();
 });
 
-export { io, clientSocket, serverSocket, player };
+export { io, clientSocket, serverSocket, player, eventsEmitter };

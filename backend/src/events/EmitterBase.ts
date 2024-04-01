@@ -1,13 +1,14 @@
 
 import { Socket, Server } from "socket.io";
+import { Socket as ClientSocket } from "socket.io-client";
 
 
 export default class EmitterBase {
-    private socket: Socket;
+    private socket: Socket|ClientSocket;
     private io: Server;
     private lobbyId?: string;
 
-    constructor(io: Server, socket: Socket, lobbyId?: string) {
+    constructor(io: Server, socket: Socket|ClientSocket, lobbyId?: string) {
         this.io = io
         this.socket = socket
         this.lobbyId = lobbyId;
