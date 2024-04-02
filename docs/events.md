@@ -197,29 +197,6 @@ Evento criado quando um jogador deseja sair de uma sala. O jogador sairá da sal
 
 
 
-### logout-error
-
-Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
-
-#### Descrição
-
-Evento indicando que ocorreu um erro ao sair de uma sala. Isso pode acontecer caso o cliente não estivesse em uma sala.
-
-#### Parâmetros
-
-- type: "not-in-lobby"
-
----
-
-
-
-
-
-
-
-
-
-
 ### player-logout
 
 Servidor ----> Lobby (servidor envia para todos clientes do lobby)
@@ -231,6 +208,28 @@ Evento indicando que um jogador acaba de sair da sala.
 #### Parâmetros
 
 - id: string indicando o jogador que saiu.
+
+---
+
+
+
+
+
+
+
+
+
+### logout-error
+
+Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
+
+#### Descrição
+
+Evento indicando que ocorreu um erro ao sair de uma sala. Isso pode acontecer caso o cliente não estivesse em uma sala.
+
+#### Parâmetros
+
+- type: "not-in-lobby"
 
 ---
 
