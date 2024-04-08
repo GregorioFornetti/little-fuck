@@ -572,7 +572,7 @@ A partida com apenas uma carta é especial. Nessa partida, os jogadores não pod
 
 ### start-match
 
-Servidor ----> Lobby (servidor envia para todos clientes do lobby)
+Servidor ----> Lobby (servidor envia para todos clientes do lobby, porém as mensagens são específicas para cada jogador)
 
 #### Descrição
 
@@ -590,7 +590,7 @@ Evento enviado para indicar o início da partida.
     ...
 ]
 ```
-- firstPlayer: id do primeiro jogador que deve palpitar.
+- firstPlayerId: id do primeiro jogador que deve palpitar.
 
 ---
 
@@ -636,7 +636,7 @@ Após um jogador fazer um palpite válido, essa mensagem será enviada para que 
 
 - numWinMatches: inteiro indicando o palpite do jogador que acabou de palpitar.
 
-- nextPlayer: string indicando o id do próximo jogador que deverá palpitar. Pode ser `null` caso todos os jogadores já tenham palpitado.
+- nextPlayerId: string indicando o id do próximo jogador que deverá palpitar. Pode ser `null` caso todos os jogadores já tenham palpitado.
 
 ---
 
@@ -696,7 +696,7 @@ Evento enviado para indicar o fim da partida. Uma partida acaba quando todos os 
 
 ### start-special-match
 
-Servidor ----> Lobby (servidor envia para todos clientes do lobby)
+Servidor ----> Lobby (servidor envia para todos clientes do lobby, porém as mensagens são específicas para cada jogador)
 
 #### Descrição
 
@@ -758,7 +758,7 @@ Evento enviado para indicar o início da rodada.
 
 #### Parâmetros
 
-- player: string do id do jogador que jogará a primeira carta da rodada.
+- playerId: string do id do jogador que jogará a primeira carta da rodada.
 
 ---
 
@@ -820,7 +820,7 @@ Após um jogador selecionar uma carta, essa mensagem será enviada para que todo
         anulledCards: [ ... ]  // Uma lista de cartas e seus donos (igual o onMatch). Nesse caso, as cartas estão anuladas (por causa de empate, por exemplo), e não serão contadas na disputa.
     }
     ```
-- nextPlayer: string contendo o id do jogador que deverá jogar agora. Caso não tenha um próximo jogador (todos já escolheram as cartas), esse valor será `null`
+- nextPlayerId: string contendo o id do jogador que deverá jogar agora. Caso não tenha um próximo jogador (todos já escolheram as cartas), esse valor será `null`
 
 ---
 
@@ -870,6 +870,6 @@ Evento enviado para indicar o fim da rodada. Uma rodada acaba quando todos os jo
 
 #### Parâmetros
 
-- winner: string com o id do jogador que ganhou rodada. O valor será `null` caso ninguém tenha ganho a rodada.
+- winnerId: string com o id do jogador que ganhou rodada. O valor será `null` caso ninguém tenha ganho a rodada.
 
 - points: inteiro indicando a quantidade de pontos ganhos pelo vencedor nessa rodada.

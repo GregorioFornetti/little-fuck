@@ -2,7 +2,7 @@
 /**
  *  Interface que contém as informações 
  */
-interface Card {
+export interface Card {
     /** Tipo da carta */
     type: "common",
     /** O poder da carta. Cartas com valores mais altos ganham das outras com valores mais baixos. */
