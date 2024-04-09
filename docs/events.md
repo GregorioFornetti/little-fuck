@@ -219,7 +219,7 @@ Evento indicando que um jogador acaba de sair da sala.
 
 
 
-### logout-error
+### player-logout-error
 
 Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
 

@@ -56,8 +56,8 @@ export default class LobbyEventsEmitter extends EmitterBase {
      * 
      *  @param type tipo de erro que ocorreu ao tentar sair da sala
      */
-    public emitLogoutError(type: "player-not-in-lobby") {
-        this.emitToUser("logout-error", type)
+    public emitPlayerLogoutError(type: "not-in-lobby") {
+        this.emitToUser("player-logout-error", type)
     }
 
     /**
@@ -79,7 +79,7 @@ export default class LobbyEventsEmitter extends EmitterBase {
      *  @param type tipo de erro que ocorreu ao tentar se preparar para a partida
      */
     public emitPlayerReadyError(type: "in-game"|"not-in-lobby"|"leader") {
-        this.emitToUser("ready-error", type)
+        this.emitToUser("player-ready-error", type)
     }
 
     /**
@@ -101,7 +101,7 @@ export default class LobbyEventsEmitter extends EmitterBase {
      *  @param type tipo de erro que ocorreu ao tentar se despreparar para a partida
      */
     public emitPlayerUnreadyError(type: "in-game"|"not-in-lobby"|"leader") {
-        this.emitToUser("unready-error", type)
+        this.emitToUser("player-unready-error", type)
     }
 
     /**

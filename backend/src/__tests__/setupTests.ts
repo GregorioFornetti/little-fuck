@@ -13,6 +13,7 @@ let clientSocket: ClientSocket;
 let serverSocket: ServerSocket;
 let player: Player;
 let eventsEmitter: EventsEmitter;
+let lobbyClientsSockets: ClientSocket[] = [];
 
 beforeAll((done) => {
   io = new Server(httpServer);
@@ -20,6 +21,7 @@ beforeAll((done) => {
     const port = (httpServer.address() as AddressInfo).port;
     clientSocket = ioc(`http://localhost:${port}`);
     io.on("connection", (socket) => {
+      if (serverSocket) return;
       serverSocket = socket;
       eventsEmitter = new EventsEmitter(io, serverSocket);
       player = {
@@ -27,7 +29,15 @@ beforeAll((done) => {
         eventsEmitter: new EventsEmitter(io, serverSocket),
       };
     });
-    clientSocket.on("connect", done);
+    const handleConnect = () => {
+      if (lobbyClientsSockets.length === 2) {
+        done();
+        return;
+      }
+      lobbyClientsSockets.push(ioc(`http://localhost:${port}`));
+      lobbyClientsSockets[lobbyClientsSockets.length - 1].on("connect", handleConnect);
+    }
+    clientSocket.on("connect", handleConnect);
   });
 });
 
@@ -39,12 +49,18 @@ afterEach(() => {
     delete players[player];
   }
   clientSocket.removeAllListeners();
+  for (let socket of lobbyClientsSockets) {
+    socket.removeAllListeners();
+  }
 });
 
 afterAll(() => {
   httpServer.close()
   io.close();
   clientSocket.disconnect();
+  for (let socket of lobbyClientsSockets) {
+    socket.disconnect()
+  }
 });
 
-export { io, clientSocket, serverSocket, player, eventsEmitter };
+export { io, clientSocket, serverSocket, player, eventsEmitter, lobbyClientsSockets };
