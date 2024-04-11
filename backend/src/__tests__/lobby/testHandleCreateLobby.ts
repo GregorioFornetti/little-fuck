@@ -1,6 +1,6 @@
 
 import { lobbys, players } from "../../global";
-import { handleCreateLobby } from "../../events/lobby/eventsHandlers";
+import { handleCreateLobby } from "../../events/lobby/handlers/createLobby";
 import Lobby from "../../interfaces/Lobby";
 
 import { clientSocket, player, io } from "../setupTests";
