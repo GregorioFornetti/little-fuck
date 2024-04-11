@@ -14,6 +14,7 @@ let serverSocket: ServerSocket;
 let player: Player;
 let eventsEmitter: EventsEmitter;
 let lobbyClientsSockets: ClientSocket[] = [];
+let lobbyServerSockets: ServerSocket[] = [];
 
 beforeAll((done) => {
   io = new Server(httpServer);
@@ -21,7 +22,10 @@ beforeAll((done) => {
     const port = (httpServer.address() as AddressInfo).port;
     clientSocket = ioc(`http://localhost:${port}`);
     io.on("connection", (socket) => {
-      if (serverSocket) return;
+      if (serverSocket) {
+        lobbyServerSockets.push(socket);
+        return;
+      }
       serverSocket = socket;
       eventsEmitter = new EventsEmitter(io, serverSocket);
       player = {
@@ -63,4 +67,4 @@ afterAll(() => {
   }
 });
 
-export { io, clientSocket, serverSocket, player, eventsEmitter, lobbyClientsSockets };
+export { io, clientSocket, serverSocket, player, eventsEmitter, lobbyClientsSockets, lobbyServerSockets };
