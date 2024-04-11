@@ -51,7 +51,7 @@ export default class RoundEventsEmitter extends EmitterBase {
      *  @param winnerId Id do jogador que venceu a rodada
      *  @param points número de pontos que o jogador vencedor ganhou
      */
-    public emitRoundEnd(winnerId: string, points: number) {
-        this.emitToLobby("round-end", winnerId, points)
+    public emitEndRound(winnerId: string, points: number) {
+        this.emitToLobby("end-round", winnerId, points)
     }
 }

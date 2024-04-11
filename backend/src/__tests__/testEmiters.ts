@@ -460,4 +460,123 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
             lobbyEmitter.Match.emitStartSpecialMatch(cards, lobbyClientsSockets[0].id as string);
         })
     })
+
+    describe("Round events", () => {
+        test("start-round", (done) => {
+            const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
+            let count = { value: 0 }
+
+            lobbyClientsSockets[0].on('start-round', (firstPlayerId: string) => {
+                expect(firstPlayerId).toBe(lobbyClientsSockets[0].id as string);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyClientsSockets[1].on('start-round', (firstPlayerId: string) => {
+                expect(firstPlayerId).toBe(lobbyClientsSockets[0].id as string);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyEmitter.Round.emitStartRound(lobbyClientsSockets[0].id as string);
+        })
+
+        test("table-update", (done) => {
+            const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
+            let count = { value: 0 }
+
+            lobbyClientsSockets[0].on('table-update', (table: Round, nextPlayerId: string) => {
+                expect(table.onMatch).toHaveLength(2)
+                expect(table.onMatch[0].card.type).toBe('common')
+                expect(table.onMatch[0].card.value).toBe(1)
+                expect(table.onMatch[0].playerId).toBe(lobbyClientsSockets[0].id as string)
+                expect(table.onMatch[1].card.type).toBe('common')
+                expect(table.onMatch[1].card.value).toBe(2)
+                expect(table.onMatch[1].playerId).toBe(lobbyClientsSockets[1].id as string)
+                expect(table.anulledCards).toHaveLength(0)
+                expect(nextPlayerId).toBe(lobbyClientsSockets[0].id as string);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyClientsSockets[1].on('table-update', (table: Round, nextPlayerId: string) => {
+                expect(table.onMatch).toHaveLength(2)
+                expect(table.onMatch[0].card.type).toBe('common')
+                expect(table.onMatch[0].card.value).toBe(1)
+                expect(table.onMatch[0].playerId).toBe(lobbyClientsSockets[0].id as string)
+                expect(table.onMatch[1].card.type).toBe('common')
+                expect(table.onMatch[1].card.value).toBe(2)
+                expect(table.onMatch[1].playerId).toBe(lobbyClientsSockets[1].id as string)
+                expect(table.anulledCards).toHaveLength(0)
+                expect(nextPlayerId).toBe(lobbyClientsSockets[0].id as string);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            const table: Round = {
+                onMatch: [
+                    {
+                        card: {
+                            type: 'common',
+                            value: 1
+                        },
+                        playerId: lobbyClientsSockets[0].id as string
+                    },
+                    {
+                        card: {
+                            type: 'common',
+                            value: 2
+                        },
+                        playerId: lobbyClientsSockets[1].id as string
+                    }
+                ],
+                anulledCards: [
+
+                ]
+            }
+            lobbyEmitter.Round.emitTableUpdate(table, lobbyClientsSockets[0].id as string);
+        })
+
+        test("select-card-error", (done) => {
+            clientSocket.on('select-card-error', (errorType: string) => {
+                expect(errorType).toBe('not-in-lobby');
+                done()
+            })
+
+            eventsEmitter.Round.emitSelectCardError('not-in-lobby');
+        })
+
+        test("end-round", (done) => {
+            const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
+            let count = { value: 0 }
+
+            lobbyClientsSockets[0].on('end-round', (winnerId: string, points: number) => {
+                expect(winnerId).toBe(lobbyClientsSockets[0].id as string);
+                expect(points).toBe(1);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyClientsSockets[1].on('end-round', (winnerId: string, points: number) => {
+                expect(winnerId).toBe(lobbyClientsSockets[0].id as string);
+                expect(points).toBe(1);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyEmitter.Round.emitEndRound(lobbyClientsSockets[0].id as string, 1);
+        })
+    })
 })
