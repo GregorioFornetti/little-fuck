@@ -1,6 +1,6 @@
 
 import EmitterBase from "../EmitterBase"
-import { Card, Round } from "../../interfaces/Lobby"
+import { Card, Round, SpecialMatchCards } from "../../interfaces/Lobby"
 
 
 /**
@@ -80,8 +80,8 @@ export default class MatchEventsEmitter extends EmitterBase {
      *  as cartas de todos os outros jogadores, exceto o próprio jogador.
      *  @param firstPlayerId id do jogador que deve começar fazendo o primeiro palpite.
      */
-    public emitStartSpecialMatch(cards: { [playerId: string]: Round }, firstPlayerId: string) {
-        const playersInfos: { [playerId: string]: { cards: Round, firstPlayerId: string}} = {}
+    public emitStartSpecialMatch(cards: { [playerId: string]: SpecialMatchCards }, firstPlayerId: string) {
+        const playersInfos: { [playerId: string]: { cards: SpecialMatchCards, firstPlayerId: string}} = {}
         for (const playerId in cards) {
             playersInfos[playerId] = {
                 cards: cards[playerId],

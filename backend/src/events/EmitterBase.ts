@@ -33,7 +33,7 @@ export default class EmitterBase {
                 if (!lobbys[this.lobbyId].players.find(player => player.id === playerId)) {
                     throw new Error(`Tentativa de emitir evento para jogador de id ${playerId} que não está na sala ${this.lobbyId}`);
                 }
-                this.io.to(playerId).emit(event, playersInfos[playerId]);
+                this.io.to(playerId).emit(event, ...Object.values(playersInfos[playerId]));
             }
         } else {
             throw new Error(`Jogador de id ${this.socket.id} tentou emitir um evento para a sala, mas não está em nenhuma sala.`);

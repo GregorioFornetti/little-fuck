@@ -1,7 +1,7 @@
 
 import EventsEmitter from "../events/Emitter";
 import { lobbys, players } from "../global";
-import Lobby from "../interfaces/Lobby";
+import Lobby, { Card, Round, SpecialMatchCards } from "../interfaces/Lobby";
 import { io, clientSocket, eventsEmitter, lobbyClientsSockets, lobbyServerSockets } from "./setupTests";
 import { Socket as ClientSocket } from "socket.io-client";
 import { Socket as ServerSocket } from "socket.io";
@@ -278,6 +278,186 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
             })
 
             lobbyEmitter.Game.emitEndGame(['1', '2']);
+        })
+    })
+
+    describe("Match events", () => {
+        test("start-match", (done) => {
+            const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
+            let count = { value: 0 }
+
+            lobbyClientsSockets[0].on('start-match', (cards: Card[], firstPlayerId: string) => {
+                expect(cards).toHaveLength(2);
+                expect(cards[0].type).toBe('common');
+                expect(cards[0].value).toBe(1);
+                expect(cards[1].type).toBe('common');
+                expect(cards[1].value).toBe(2);
+                expect(firstPlayerId).toBe(lobbyClientsSockets[0].id as string);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyClientsSockets[1].on('start-match', (cards: Card[], firstPlayerId: string) => {
+                expect(cards).toHaveLength(2);
+                expect(cards[0].type).toBe('common');
+                expect(cards[0].value).toBe(3);
+                expect(cards[1].type).toBe('common');
+                expect(cards[1].value).toBe(4);
+                expect(firstPlayerId).toBe(lobbyClientsSockets[0].id as string);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+            
+            const cards: { [playerId: string]: Card[] }= {}
+            cards[lobbyClientsSockets[0].id as string] = [
+                {
+                    type: 'common',
+                    value: 1
+                },
+                {
+                    type: 'common',
+                    value: 2
+                }
+            ]
+            cards[lobbyClientsSockets[1].id as string] = [
+                {
+                    type: 'common',
+                    value: 3
+                },
+                {
+                    type: 'common',
+                    value: 4
+                }
+            ]
+            lobbyEmitter.Match.emitStartMatch(cards, lobbyClientsSockets[0].id as string);
+        })
+
+        test("win-rounds-number-update", (done) => {
+            const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
+            let count = { value: 0 }
+
+            lobbyClientsSockets[0].on('win-rounds-number-update', (numWinMatches: number, nextPlayerId: string) => {
+                expect(numWinMatches).toBe(2);
+                expect(nextPlayerId).toBe(lobbyClientsSockets[1].id as string);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyClientsSockets[1].on('win-rounds-number-update', (numWinMatches: number, nextPlayerId: string) => {
+                expect(numWinMatches).toBe(2);
+                expect(nextPlayerId).toBe(lobbyClientsSockets[1].id as string);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyEmitter.Match.emitWinRoundsNumberUpdate(2, lobbyClientsSockets[1].id as string);
+        })
+
+        test("win-rounds-number-error", (done) => {
+            clientSocket.on('win-rounds-number-error', (errorType: string) => {
+                expect(errorType).toBe('not-in-lobby');
+                done()
+            })
+
+            eventsEmitter.Match.emitWinRoundsNumberError('not-in-lobby');
+        })
+
+        test("end-match", (done) => {
+            const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
+            let count = { value: 0 }
+
+            lobbyClientsSockets[0].on('end-match', (healthUpdates: { [playerId: string]: number }) => {
+                expect(healthUpdates[lobbyClientsSockets[0].id as string]).toBe(-1);
+                expect(healthUpdates[lobbyClientsSockets[1].id as string]).toBe(0);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyClientsSockets[1].on('end-match', (healthUpdates: { [playerId: string]: number }) => {
+                expect(healthUpdates[lobbyClientsSockets[0].id as string]).toBe(-1);
+                expect(healthUpdates[lobbyClientsSockets[1].id as string]).toBe(0);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            const healthUpdates: { [playerId: string]: number } = {}
+            healthUpdates[lobbyClientsSockets[0].id as string] = -1
+            healthUpdates[lobbyClientsSockets[1].id as string] = 0
+            lobbyEmitter.Match.emitEndMatch(healthUpdates);
+        })
+
+        test("start-special-match", (done) => {
+            const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
+            let count = { value: 0 }
+
+            lobbyClientsSockets[0].on('start-special-match', (cards: SpecialMatchCards, firstPlayerId: string) => {
+                expect(cards.onMatch).toHaveLength(1)
+                expect(cards.onMatch[0].card.type).toBe('common')
+                expect(cards.onMatch[0].card.value).toBe(2)
+                expect(cards.onMatch[0].playerId).toBe(lobbyClientsSockets[1].id as string)
+                expect(cards.anulledCards).toHaveLength(0)
+                expect(firstPlayerId).toBe(lobbyClientsSockets[0].id as string);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyClientsSockets[1].on('start-special-match', (cards: SpecialMatchCards, firstPlayerId: string) => {
+                expect(cards.onMatch).toHaveLength(1)
+                expect(cards.onMatch[0].card.type).toBe('common')
+                expect(cards.onMatch[0].card.value).toBe(1)
+                expect(cards.onMatch[0].playerId).toBe(lobbyClientsSockets[0].id as string)
+                expect(cards.anulledCards).toHaveLength(0)
+                expect(firstPlayerId).toBe(lobbyClientsSockets[0].id as string);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+            
+            const cards: { [playerId: string]: SpecialMatchCards }= {}
+            cards[lobbyClientsSockets[0].id as string] = {
+                onMatch: [
+                    {
+                        card: {
+                            type: 'common',
+                            value: 2
+                        },
+                        playerId: lobbyClientsSockets[1].id as string
+                    }
+                ],
+                anulledCards: [
+
+                ]
+            }
+            cards[lobbyClientsSockets[1].id as string] = {
+                onMatch: [
+                    {
+                        card: {
+                            type: 'common',
+                            value: 1
+                        },
+                        playerId: lobbyClientsSockets[0].id as string
+                    }
+                ],
+                anulledCards: [
+
+                ]
+            }
+            lobbyEmitter.Match.emitStartSpecialMatch(cards, lobbyClientsSockets[0].id as string);
         })
     })
 })
