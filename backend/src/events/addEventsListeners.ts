@@ -16,6 +16,7 @@ export default function addEventsListeners(io: Server, socket: Socket) {
             const player: Player = {
                 playerId: socket.id,
                 eventsEmitter: new EventsEmitter(io, socket, players[socket.id]?.lobbyId),
+                socket: socket,
                 lobby: players[socket.id]
             }
             eventHandler(player, ...args)

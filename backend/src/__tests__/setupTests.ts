@@ -30,6 +30,7 @@ beforeAll((done) => {
       eventsEmitter = new EventsEmitter(io, serverSocket);
       player = {
         playerId: clientSocket.id as string,
+        socket: serverSocket,
         eventsEmitter: new EventsEmitter(io, serverSocket),
       };
     });
