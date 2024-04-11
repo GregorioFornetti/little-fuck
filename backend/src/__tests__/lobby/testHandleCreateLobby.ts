@@ -3,7 +3,7 @@ import { lobbys, players } from "../../global";
 import { handleCreateLobby } from "../../events/lobby/eventsHandlers";
 import Lobby from "../../interfaces/Lobby";
 
-import { clientSocket, player } from "../setupTests";
+import { clientSocket, player, io } from "../setupTests";
 
 
 describe("handleCreateLobby", () => {
@@ -30,27 +30,47 @@ describe("handleCreateLobby", () => {
     handleCreateLobby(player, '       ');
   });
 
-  test("Criar lobby com nome válido", (done) => {
-    clientSocket.on('join-lobby-success', (lobby: Lobby) => {
-      // Verifica se as informações do lobby foram enviadas corretamente para o jogador
-      expect(lobby.lobbyId).toBeDefined();
-      expect(lobby.players).toHaveLength(1);
-      expect(lobby.players[0].id).toBe(player.playerId);
-      expect(lobby.players[0].name).toBe('player1');
-      expect(lobby.players[0].leader).toBe(true);
-      expect(lobby.players[0].ready).toBe(false);
-      expect(lobby.game).toBeUndefined();
-
-      // Verifica se as informações do lobby foram salvas corretamente no servidor
-      expect(lobbys[lobby.lobbyId]).toEqual(lobby);
-      expect(players[player.playerId]).toEqual(lobby);
-
-      done();
+  describe("Criar lobby com nome válido", () => {
+    test("Lobby deve ser criado com as informações corretas", (done) => {
+      clientSocket.on('join-lobby-success', (lobby: Lobby) => {
+        // Verifica se as informações do lobby foram enviadas corretamente para o jogador
+        expect(lobby.lobbyId).toBeDefined();
+        expect(lobby.players).toHaveLength(1);
+        expect(lobby.players[0].id).toBe(player.playerId);
+        expect(lobby.players[0].name).toBe('player1');
+        expect(lobby.players[0].leader).toBe(true);
+        expect(lobby.players[0].ready).toBe(false);
+        expect(lobby.game).toBeUndefined();
+        done();
+      })
+  
+      handleCreateLobby(player, 'player1');
     })
 
-    handleCreateLobby(player, 'player1');
-  });
+    test("As informações do lobby foram salvas corretamente no servidor", (done) => {
+      clientSocket.on('join-lobby-success', (lobby: Lobby) => {
+        // Verifica se as informações do lobby foram salvas corretamente no servidor
+        expect(lobbys[lobby.lobbyId]).toEqual(lobby);
+        expect(players[player.playerId]).toEqual(lobby);
+        done();
+      })
+  
+      handleCreateLobby(player, 'player1');
+    })
 
+    test("Criar lobby adiciona o cliente em um room de mesmo lobbyId", (done) => {
+      clientSocket.on('join-lobby-success', (lobby: Lobby) => {
+        // Verifica se o jogador foi corretamente adicionado ao lobby (room) no socket
+        clientSocket.on('test', () => {
+          done()
+        })
+        io.to(lobby.lobbyId).emit('test');
+      })
+  
+      handleCreateLobby(player, 'player1');
+    });
+  })
+  
   test("Criar lobby com jogador já em outro lobby deve emitir erro", (done) => {
 
     // A primeira vez chamando handleCreateLobby deve ser bem sucedida
