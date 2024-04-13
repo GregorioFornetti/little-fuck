@@ -7,6 +7,11 @@ import MatchEventsEmitter from "./match/eventsEmitter";
 import RoundEventsEmitter from "./round/eventsEmitter";
 
 
+/**
+ *  Classe para emissão de eventos (enviar mensagens aos clientes). 
+ * 
+ *  Todas as documentações sobre os eventos estão em `docs/events.md`.
+ */
 export default class EventsEmitter {
     public Lobby: LobbyEventsEmitter;
     public Game: GameEventsEmitter;

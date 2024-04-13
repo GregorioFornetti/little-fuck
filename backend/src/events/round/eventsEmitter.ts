@@ -5,9 +5,11 @@ import { Round } from "../../interfaces/Lobby"
 
 
 /**
- *   Uma rodada consiste em todos os jogadores jogarem uma das suas cartas.
- *   Ao final da rodada, será verificado qual for a maior carta para definir um campeão daquela rodada.
- *   Podem ocorrer empates também, caso todas as cartas empatem, nãa concedendo a vitória a nenhum dos jogadores.
+ *  Objetos dessa classe emitem eventos a respeito de uma rodada.
+ *  
+ *  Uma rodada consiste em todos os jogadores jogarem uma das suas cartas.
+ *  Ao final da rodada, será verificado qual for a maior carta para definir um campeão daquela rodada.
+ *  Podem ocorrer empates também, caso todas as cartas empatem, nãa concedendo a vitória a nenhum dos jogadores.
  */
 export default class RoundEventsEmitter extends EmitterBase {
 

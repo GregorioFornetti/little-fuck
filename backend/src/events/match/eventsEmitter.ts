@@ -1,15 +1,17 @@
 
 import EmitterBase from "../EmitterBase"
-import { Card, Round, SpecialMatchCards } from "../../interfaces/Lobby"
+import { Card, SpecialMatchCards } from "../../interfaces/Lobby"
 
 
 /**
- *   Uma partida consiste de diversas rodadas, dependendo da quantidade de cartas distribuídas na partida.
- *   No inicio das partidas, são distribuídas as cartas e os jogadores devem fazer seus palpites.
- *   Logo em seguida começam as rodadas.
+ *  Objetos dessa classe emitem eventos a respeito de uma partida.
+ *  
+ *  Uma partida consiste de diversas rodadas, dependendo da quantidade de cartas distribuídas na partida.
+ *  No inicio das partidas, são distribuídas as cartas e os jogadores devem fazer seus palpites.
+ *  Logo em seguida começam as rodadas.
  * 
- *   A partida com apenas uma carta é especial, com os jogadores podendo ver as cartas dos outros jogadores,
- *   menos as próprias cartas.
+ *  A partida com apenas uma carta é especial, com os jogadores podendo ver as cartas dos outros jogadores,
+ *  menos as próprias cartas.
  */
 export default class MatchEventsEmitter extends EmitterBase {
 
