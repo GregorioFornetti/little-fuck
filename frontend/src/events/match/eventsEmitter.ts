@@ -14,7 +14,7 @@
  *  @param numWinRound número de rodadas que o jogador espera ganhar (palpite)
  */
 export function emitWinRoundsNumberResponse(numWinRound: number) {
-    globalThis.socket.emit('win-rounds-numbers-response', numWinRound);
+    globalThis.socket.emit('win-rounds-number-response', numWinRound);
 }
 
 
