@@ -2,7 +2,7 @@
 /**
  *  Interface que contém as informações 
  */
-interface Card {
+export interface Card {
     /** Tipo da carta */
     type: "common",
     /** O poder da carta. Cartas com valores mais altos ganham das outras com valores mais baixos. */
@@ -12,11 +12,22 @@ interface Card {
 /**
  *  Interface que contém as informações de uma carta que está na mesa de uma rodada.
  */
-interface RoundCard {
+export interface RoundCard {
     /** Informações da carta contida na mesa da rodada */
     card: Card,
     /** ID do jogador que colocou essa carta na mesa */
     playerId: string
+}
+
+/**
+ *  Interface que contém as informações de uma partida especial, como as cartas que estão na mesa e seus rankings. No caso, os jogadores 
+ *  verão as cartas de todos os outros jogadores, e não as suas próprias.
+ */
+export interface SpecialMatchCards {
+    /** Todas as cartas (dos outros jogadores) que ainda não foram anuladas ou empatadas. Essa lista está ordenada da carta mais forte para a mais fraca. */
+    onMatch: RoundCard[],
+    /** Uma lista de cartas e seus donos (igual o onMatch). Nesse caso, as cartas estão anuladas (por causa de empate, por exemplo), e não serão contadas na disputa. Apenas contém cartas de outros jogadores */
+    anulledCards: RoundCard[]
 }
 
 /**
