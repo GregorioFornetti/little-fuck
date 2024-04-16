@@ -1,4 +1,7 @@
 
+import EventsEmitterBase from "../EventsEmitterBase";
+
+
 /**
  *  Objetos dessa classe emitem eventos a respeito de um jogo de "Little Fuck".
  *  
@@ -6,6 +9,6 @@
  *  Todos os jogadores iniciam com uma quantidade de vida, e vão perdendo elas ao decorrer das partidas.
  *  O jogo acaba quando restar apenas um jogador com vidas.
  */
-export default class GameEventsEmitter {
+export default class GameEventsEmitter extends EventsEmitterBase {
     
 }

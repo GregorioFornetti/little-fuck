@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "test": "jest --watchAll --no-cache --detectOpenHandles"
+    "test": "jest --verbose"
   },
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",

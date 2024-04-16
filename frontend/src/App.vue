@@ -5,7 +5,9 @@
 
   import HomePage from "./components/pages/HomePage.vue";
   import Spinner from "./components/Spinner.vue";
-  import EventsEmitter from "./events/Emitter";
+  import EventsEmitter from "./events/EventsEmitter";
+  import EventsListenersAdder from "./events/EventsListenersAdder";
+  import addDefaultEventsListeners from "./events/addDefaultEventsListeners";
 
   const connectionStatus = ref<"loading" | "connected" | "disconnected">("loading")
 
@@ -32,8 +34,10 @@
 
   globalThis.player = {
     socket: socket,
-    eventsEmitter: EventsEmitter,
+    eventsEmitter: new EventsEmitter(socket),
+    eventsListenersAdder: new EventsListenersAdder(socket)
   }
+  addDefaultEventsListeners(socket)
 </script>
 
 <template>

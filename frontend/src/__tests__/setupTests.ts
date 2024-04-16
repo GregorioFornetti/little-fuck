@@ -4,7 +4,8 @@ import { AddressInfo } from "net";
 import { io as ioc, Socket as ClientSocket } from "socket.io-client";
 import { Server, Socket as ServerSocket } from "socket.io";
 import "../global"
-import EventsEmitter from "../events/Emitter"
+import EventsEmitter from "../events/EventsEmitter"
+import EventsListenersAdder from "../events/EventsListenersAdder"
 
 const httpServer = createServer();
 let io: Server;
@@ -21,7 +22,8 @@ beforeAll((done) => {
     });
     globalThis.player = {
       socket: clientSocket,
-      eventsEmitter: EventsEmitter
+      eventsEmitter: new EventsEmitter(clientSocket),
+      eventsListenersAdder: new EventsListenersAdder(clientSocket)
     }
     clientSocket.on("connect", done);
   });

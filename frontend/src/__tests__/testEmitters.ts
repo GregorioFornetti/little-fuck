@@ -1,60 +1,65 @@
 
-import EventsEmitter from "../events/Emitter";
+
 import { clientSocket, serverSocket } from "./setupTests";
-import { Socket as ClientSocket } from "socket.io-client";
-import { Socket as ServerSocket } from "socket.io";
+import EventsEmitter from "../events/EventsEmitter";
 
 describe("Testes de envio de mensagem / eventos pelo servidor", () => {
     
     describe("Lobby events", () => {
         test("create-lobby", (done) => {
+            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('create-lobby', (name: string) => {
                 expect(name).toBe('Player1')
                 done()
             })
 
-            EventsEmitter.Lobby.emitCreateLobby('Player1')
+            eventsEmitter.lobby.emitCreateLobby('Player1')
         })
 
         test("join-lobby", (done) => {
+            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('join-lobby', (lobbyId: string, name: string) => {
                 expect(lobbyId).toBe('123')
                 expect(name).toBe('Player1')
                 done()
             })
 
-            EventsEmitter.Lobby.emitJoinLoby('123', 'Player1')
+            eventsEmitter.lobby.emitJoinLoby('123', 'Player1')
         })
 
         test("logout", (done) => {
+            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('logout', () => {
                 done()
             })
 
-            EventsEmitter.Lobby.emitLogout()
+            eventsEmitter.lobby.emitLogout()
         })
 
         test("ready", (done) => {
+            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('ready', () => {
                 done()
             })
 
-            EventsEmitter.Lobby.emitReady()
+            eventsEmitter.lobby.emitReady()
         })
 
         test("unready", (done) => {
+            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('unready', () => {
                 done()
             })
 
-            EventsEmitter.Lobby.emitUnready()
+            eventsEmitter.lobby.emitUnready()
         })
 
         test("start-game-request", (done) => {
+            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('start-game-request', () => {
                 done()
             })
-            EventsEmitter.Lobby.emitStartGameRequest()
+            eventsEmitter.lobby.emitStartGameRequest()
         })
     })
 
@@ -64,23 +69,25 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
     describe("Match events", () => {
         test("win-rounds-number-response", (done) => {
+            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('win-rounds-number-response', (winRounds: number) => {
                 expect(winRounds).toBe(5)
                 done()
             })
 
-            EventsEmitter.Match.emitWinRoundsNumberResponse(5)
+            eventsEmitter.match.emitWinRoundsNumberResponse(5)
         })
     })
 
     describe("Round events", () => {
         test("select-card", (done) => {
+            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('select-card', (card: number) => {
                 expect(card).toBe(1)
                 done()
             })
 
-            EventsEmitter.Round.emitSelectCard(1)
+            eventsEmitter.round.emitSelectCard(1)
         })
     })
 })

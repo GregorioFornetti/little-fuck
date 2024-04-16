@@ -1,11 +1,14 @@
 <script setup lang="ts">
+    import "./global.ts"
     import { ref } from "vue";
     import Modal from "../modal/Modal.vue";
     import PrimaryModalBtn from "../modal/PrimaryModalBtn.vue";
     import SecundaryModalBtn from "../modal/SecundaryModalBtn.vue";
     import ModalInput from "../modal/ModalInput.vue";
-    import EventsEmitter from "@/events/Emitter";
+    import EventsEmitter from "@/events/EventsEmitter";
     import Spinner from "../Spinner.vue";
+import type Player from "@/interfaces/Player";
+import type Lobby from "@/interfaces/Lobby";
 
     type JoinLobbyErrorType = "lobby-in-game"|"inexistent-lobby"|"no-name"|"repeated-name"|"player-already-in-lobby"
 
@@ -52,13 +55,13 @@
         createLobbyModalStatus.value = 'loading';
     }
 
-    globalThis.socket.on('join-lobby-success', (lobbyInfo: any) => {
-        closeJoinLobbyModal()
-        closeCreateLobbyModal()
-        console.log('join-lobby-success')
-    })
+    globalThis.player.eventsListenersAdder.lobby.joinLobbySuccess((player: Player, lobby: Lobby) => {
+        closeJoinLobbyModal();
+        closeCreateLobbyModal();
+        console.log('join-lobby-success');
+    });
 
-    globalThis.socket.on('join-lobby-error', (errorTypeParam: JoinLobbyErrorType) => {
+    globalThis.player.eventsListenersAdder.lobby.joinLobbyError((player: Player, errorTypeParam: JoinLobbyErrorType) => {
         if (joinLobbyModalStatus.value === 'loading') {
             joinLobbyModalStatus.value = 'error';
         } else if (createLobbyModalStatus.value === 'loading') {

@@ -1,7 +1,8 @@
 
 import type Lobby from "./Lobby"
 import type { Ref } from "vue"
-import EventsEmitter from "@/events/Emitter"
+import EventsEmitter from "@/events/EventsEmitter"
+import EventsListenersAdder from "@/events/EventsListenersAdder"
 import type { Socket } from "socket.io-client"
 
 export default interface Player {
@@ -9,6 +10,8 @@ export default interface Player {
     lobby?: Ref<Lobby>,
     /** Emissor de eventos. É responsável por enviar mensagens para o servidor */
     eventsEmitter: EventsEmitter,
+    /** Receptor de eventos. Pode ser usado para cadastrar novas funções de handler (funções chamadas ao receber mensagens do servidor) */
+    eventsListenersAdder: EventsListenersAdder,
     /** Variável global que armazena o socket de comunicação com o servidor. Será undefined se o usuário não estiver conectado */
     socket: Socket
 }
