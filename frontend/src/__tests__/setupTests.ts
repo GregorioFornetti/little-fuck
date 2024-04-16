@@ -4,6 +4,7 @@ import { AddressInfo } from "net";
 import { io as ioc, Socket as ClientSocket } from "socket.io-client";
 import { Server, Socket as ServerSocket } from "socket.io";
 import "../global"
+import EventsEmitter from "../events/Emitter"
 
 const httpServer = createServer();
 let io: Server;
@@ -18,7 +19,10 @@ beforeAll((done) => {
     io.on("connection", (socket) => {
       serverSocket = socket;
     });
-    globalThis.socket = clientSocket
+    globalThis.player = {
+      socket: clientSocket,
+      eventsEmitter: EventsEmitter
+    }
     clientSocket.on("connect", done);
   });
 });

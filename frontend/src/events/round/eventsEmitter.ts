@@ -8,7 +8,7 @@
  *  @param cardIndex índice da carta selecionada
  */
 export function emitSelectCard(cardIndex: number) {
-    globalThis.socket.emit('select-card', cardIndex)
+    globalThis.player.socket.emit('select-card', cardIndex)
 }
 
 

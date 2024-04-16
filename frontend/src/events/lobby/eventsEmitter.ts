@@ -8,7 +8,7 @@
  *  @param name Nome do jogador
  */
 export function emitCreateLobby(name: string) {
-    globalThis.socket.emit('create-lobby', name);
+    globalThis.player.socket.emit('create-lobby', name);
 }
 
 /**
@@ -23,7 +23,7 @@ export function emitCreateLobby(name: string) {
  *  @param name nome que o jogador deseja utilizar no jogo.
  */
 export function emitJoinLoby(lobbyId: string, name: string) {
-    globalThis.socket.emit('join-lobby', lobbyId, name);
+    globalThis.player.socket.emit('join-lobby', lobbyId, name);
 }
 
 /**
@@ -32,7 +32,7 @@ export function emitJoinLoby(lobbyId: string, name: string) {
  *  para que removam ele da sala também), caso contrário será enviado o evento `logout-error` (apenas para o jogador que tentou sair).
  */
 export function emitLogout() {
-    globalThis.socket.emit('logout');
+    globalThis.player.socket.emit('logout');
 }
 
 /**
@@ -42,7 +42,7 @@ export function emitLogout() {
  *  Caso contrário, o erro será informado para o cliente pelo evento `player-ready-error`.
  */
 export function emitReady() {
-    globalThis.socket.emit('ready');
+    globalThis.player.socket.emit('ready');
 }
 
 /**
@@ -52,7 +52,7 @@ export function emitReady() {
  *  Caso contrário, o erro será informado para o cliente pelo evento `player-unready-error`.
  */
 export function emitUnready() {
-    globalThis.socket.emit('unready');
+    globalThis.player.socket.emit('unready');
 }
 
 /**
@@ -63,7 +63,7 @@ export function emitUnready() {
  *  será enviado ao solicitante o evento `start-game-error`.
  */
 export function emitStartGameRequest() {
-    globalThis.socket.emit('start-game-request');
+    globalThis.player.socket.emit('start-game-request');
 }
 
 
