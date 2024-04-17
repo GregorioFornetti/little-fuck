@@ -37,7 +37,7 @@ function getPlayer(socket: Socket) {
     }
 }
 
-describe("Testes de envio de mensagem / eventos pelo servidor", () => {
+describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
 
     describe("Lobby events", () => {
         test("create-lobby", (done) => {
