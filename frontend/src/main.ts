@@ -1,5 +1,4 @@
 import './assets/main.css'
-import "./global"
 import { createApp } from 'vue'
 import App from './App.vue'
 

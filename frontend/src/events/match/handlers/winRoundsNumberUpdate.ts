@@ -1,5 +1,5 @@
 
-import type Player from "@/interfaces/Player";
+import { lobby } from '@/connection'
 
 
 /**
@@ -10,6 +10,6 @@ import type Player from "@/interfaces/Player";
  *  @param numWinRounds número de rodadas que o jogador atual acredita que irá vencer (palpite)
  *  @param nextPlayerId id do próximo jogador que deve palpitar. Pode ser null caso todos os jogadores já tenham palpitado
  */
-export function handleWinRoundsNumberUpdate(player: Player, numWinRounds: number, nextPlayerId: string|null) {
+export function handleWinRoundsNumberUpdate(numWinRounds: number, nextPlayerId: string|null) {
 
 }

@@ -1,6 +1,6 @@
 
 import type Lobby from "@/interfaces/Lobby";
-import type Player from "@/interfaces/Player";
+import { lobby } from '@/connection'
 
 
 /**
@@ -12,6 +12,6 @@ import type Player from "@/interfaces/Player";
  *  @param player informações do jogador atual
  *  @param lobby informações da sala que o jogador entrou
  */
-export function handleJoinLobbySuccess(player: Player, lobby: Lobby) {
+export function handleJoinLobbySuccess(lobbyResponse: Lobby) {
 
 }

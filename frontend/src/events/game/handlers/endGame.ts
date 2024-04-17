@@ -1,5 +1,5 @@
 
-import type Player from "@/interfaces/Player";
+import { lobby } from '@/connection'
 
 
 /**
@@ -8,6 +8,6 @@ import type Player from "@/interfaces/Player";
  *  @param player informações do jogador atual
  *  @param type tipo de erro que ocorreu
  */
-export function handleEndGame(player: Player, playerRanks: string[]) {
+export function handleEndGame(playerRanks: string[]) {
 
 }

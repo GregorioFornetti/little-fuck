@@ -1,6 +1,6 @@
 
 import type { Card } from "@/interfaces/Lobby";
-import type Player from "@/interfaces/Player";
+import { lobby } from '@/connection'
 
 
 /**
@@ -10,6 +10,6 @@ import type Player from "@/interfaces/Player";
  *  @param cards cartas que o jogador atual possui
  *  @param firstPlayerId id do jogador que deve começar a partida
  */
-export function handleStartMatch(player: Player, cards: Card[], firstPlayerId: string) {
+export function handleStartMatch(cards: Card[], firstPlayerId: string) {
 
 }

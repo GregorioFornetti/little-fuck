@@ -1,5 +1,5 @@
 
-import type Player from "@/interfaces/Player";
+import { lobby } from '@/connection'
 
 
 /**
@@ -9,6 +9,6 @@ import type Player from "@/interfaces/Player";
  *  @param winnerId id do jogador que ganhou a rodada
  *  @param points pontos que o jogador ganhador fez nessa rodada
  */
-export function handleEndRound(player: Player, winnerId: string, points: number) {
+export function handleEndRound(winnerId: string, points: number) {
 
 }

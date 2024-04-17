@@ -1,7 +1,5 @@
 
 import type { Socket } from "socket.io-client"
-import "../global"
-
 
 export default class EventsEmitterBase {
 

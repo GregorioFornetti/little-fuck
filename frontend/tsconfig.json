@@ -8,7 +8,16 @@
       "path": "./tsconfig.app.json"
     }
   ],
+  "include": [
+    "src/**/*.ts", // Adjust the path to match your source files
+    "test/**/*.ts" // Adjust the path to match your test files
+  ],
   "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {

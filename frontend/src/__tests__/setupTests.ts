@@ -3,7 +3,6 @@ import { createServer } from "node:http";
 import { AddressInfo } from "net";
 import { io as ioc, Socket as ClientSocket } from "socket.io-client";
 import { Server, Socket as ServerSocket } from "socket.io";
-import "../global"
 import EventsEmitter from "../events/EventsEmitter"
 import EventsListenersAdder from "../events/EventsListenersAdder"
 
@@ -11,6 +10,8 @@ const httpServer = createServer();
 let io: Server;
 let clientSocket: ClientSocket;
 let serverSocket: ServerSocket;
+let eventsEmitter: EventsEmitter;
+let eventsListenersAdder: EventsListenersAdder;
 
 beforeAll((done) => {
   io = new Server(httpServer);
@@ -20,12 +21,9 @@ beforeAll((done) => {
     io.on("connection", (socket) => {
       serverSocket = socket;
     });
-    globalThis.player = {
-      socket: clientSocket,
-      eventsEmitter: new EventsEmitter(clientSocket),
-      eventsListenersAdder: new EventsListenersAdder(clientSocket)
-    }
     clientSocket.on("connect", done);
+    eventsEmitter = new EventsEmitter(clientSocket);
+    eventsListenersAdder = new EventsListenersAdder(clientSocket);
   });
 });
 
@@ -39,4 +37,4 @@ afterAll(() => {
   clientSocket.disconnect();
 });
 
-export { io, clientSocket, serverSocket };
+export { io, clientSocket, serverSocket, eventsEmitter, eventsListenersAdder };

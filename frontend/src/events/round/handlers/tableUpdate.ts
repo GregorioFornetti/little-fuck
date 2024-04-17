@@ -1,6 +1,6 @@
 
 import type { Round } from "@/interfaces/Lobby";
-import type Player from "@/interfaces/Player";
+import { lobby } from '@/connection'
 
 
 /**
@@ -11,6 +11,6 @@ import type Player from "@/interfaces/Player";
  *  @param cards cartas jogadas até o momento
  *  @param nextPlayerId id do próximo jogador que deve jogar. Pode ser null caso todos os jogadores já tenham jogado
  */
-export function handleTableUpdate(player: Player, cards: Round, nextPlayerId: string|null) {
+export function handleTableUpdate(cards: Round, nextPlayerId: string|null) {
 
 }

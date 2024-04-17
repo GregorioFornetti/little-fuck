@@ -1,5 +1,4 @@
 
-import type Player from "@/interfaces/Player";
 import type { Round } from "@/interfaces/Lobby";
 import EventsListenersAdderBase from "../eventsListenersAdderBase";
 
@@ -12,19 +11,19 @@ import type { Socket } from "socket.io-client";
 
 export class RoundEventsHandlersAdder extends EventsListenersAdderBase {
 
-    public startRound(handlerFunction: (player: Player, firstPlayerId: string) => void): void {
+    public startRound(handlerFunction: (firstPlayerId: string) => void): void {
         this.addEventListener('start-round', handlerFunction)
     }
 
-    public tableUpdate(handlerFunction: (player: Player, cards: Round, nextPlayerId: string | null) => void): void {
+    public tableUpdate(handlerFunction: (cards: Round, nextPlayerId: string | null) => void): void {
         this.addEventListener('table-update', handlerFunction)
     }
 
-    public selectCardError(handlerFunction: (player: Player, type: "not-your-turn"|"invalid-index"|"not-in-lobby") => void): void {
+    public selectCardError(handlerFunction: (type: "not-your-turn"|"invalid-index"|"not-in-lobby") => void): void {
         this.addEventListener('select-card-error', handlerFunction)
     }
 
-    public endRound(handlerFunction: (player: Player, winnerId: string, points: number) => void): void {
+    public endRound(handlerFunction: (winnerId: string, points: number) => void): void {
         this.addEventListener('end-round', handlerFunction)
     }
 }

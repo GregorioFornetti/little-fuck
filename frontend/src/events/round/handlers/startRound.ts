@@ -1,5 +1,5 @@
 
-import type Player from "@/interfaces/Player";
+import { lobby } from '@/connection'
 
 
 /**
@@ -8,6 +8,6 @@ import type Player from "@/interfaces/Player";
  *  @param player informações do jogador atual
  *  @param firstPlayerId id do jogador que deve começar a rodada (jogar a primeira carta)
  */
-export function handleStartRound(player: Player, firstPlayerId: string) {
+export function handleStartRound(firstPlayerId: string) {
 
 }

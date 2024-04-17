@@ -1,5 +1,5 @@
 
-import type Player from "@/interfaces/Player";
+import { lobby } from '@/connection'
 
 
 /**
@@ -12,6 +12,6 @@ import type Player from "@/interfaces/Player";
  *  Ex: { 123: -1 } = jogador com id 123 perdeu uma vida
 
  */
-export function handleEndMatch(player: Player, playerHealthUpdate: { [playerId: string]: number }) {
+export function handleEndMatch(playerHealthUpdate: { [playerId: string]: number }) {
 
 }

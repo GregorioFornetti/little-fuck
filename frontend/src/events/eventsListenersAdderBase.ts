@@ -1,7 +1,5 @@
 
 import type { Socket } from "socket.io-client"
-import "../global"
-import type Player from "../interfaces/Player"
 
 
 export default class EventsListenersAdderBase {
@@ -12,8 +10,8 @@ export default class EventsListenersAdderBase {
         this.socket = socket
     }
 
-    protected addEventListener(eventName: string, eventHandler: (player: Player, ...args: any[]) => void) {
-        this.socket.on(eventName, (...args) => eventHandler(globalThis.player, ...args))
+    protected addEventListener(eventName: string, eventHandler: (...args: any[]) => void) {
+        this.socket.on(eventName, (...args) => eventHandler(...args))
     }
 }
 

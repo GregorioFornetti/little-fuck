@@ -1,5 +1,5 @@
 
-import type Player from "@/interfaces/Player";
+import { lobby } from '@/connection'
 
 
 /**
@@ -9,6 +9,6 @@ import type Player from "@/interfaces/Player";
  *  @param player informações do jogador atual
  *  @param id identificador do jogador que acabou de ficar despreparado
  */
-export function handlePlayerUnready(player: Player, id: string) {
+export function handlePlayerUnready(id: string) {
 
 }

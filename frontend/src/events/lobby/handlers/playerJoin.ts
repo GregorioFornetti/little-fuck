@@ -1,5 +1,5 @@
 
-import type Player from "@/interfaces/Player";
+import { lobby } from '@/connection'
 
 
 /**
@@ -9,6 +9,6 @@ import type Player from "@/interfaces/Player";
  *  @param id id do jogador que acabou de entrar na sala
  *  @param name nome do jogador que acabou de entrar na sala
  */
-export function handlePlayerJoin(player: Player, id: string, name: string) {
+export function handlePlayerJoin(id: string, name: string) {
 
 }

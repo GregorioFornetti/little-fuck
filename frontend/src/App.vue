@@ -1,26 +1,11 @@
 <script setup lang="ts">
-  import "./global.ts"
-  import { io } from "socket.io-client"
+  import { socket, lobby } from "./connection";
   import { ref } from "vue";
 
   import HomePage from "./components/pages/HomePage.vue";
   import Spinner from "./components/Spinner.vue";
-  import EventsEmitter from "./events/EventsEmitter";
-  import EventsListenersAdder from "./events/EventsListenersAdder";
-  import addDefaultEventsListeners from "./events/addDefaultEventsListeners";
 
   const connectionStatus = ref<"loading" | "connected" | "disconnected">("loading")
-
-  const rootUrl: string = process.env.NODE_ENV === 'development' ?
-                        'localhost:3000' :
-                         window.location.host
-  const socket = io(
-    rootUrl, {
-      autoConnect: false,
-      path: `${import.meta.env.VITE_SERVER_PATH || ''}/socket.io/`
-    }
-  )
-  socket.connect()
 
   socket.on("connect", () => {
     console.log("connected")
@@ -32,12 +17,6 @@
     connectionStatus.value = "disconnected"
   });
 
-  globalThis.player = {
-    socket: socket,
-    eventsEmitter: new EventsEmitter(socket),
-    eventsListenersAdder: new EventsListenersAdder(socket)
-  }
-  addDefaultEventsListeners(socket)
 </script>
 
 <template>

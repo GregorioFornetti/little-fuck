@@ -1,5 +1,5 @@
 
-import type Player from "@/interfaces/Player";
+import { lobby } from '@/connection'
 
 
 /**
@@ -10,6 +10,6 @@ import type Player from "@/interfaces/Player";
  *  @param player informações do jogador atual
  *  @param type tipo de erro que ocorreu
  */
-export function handleStartGameError(player: Player, type: "not-leader"|"not-all-ready"|"not-in-lobby"|"already-in-game") {
+export function handleStartGameError(type: "not-leader"|"not-all-ready"|"not-in-lobby"|"already-in-game") {
 
 }

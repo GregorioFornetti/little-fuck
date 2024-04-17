@@ -1,13 +1,11 @@
 
 
-import { clientSocket, serverSocket } from "./setupTests";
-import EventsEmitter from "../events/EventsEmitter";
+import { serverSocket, eventsEmitter } from "./setupTests";
 
 describe("Testes de envio de mensagem / eventos pelo servidor", () => {
     
     describe("Lobby events", () => {
         test("create-lobby", (done) => {
-            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('create-lobby', (name: string) => {
                 expect(name).toBe('Player1')
                 done()
@@ -17,7 +15,6 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
         })
 
         test("join-lobby", (done) => {
-            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('join-lobby', (lobbyId: string, name: string) => {
                 expect(lobbyId).toBe('123')
                 expect(name).toBe('Player1')
@@ -28,7 +25,6 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
         })
 
         test("logout", (done) => {
-            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('logout', () => {
                 done()
             })
@@ -37,7 +33,6 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
         })
 
         test("ready", (done) => {
-            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('ready', () => {
                 done()
             })
@@ -46,7 +41,6 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
         })
 
         test("unready", (done) => {
-            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('unready', () => {
                 done()
             })
@@ -55,7 +49,6 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
         })
 
         test("start-game-request", (done) => {
-            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('start-game-request', () => {
                 done()
             })
@@ -69,7 +62,6 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
     describe("Match events", () => {
         test("win-rounds-number-response", (done) => {
-            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('win-rounds-number-response', (winRounds: number) => {
                 expect(winRounds).toBe(5)
                 done()
@@ -81,7 +73,6 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
     describe("Round events", () => {
         test("select-card", (done) => {
-            const eventsEmitter = new EventsEmitter(clientSocket)
             serverSocket.on('select-card', (card: number) => {
                 expect(card).toBe(1)
                 done()

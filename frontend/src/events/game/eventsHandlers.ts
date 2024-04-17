@@ -1,5 +1,4 @@
 
-import type Player from "@/interfaces/Player";
 import EventsListenersAdderBase from "../eventsListenersAdderBase";
 
 import { handleEndGame } from "./handlers/endGame";
@@ -8,11 +7,11 @@ import type { Socket } from "socket.io-client";
 
 
 export class GameEventsHandlersAdder extends EventsListenersAdderBase {
-    public startGame(handlerFunction: (player: Player) => void): void {
+    public startGame(handlerFunction: () => void): void {
         this.addEventListener('start-game', handlerFunction)
     }
 
-    public endGame(handlerFunction: (player: Player, playersRanks: string[]) => void): void {
+    public endGame(handlerFunction: (playersRanks: string[]) => void): void {
         this.addEventListener('end-game', handlerFunction)
     }
 }

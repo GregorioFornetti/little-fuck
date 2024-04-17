@@ -1,5 +1,5 @@
 
-import type Player from "@/interfaces/Player";
+import { lobby } from '@/connection'
 import type { SpecialMatchCards } from "@/interfaces/Lobby";
 
 
@@ -14,6 +14,6 @@ import type { SpecialMatchCards } from "@/interfaces/Lobby";
  *  @param cards cartas dos outros jogadores
  *  @param firstPlayerId id do jogador que deve começar palpitando
  */
-export function handleStartSpecialMatch(player: Player, cards: SpecialMatchCards, firstPlayerId: string) {
+export function handleStartSpecialMatch(cards: SpecialMatchCards, firstPlayerId: string) {
 
 }
