@@ -137,7 +137,7 @@ Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
 
 #### Descrição
 
-Indica ao usuário que ocorreu algum erro ao entrar na sala (ou criá-la). Isso pode ocorrer devido à um nome inválido (nenhum caractere ou nome repetido), um lobby inexistente ou em partida, ou o jogador já estar em um outro lobby.
+Indica ao usuário que ocorreu algum erro ao entrar na sala (ou criá-la). Isso pode ocorrer devido a um nome inválido (nenhum caractere ou nome repetido), um lobby inexistente ou em partida, ou o jogador já estar em um outro lobby.
 
 #### Parâmetros
 
@@ -271,7 +271,7 @@ Indica que um jogador acaba de ficar preparado para um jogo. Este evento só é 
 
 #### Parâmetros
 
-- player: string do id do jogador que acaba de ficar pronto.
+- id: string do id do jogador que acaba de ficar pronto.
 
 ---
 
@@ -292,7 +292,7 @@ Evento enviado ao cliente que tentou se preparar para a partida, mas falhou. Iss
 
 #### Parâmetros
 
-- type: "in-game" | "not-in-lobby" | "leader"
+- type: "in-game" | "not-in-lobby" | "leader"
 
 ---
 
@@ -335,7 +335,7 @@ Indica que um jogador acaba de ficar despreparado para um jogo. Este evento só 
 
 #### Parâmetros
 
-- player: string do id do jogador que acaba de ficar despreparado.
+- id: string do id do jogador que acaba de ficar despreparado.
 
 ---
 
@@ -357,7 +357,7 @@ Evento enviado ao cliente que tentou se despreparar para a partida, mas falhou. 
 
 #### Parâmetros
 
-- type: "in-game" | "not-in-lobby" | "leader"
+- type: "in-game" | "not-in-lobby" | "leader"
 
 ---
 
@@ -376,7 +376,7 @@ Cliente ----> Servidor (cliente envia a mensagem ao servidor)
 
 #### Descrição
 
-Evento para tentativa de inicio de jogo. Para que o jogo comece, é preciso que o solicitante esteja em uma sala que não esteja em andamento e seja o líder dela, além de que todos os jogadores precisam estar prontos. Caso todas essas condições sejam atendidas, o evento `start-game` será acionado, para que o jogo comece, caso contrário, será enviado ao solicitante o evento `start-game-error`
+Evento para tentativa de início de jogo. Para que o jogo comece, é preciso que o solicitante esteja em uma sala que não esteja em andamento e seja o líder dela, além de que todos os jogadores precisam estar prontos. Caso todas essas condições sejam atendidas, o evento `start-game` será acionado, para que o jogo comece, caso contrário, será enviado ao solicitante o evento `start-game-error`
 
 ---
 
@@ -395,7 +395,7 @@ Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
 
 #### Descrição
 
-Evento indicando que ocorreu um erro ao iniciar a partida. Esse erro pode ocorrer caso o solicitante não esteja em um sala, ou que está já está em jogo. Outro possível erro pode ocorrer caso ele não seja o líder ou se nem todos jogadores estão prontos para começar.
+Evento indicando que ocorreu um erro ao iniciar a partida. Esse erro pode ocorrer caso o solicitante não esteja em uma sala, ou que esta já esteja em jogo. Outro possível erro pode ocorrer caso ele não seja o líder ou se nem todos jogadores estiverem prontos para começar.
 
 #### Parâmetros
 
@@ -447,7 +447,7 @@ Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a
                 id: {
                     numWonRounds: ... // int: quantidade de rodadas ganhas até o momento pelo usuário em questão
                     numWinsNeeded: ... // int | undefined: quantidade de vitórias palpitadas pelo jogador. Pode ser undefined caso não tenha palpitado ainda
-                    numCards: ... // int: número de cartas que este jogador possui no momento
+                    numCards: ... // int: numero de cartas que este jogador possui no momento
                 },
                 ...
             },
@@ -459,7 +459,7 @@ Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a
             ],
             numRounds: ..., // int: quantidade de rodadas que devem ocorrer nessa partida (número de cartas que foram dadas à cada jogador).
             nextPlayerId: ..., // string | undefined: id do jogador que deve palpitar atualmente. undefined caso todos já tenham palpitado
-            round: {  // Pode ser undefined caso não esteja ocorrendo uma partida
+            round: {  // Pode ser undefined caso não esteja ocorrendo uma partida
                 cards: {
                     onMatch: [  // Todas as cartas que foram que ainda não foram anuladas ou empatadas. Essa lista está ordenada da carta mais forte para a mais fraca.
                         {
@@ -473,10 +473,10 @@ Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a
                     ],
                     anulledCards: [ ... ]  // Uma lista de cartas e seus donos (igual o onMatch). Nesse caso, as cartas estão anuladas (por causa de empate, por exemplo), e não serão contadas na disputa.
                 },
-                nextPlayerId: ...  // string | undefined: id do jogador que deve jogar a carta atualmente. undefined caso todas já tenham jogado suas cartas
+                nextPlayerId: ...  // string | undefined: id do jogador que deve jogar a carta atualmente. undefined caso todas já tenham jogado suas cartas
             }
         }
-    }
+    }
 }
 ```
 
@@ -547,7 +547,7 @@ Evento indicando o final de um jogo completo de "Little Fuck".
 
 ## Partida (Match)
 
-No começo de cada partida, cartas aleatórias do baralho serão distribuídas aos jogadores. Na primeira partida, será distribuído apenas uma carta a cada um dos jogadores, na segunda partida, duas cartas, e assim por diante. Quando o número de cartas do baralho não for suficiente para entregar cartas para todos jogadores, voltará a ser distribuido apenas uma carta.
+No começo de cada partida, cartas aleatórias do baralho serão distribuídas aos jogadores. Na primeira partida, será distribuído apenas uma carta a cada um dos jogadores, na segunda partida, duas cartas, e assim por diante. Quando o número de cartas do baralho não for suficiente para entregar cartas para todos jogadores, voltará a ser distribuído apenas uma carta.
 
 No começo de cada partida, os jogadores verão as suas próprias cartas recebidas e deverão fazer os seus palpites. O palpite consiste em dizer quantas rodadas você acredita ganhar com as cartas que está em mão. Por exemplo, se você estiver com cartas “altas” (como alguma manilha), palpitar alguma vitória pode ser uma boa ideia. Agora, se você está com cartas “fracas”, poderá não ganhar muitas rodadas. Dependendo da sua posição na fila de palpites, você terá informação dos palpites dos outros jogadores, o que pode te ajudar a fazer o seu próprio palpite.
 
@@ -555,9 +555,9 @@ A primeira partida de todas sorteia aleatoriamente um jogador que iniciará palp
 
 O último jogador a palpitar possui uma restrição: este não pode palpitar um número de rodadas que o somatório de todos palpites resulte no mesmo número de cartas. Por exemplo, considerando uma partida com 5 cartas, e que no momento do palpite do último jogador já foram palpitadas 4 vitórias, o último jogador não poderá palpitar apena uma vitória, ele poderá apenas palpitar 0 vitórias ou 2 ou mais vitórias (para que o somatório não dê 5 (4 + 1 = 5)).
 
-Cada partida é composta por rodadas, definidas na próxima seção. Cada rodada pode ser vencida por apenas um jogador ou resultar em um empate (sendo uma rodada sem pontos). Os palpites são relacionados à vitórias dessas rodadas. Caso o palpite do jogador for correto, este não perderá nenhuma vida. Caso contrário, este perderá vidas, dependendo do tamanho do erro (por exemplo, se palpitar 5 e fazer apenas 2 rodadas, perde 3 vidas).
+Cada partida é composta por rodadas, definidas na próxima seção. Cada rodada pode ser vencida por apenas um jogador ou resultar em um empate (sendo uma rodada sem pontos). Os palpites estão relacionados à vitórias dessas rodadas. Caso o palpite do jogador for correto, este não perderá nenhuma vida. Caso contrário, este perderá vidas, dependendo do tamanho do erro (por exemplo, se palpitar 5 e fazer apenas 2 rodadas, perde 3 vidas).
 
-A partida com apenas uma carta é especial. Nessa partida, os jogadores não poderão ver as suas próprias cartas, mas poderão ver as cartas de todos os outros jogadores. Os palpites e a mesma mecânica se mantém, apenas essa visualização das cartas que é modificado nesse caso especial.
+A partida com apenas uma carta é especial. Nessa partida, os jogadores não poderão ver as suas próprias cartas, mas poderão ver as cartas de todos os outros jogadores. Os palpites e a mesma mecânica se mantém, apenas essa visualização das cartas que é modificada nesse caso especial.
 
 ---
 
@@ -683,7 +683,7 @@ Evento enviado para indicar o fim da partida. Uma partida acaba quando todos os 
     idPlayer: healthUpdate,
     ...
 }
-// É um objeto tendo como chaves todos os ids dos jogadores do lobby. É um objeto mapeando id de jogadores para o valor que deve ser modificado em sua vida final. Ex: { 123: -1 } = jogador com id 123 perdeu uma vida
+// É um objeto tendo como chaves todos os ids dos jogadores do lobby. É um objeto mapeando id de jogadores para o valor que deve ser modificado em sua vida final. Ex: { 123: -1 } = jogador com id 123 perdeu uma vida
 ```
 
 ---
@@ -738,7 +738,7 @@ Após todos os jogadores palpitarem, será acionado o evento `table-update`, mos
 
 ## Rodada (Round)
 
-Uma rodada consiste em todos os jogadores jogarem uma das suas cartas. Ao final da rodada, será verificado qual for a maior carta para definir um campeão daquela rodada. Podem ocorrer empates também, caso todas as cartas empatem, nãa concedendo a vitória a nenhum dos jogadores.
+Uma rodada consiste em todos os jogadores jogarem uma das suas cartas. Ao final da rodada, será verificado qual foi a maior carta para definir um campeão daquela rodada. Podem ocorrer empates também, caso todas as cartas empatem, não concedendo a vitória a nenhum dos jogadores.
 
 ---
 
@@ -777,7 +777,7 @@ Cliente ----> Servidor (cliente envia a mensagem ao servidor)
 
 #### Descrição
 
-Evento enviado para selecionar a carta que o jogador jogará na rodada atual. Caso seja de fato a vez do jogdor selecinar sua carta e ele fornecer um índice de carta válido, será colocado a nova carta na mesa para que todos possam vê-la (evento `table-update`). Caso contrário, o servidor informará o erro ao cliente (evento `select-card-error`).
+Evento enviado para selecionar a carta que o jogador jogará na rodada atual. Caso seja de fato a vez do jogador selecionar sua carta e ele fornecer um índice de carta válido, será colocado a nova carta na mesa para que todos possam vê-la (evento `table-update`). Caso contrário, o servidor informará o erro ao cliente (evento `select-card-error`).
 
 #### Parâmetros
 
