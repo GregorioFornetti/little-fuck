@@ -1,6 +1,6 @@
 
 import type { Round } from "@/interfaces/Lobby";
-import EventsListenersAdderBase from "../eventsListenersAdderBase";
+import EventsListenersAdderBase from "../EventsListenersAdderBase";
 
 import { handleEndRound } from "./handlers/endRound";
 import { handleSelectCardError } from "./handlers/selectCardError";
@@ -53,7 +53,7 @@ export class RoundEventsHandlersAdder extends EventsListenersAdderBase {
     }
 }
 
-export default function addDefaultRoundHandlers (socket: Socket) {
+export default function addDefaultRoundHandlers(socket: Socket) {
     const roundEventsHandlersAdder = new RoundEventsHandlersAdder(socket)
     
     roundEventsHandlersAdder.startRound(handleStartRound)

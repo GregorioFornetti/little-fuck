@@ -1,7 +1,7 @@
 
 import { lobby } from '@/connection'
 import type { Card, SpecialMatchCards } from "@/interfaces/Lobby";
-import EventsListenersAdderBase from "../eventsListenersAdderBase";
+import EventsListenersAdderBase from "../EventsListenersAdderBase";
 
 import { handleEndMatch } from "./handlers/endMatch";
 import { handleStartMatch } from "./handlers/startMatch";
@@ -74,7 +74,7 @@ export class MatchEventsHandlersAdder extends EventsListenersAdderBase {
     
 
 
-export default function addDefaultMatchHandlers (socket: Socket) {
+export default function addDefaultMatchHandlers(socket: Socket) {
     const matchEventsHandlersAdder = new MatchEventsHandlersAdder(socket)
     
     matchEventsHandlersAdder.startMatch(handleStartMatch)

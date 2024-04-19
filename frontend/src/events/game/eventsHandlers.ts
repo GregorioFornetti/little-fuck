@@ -1,5 +1,5 @@
 
-import EventsListenersAdderBase from "../eventsListenersAdderBase";
+import EventsListenersAdderBase from "../EventsListenersAdderBase";
 
 import { handleEndGame } from "./handlers/endGame";
 import { handleStartGame } from "./handlers/startGame";
@@ -27,7 +27,7 @@ export class GameEventsHandlersAdder extends EventsListenersAdderBase {
 }
 
 
-export default function addDefaultGameHandlers (socket: Socket) {
+export default function addDefaultGameHandlers(socket: Socket) {
     const gameEventsHandlersAdder = new GameEventsHandlersAdder(socket)
     
     gameEventsHandlersAdder.startGame(handleStartGame)

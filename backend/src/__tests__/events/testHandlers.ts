@@ -1,31 +1,31 @@
 
 import { io, clientSocket, serverSocket, player } from "./setupTests";
-import addEventsListeners from "../events/addEventsListeners";
+import addEventsListeners from "../../events/addEventsListeners";
 
-import { handleCreateLobby } from "../events/lobby/handlers/createLobby";
-import { handleJoinLobby } from "../events/lobby/handlers/joinLobby";
-import { handleLogout } from "../events/lobby/handlers/logout";
-import { handleReady } from "../events/lobby/handlers/ready";
-import { handleStartGameRequest } from "../events/lobby/handlers/startGameRequest";
-import { handleUnready } from "../events/lobby/handlers/unready";
-import { handleWinRoundsNumberResponse } from "../events/match/handlers/winRoundsNumberResponse";
-import { handleSelectCard } from "../events/round/handlers/selectCard";
+import { handleCreateLobby } from "../../events/lobby/handlers/createLobby";
+import { handleJoinLobby } from "../../events/lobby/handlers/joinLobby";
+import { handleLogout } from "../../events/lobby/handlers/logout";
+import { handleReady } from "../../events/lobby/handlers/ready";
+import { handleStartGameRequest } from "../../events/lobby/handlers/startGameRequest";
+import { handleUnready } from "../../events/lobby/handlers/unready";
+import { handleWinRoundsNumberResponse } from "../../events/match/handlers/winRoundsNumberResponse";
+import { handleSelectCard } from "../../events/round/handlers/selectCard";
 
-import EventsEmitter from "../events/Emitter";
+import EventsEmitter from "../../events/Emitter";
 import { Socket } from "socket.io";
-import { players } from "../global";
+import { players } from "../../global";
 
 
-jest.mock("../events/lobby/handlers/createLobby");
-jest.mock("../events/lobby/handlers/joinLobby");
-jest.mock("../events/lobby/handlers/logout");
-jest.mock("../events/lobby/handlers/ready");
-jest.mock("../events/lobby/handlers/startGameRequest");
-jest.mock("../events/lobby/handlers/unready");
+jest.mock("../../events/lobby/handlers/createLobby");
+jest.mock("../../events/lobby/handlers/joinLobby");
+jest.mock("../../events/lobby/handlers/logout");
+jest.mock("../../events/lobby/handlers/ready");
+jest.mock("../../events/lobby/handlers/startGameRequest");
+jest.mock("../../events/lobby/handlers/unready");
 
-jest.mock("../events/match/handlers/winRoundsNumberResponse")
+jest.mock("../../events/match/handlers/winRoundsNumberResponse")
 
-jest.mock("../events/round/handlers/selectCard")
+jest.mock("../../events/round/handlers/selectCard")
 
 
 function getPlayer(socket: Socket) {

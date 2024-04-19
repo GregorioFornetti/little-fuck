@@ -3,8 +3,8 @@ import { createServer } from "node:http";
 import { AddressInfo } from "net";
 import { io as ioc, Socket as ClientSocket } from "socket.io-client";
 import { Server, Socket as ServerSocket } from "socket.io";
-import EventsEmitter from "../events/EventsEmitter"
-import EventsListenersAdder from "../events/EventsListenersAdder"
+import EventsEmitter from "../../events/EventsEmitter"
+import EventsListenersAdder from "../../events/EventsListenersAdder"
 
 const httpServer = createServer();
 let io: Server;

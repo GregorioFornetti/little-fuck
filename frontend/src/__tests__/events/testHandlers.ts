@@ -31,31 +31,31 @@ import { serverSocket, eventsListenersAdder, clientSocket } from "./setupTests";
 import addDefaultEventsListeners from "@/events/addDefaultEventsListeners";
 import { on } from "events";
 
-jest.mock("../events/lobby/handlers/joinLobbySuccess");
-jest.mock("../events/lobby/handlers/joinLobbyError");
-jest.mock("../events/lobby/handlers/playerJoin");
-jest.mock("../events/lobby/handlers/playerLogout");
-jest.mock("../events/lobby/handlers/playerLogoutError");
-jest.mock("../events/lobby/handlers/playerReady");
-jest.mock("../events/lobby/handlers/playerReadyError");
-jest.mock("../events/lobby/handlers/playerUnready");
-jest.mock("../events/lobby/handlers/playerUnreadyError");
-jest.mock("../events/lobby/handlers/reconnect");
-jest.mock("../events/lobby/handlers/startGameError");
+jest.mock("../../events/lobby/handlers/joinLobbySuccess");
+jest.mock("../../events/lobby/handlers/joinLobbyError");
+jest.mock("../../events/lobby/handlers/playerJoin");
+jest.mock("../../events/lobby/handlers/playerLogout");
+jest.mock("../../events/lobby/handlers/playerLogoutError");
+jest.mock("../../events/lobby/handlers/playerReady");
+jest.mock("../../events/lobby/handlers/playerReadyError");
+jest.mock("../../events/lobby/handlers/playerUnready");
+jest.mock("../../events/lobby/handlers/playerUnreadyError");
+jest.mock("../../events/lobby/handlers/reconnect");
+jest.mock("../../events/lobby/handlers/startGameError");
 
-jest.mock("../events/game/handlers/startGame");
-jest.mock("../events/game/handlers/endGame");
+jest.mock("../../events/game/handlers/startGame");
+jest.mock("../../events/game/handlers/endGame");
 
-jest.mock("../events/match/handlers/startMatch")
-jest.mock("../events/match/handlers/winRoundsNumberUpdate")
-jest.mock("../events/match/handlers/winRoundsNumberError")
-jest.mock("../events/match/handlers/endMatch")
-jest.mock("../events/match/handlers/startSpecialMatch")
+jest.mock("../../events/match/handlers/startMatch")
+jest.mock("../../events/match/handlers/winRoundsNumberUpdate")
+jest.mock("../../events/match/handlers/winRoundsNumberError")
+jest.mock("../../events/match/handlers/endMatch")
+jest.mock("../../events/match/handlers/startSpecialMatch")
 
-jest.mock("../events/round/handlers/startRound")
-jest.mock("../events/round/handlers/tableUpdate")
-jest.mock("../events/round/handlers/selectCardError")
-jest.mock("../events/round/handlers/endRound")
+jest.mock("../../events/round/handlers/startRound")
+jest.mock("../../events/round/handlers/tableUpdate")
+jest.mock("../../events/round/handlers/selectCardError")
+jest.mock("../../events/round/handlers/endRound")
 
 
 describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {

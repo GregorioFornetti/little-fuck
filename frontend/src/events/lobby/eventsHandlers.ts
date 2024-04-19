@@ -1,6 +1,6 @@
 
 import type Lobby from "@/interfaces/Lobby";
-import EventsListenersAdderBase from "../eventsListenersAdderBase";
+import EventsListenersAdderBase from "../EventsListenersAdderBase";
 
 import { handleJoinLobbyError } from "./handlers/joinLobbyError";
 import { handleJoinLobbySuccess } from "./handlers/joinLobbySuccess";
@@ -135,7 +135,7 @@ export class LobbyEventsHandlersAdder extends EventsListenersAdderBase {
 }
 
 
-export default function addDefaultLobbyHandlers (socket: Socket) {
+export default function addDefaultLobbyHandlers(socket: Socket) {
     const lobbyEventsHandlersAdder = new LobbyEventsHandlersAdder(socket)
 
     lobbyEventsHandlersAdder.joinLobbySuccess(handleJoinLobbySuccess)

@@ -1,7 +1,7 @@
 
-import EventsEmitter from "../events/Emitter";
-import { lobbys, players } from "../global";
-import Lobby, { Card, Round, SpecialMatchCards } from "../interfaces/Lobby";
+import EventsEmitter from "../../events/Emitter";
+import { lobbys, players } from "../../global";
+import Lobby, { Card, Round, SpecialMatchCards } from "../../interfaces/Lobby";
 import { io, clientSocket, eventsEmitter, lobbyClientsSockets, lobbyServerSockets } from "./setupTests";
 import { Socket as ClientSocket } from "socket.io-client";
 import { Socket as ServerSocket } from "socket.io";

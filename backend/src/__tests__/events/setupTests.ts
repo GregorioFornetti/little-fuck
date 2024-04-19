@@ -3,9 +3,9 @@ import { createServer } from "node:http";
 import { AddressInfo } from "net";
 import { io as ioc, Socket as ClientSocket } from "socket.io-client";
 import { Server, Socket as ServerSocket } from "socket.io";
-import { lobbys, players } from "../global";
-import Player from "../interfaces/Player";
-import EventsEmitter from "../events/Emitter";
+import { lobbys, players } from "../../global";
+import Player from "../../interfaces/Player";
+import EventsEmitter from "../../events/Emitter";
 
 const httpServer = createServer();
 let io: Server;
