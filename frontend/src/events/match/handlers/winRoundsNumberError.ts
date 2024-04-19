@@ -11,7 +11,6 @@ import { lobby } from '@/connection'
  *  já foram palpitadas 4 vitórias, o último jogador não poderá palpitar apena uma vitória, ele poderá apenas palpitar 
  *  0 vitórias ou 2 ou mais vitórias (para que o somatório não dê 5 (4 + 1 = 5)).
  * 
- *  @param player informações do jogador atual
  *  @param type tipo de erro que ocorreu
  */
 export function handleWinRoundsNumberError(type: "not-your-turn"|"negative-is-invalid"|"not-in-lobby"|"num-wins-equals-num-cards") {

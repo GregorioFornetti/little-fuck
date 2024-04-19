@@ -9,6 +9,12 @@ import Player from '../interfaces/Player';
 import EventsEmitter from './Emitter';
 
 
+/**
+ *  Adiciona todos os handlers de eventos ao socket especificado
+ * 
+ *  @param io objeto do servidor, para conseguir emitir eventos para jogadores em lobby
+ *  @param socket socket do jogador
+ */
 export default function addEventsListeners(io: Server, socket: Socket) {
     const eventsHandlers: { [eventName: string]: (player: Player, ...args: any[]) => any} = {
         ...lobbyEventsHandlers,

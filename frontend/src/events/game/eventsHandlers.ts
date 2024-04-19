@@ -7,12 +7,22 @@ import type { Socket } from "socket.io-client";
 
 
 export class GameEventsHandlersAdder extends EventsListenersAdderBase {
+    /**
+     *  Evento indicando o início de um jogo completo de "Little Fuck"
+     * 
+     *  @param handlerFunction função que será chamada quando o evento for recebido
+     */
     public startGame(handlerFunction: () => void): void {
-        this.addEventListener('start-game', handlerFunction)
+        this.socket.on('start-game', handlerFunction)
     }
 
+    /**
+     *  Evento indicando o final de um jogo completo de "Little Fuck".
+     * 
+     *  @param handlerFunction função que será chamada quando o evento for recebido
+     */
     public endGame(handlerFunction: (playersRanks: string[]) => void): void {
-        this.addEventListener('end-game', handlerFunction)
+        this.socket.on('end-game', handlerFunction)
     }
 }
 

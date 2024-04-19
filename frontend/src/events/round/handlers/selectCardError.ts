@@ -9,7 +9,6 @@ import { lobby } from '@/connection'
  *  Outro motivo é a seleção de um índice inválido, por exemplo, contando que temos 5 cartas, -1 e 5 (índice começa em 0)
  *  seriam índices inválidos. Para finalizar, outro motivo possível é que ele tenha mandado essa mensagem sem estar em um lobby.
  * 
- *  @param player informações do jogador atual
  *  @param type tipo de erro que ocorreu
  */
 export function handleSelectCardError(type: "not-your-turn"|"invalid-index"|"not-in-lobby") {

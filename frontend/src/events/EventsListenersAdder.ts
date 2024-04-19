@@ -6,6 +6,13 @@ import { RoundEventsHandlersAdder } from "./round/eventsHandlers";
 import type { Socket } from "socket.io-client";
 
 
+/**
+ *  Classe para facilitar a adição de handlers de eventos. Ao invés de usar o `socket.on(nomeDoEvento, handler)` para adicionar
+ *  eventos, essa classe permite adicionar handlers de eventos de forma mais organizada.  
+ *  Ao usar essa classe, é evitado que os nomes dos eventos sejam escritos de forma errada, 
+ *  com um erro de digitação (ex: 'join-loby' ao invés de 'join-lobby'). Além disso, com a tipagem é possível saber quais
+ *  parâmetros são esperados pelo handler do evento.
+ */
 export default class EventsListenersAdder {
     
     public lobby: LobbyEventsHandlersAdder;

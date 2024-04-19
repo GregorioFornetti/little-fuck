@@ -8,7 +8,6 @@ import { lobby } from '@/connection'
  *  Outro motivo pode ser que o líder tente se preparar, mas este não precisa fazer isso, ele só precisa iniciar a partida.
  *  OBS: caso o jogador solicite a preparação e este já está preparado, nada deve acontecer (este evento não deve ser acionado).
  * 
- *  @param player informações do jogador atual
  *  @param type tipo de erro que ocorreu
  */
 export function handlePlayerReadyError(type: "in-game"|"not-in-lobby"|"leader") {

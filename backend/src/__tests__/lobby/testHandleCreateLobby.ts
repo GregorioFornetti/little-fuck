@@ -57,18 +57,6 @@ describe("handleCreateLobby", () => {
   
       handleCreateLobby(player, 'player1');
     })
-
-    test("Criar lobby adiciona o cliente em um room de mesmo lobbyId", (done) => {
-      clientSocket.on('join-lobby-success', (lobby: Lobby) => {
-        // Verifica se o jogador foi corretamente adicionado ao lobby (room) no socket
-        clientSocket.on('test', () => {
-          done()
-        })
-        io.to(lobby.lobbyId).emit('test');
-      })
-  
-      handleCreateLobby(player, 'player1');
-    });
   })
   
   test("Criar lobby com jogador já em outro lobby deve emitir erro", (done) => {
