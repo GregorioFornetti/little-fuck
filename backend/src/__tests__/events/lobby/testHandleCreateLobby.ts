@@ -30,6 +30,23 @@ describe("handleCreateLobby", () => {
     handleCreateLobby(player, '       ');
   });
 
+  test("Criar lobby com jogador já em outro lobby deve emitir erro", (done) => {
+
+    // A primeira vez chamando handleCreateLobby deve ser bem sucedida
+    clientSocket.on('join-lobby-success', (lobby: Lobby) => {
+      player.lobby = lobby;
+      handleCreateLobby(player, 'player1');
+    })
+
+    // A segunda vez chamando handleCreateLobby deve emitir erro
+    clientSocket.on('join-lobby-error', (errorType: string) => {
+      expect(errorType).toBe('player-already-in-lobby');
+      done();
+    })
+
+    handleCreateLobby(player, 'player1');
+  });
+
   describe("Criar lobby com nome válido", () => {
     test("Lobby deve ser criado com as informações corretas", (done) => {
       clientSocket.on('join-lobby-success', (lobby: Lobby) => {
@@ -47,7 +64,7 @@ describe("handleCreateLobby", () => {
       handleCreateLobby(player, 'player1');
     })
 
-    test("As informações do lobby foram salvas corretamente no servidor", (done) => {
+    test("As informações do lobby devem ser salvas corretamente no servidor", (done) => {
       clientSocket.on('join-lobby-success', (lobby: Lobby) => {
         // Verifica se as informações do lobby foram salvas corretamente no servidor
         expect(lobbys[lobby.lobbyId]).toEqual(lobby);
@@ -58,21 +75,4 @@ describe("handleCreateLobby", () => {
       handleCreateLobby(player, 'player1');
     })
   })
-  
-  test("Criar lobby com jogador já em outro lobby deve emitir erro", (done) => {
-
-    // A primeira vez chamando handleCreateLobby deve ser bem sucedida
-    clientSocket.on('join-lobby-success', (lobby: Lobby) => {
-      player.lobby = lobby;
-      handleCreateLobby(player, 'player1');
-    })
-
-    // A segunda vez chamando handleCreateLobby deve emitir erro
-    clientSocket.on('join-lobby-error', (errorType: string) => {
-      expect(errorType).toBe('player-already-in-lobby');
-      done();
-    })
-
-    handleCreateLobby(player, 'player1');
-  });
 });
