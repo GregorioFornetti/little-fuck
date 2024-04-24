@@ -41,6 +41,7 @@ describe("handleCreateLobby", () => {
     // A segunda vez chamando handleCreateLobby deve emitir erro
     clientSocket.on('join-lobby-error', (errorType: string) => {
       expect(errorType).toBe('player-already-in-lobby');
+      player.lobby = undefined;
       done();
     })
 
@@ -60,11 +61,11 @@ describe("handleCreateLobby", () => {
         expect(lobby.game).toBeUndefined();
         done();
       })
-  
+      
       handleCreateLobby(player, 'player1');
     })
 
-    test("As informações do lobby devem ser salvas corretamente no servidor", (done) => {
+    test("As informações do lobby foram salvas corretamente no servidor", (done) => {
       clientSocket.on('join-lobby-success', (lobby: Lobby) => {
         // Verifica se as informações do lobby foram salvas corretamente no servidor
         expect(lobbys[lobby.lobbyId]).toEqual(lobby);
