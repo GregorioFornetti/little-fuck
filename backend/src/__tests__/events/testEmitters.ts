@@ -80,18 +80,18 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
             let count = { value: 0 }
 
-            lobbyClientsSockets[0].on('player-join', (player) => {
-                expect(player.id).toBe('2');
-                expect(player.name).toBe('player2');
+            lobbyClientsSockets[0].on('player-join', (id: string, name: string) => {
+                expect(id).toBe('2');
+                expect(name).toBe('player2');
                 if (count.value === 1) {
                     done()
                 }
                 count.value++
             })
 
-            lobbyClientsSockets[1].on('player-join', (player) => {
-                expect(player.id).toBe('2');
-                expect(player.name).toBe('player2');
+            lobbyClientsSockets[1].on('player-join', (id: string, name: string) => {
+                expect(id).toBe('2');
+                expect(name).toBe('player2');
                 if (count.value === 1) {
                     done()
                 }

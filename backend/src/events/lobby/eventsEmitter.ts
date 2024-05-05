@@ -41,7 +41,7 @@ export default class LobbyEventsEmitter extends EmitterBase {
      *  @param name nome do jogador que acaba de entrar na sala
      */
     public emitPlayerJoin(id: string, name: string) {
-        this.emitToLobby("player-join", {id, name})
+        this.emitToLobby("player-join", id, name)
     }
 
     /**
