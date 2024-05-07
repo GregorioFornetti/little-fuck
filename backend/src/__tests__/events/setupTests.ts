@@ -31,6 +31,7 @@ beforeAll((done) => {
       player = {
         playerId: clientSocket.id as string,
         socket: serverSocket,
+        io: io,
         eventsEmitter: new EventsEmitter(io, serverSocket),
       };
     });
@@ -39,6 +40,12 @@ beforeAll((done) => {
         done();
         return;
       }
+      player = {
+        playerId: clientSocket.id as string,
+        socket: serverSocket,
+        io: io,
+        eventsEmitter: new EventsEmitter(io, serverSocket),
+      };
       lobbyClientsSockets.push(ioc(`http://localhost:${port}`));
       lobbyClientsSockets[lobbyClientsSockets.length - 1].on("connect", handleConnect);
     }
@@ -57,6 +64,8 @@ afterEach(() => {
   for (let socket of lobbyClientsSockets) {
     socket.removeAllListeners();
   }
+  clientSocket.removeAllListeners('player-join');
+  lobbyClientsSockets[0].removeAllListeners('player-join');
 });
 
 afterAll(() => {

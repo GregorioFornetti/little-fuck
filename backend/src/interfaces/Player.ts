@@ -1,4 +1,4 @@
-import { Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
 import EventsEmitter from "../events/Emitter";
 import Lobby from "./Lobby";
 
@@ -10,6 +10,8 @@ export default interface Player {
     eventsEmitter: EventsEmitter,
     /** Socket do usuário */
     socket: Socket,
+    /** Informações do servidor */
+    io: Server,
     /** Informações do lobby que o usuário está atualmente. Será undefined se não estiver em um lobby */
     lobby?: Lobby
 }

@@ -33,6 +33,7 @@ function getPlayer(socket: Socket) {
         playerId: socket.id,
         eventsEmitter: new EventsEmitter(io, socket, players[socket.id]?.lobbyId),
         socket: socket,
+        io: io,
         lobby: players[socket.id]
     }
 }
