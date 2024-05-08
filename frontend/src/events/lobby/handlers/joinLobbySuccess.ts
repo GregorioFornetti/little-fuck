@@ -12,5 +12,9 @@ import { lobby } from '@/connection'
  *  @param lobby informações da sala que o jogador entrou
  */
 export function handleJoinLobbySuccess(lobbyResponse: Lobby) {
+    if (lobby.value !== null) {
+        throw new Error('Usuário já está em um lobby !')
+    }
 
+    lobby.value = lobbyResponse
 }
