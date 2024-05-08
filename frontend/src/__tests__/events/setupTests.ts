@@ -6,12 +6,21 @@ import { Server, Socket as ServerSocket } from "socket.io";
 import EventsEmitter from "../../events/EventsEmitter"
 import EventsListenersAdder from "../../events/EventsListenersAdder"
 
+
+jest.mock("@/connection", () => ({
+  lobby: { value: null }
+}))
+
 const httpServer = createServer();
 let io: Server;
 let clientSocket: ClientSocket;
 let serverSocket: ServerSocket;
 let eventsEmitter: EventsEmitter;
 let eventsListenersAdder: EventsListenersAdder;
+
+beforeEach(() => {
+  require('@/connection').lobby.value = null
+})
 
 beforeAll((done) => {
   io = new Server(httpServer);
