@@ -1,4 +1,5 @@
 
+import { serverSocket, eventsListenersAdder, clientSocket } from "./setupTests";
 import Lobby, { Card, Round, SpecialMatchCards } from "@/interfaces/Lobby";
 
 import { handleJoinLobbySuccess } from "@/events/lobby/handlers/joinLobbySuccess";
@@ -27,7 +28,6 @@ import { handleTableUpdate } from "@/events/round/handlers/tableUpdate";
 import { handleSelectCardError } from "@/events/round/handlers/selectCardError";
 import { handleEndRound } from "@/events/round/handlers/endRound";
 
-import { serverSocket, eventsListenersAdder, clientSocket } from "./setupTests";
 import addDefaultEventsListeners from "@/events/addDefaultEventsListeners";
 import { on } from "events";
 
