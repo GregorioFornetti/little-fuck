@@ -39,9 +39,9 @@ export default class MatchEventsEmitter extends EmitterBase {
      * 
      *  @param numWinMatches inteiro indicando o palpite do jogador que acabou de palpitar.
      *  @param nextPlayerId string indicando o id do próximo jogador que deverá palpitar.
-     *  Pode ser null caso todos os jogadores já tenham palpitado.
+     *  Pode ser undefined caso todos os jogadores já tenham palpitado.
      */
-    public emitWinRoundsNumberUpdate(numWinMatches: number, nextPlayerId: string|null) {
+    public emitWinRoundsNumberUpdate(numWinMatches: number, nextPlayerId?: string) {
         this.emitToLobby("win-rounds-number-update", numWinMatches, nextPlayerId)
     }
 
@@ -78,8 +78,8 @@ export default class MatchEventsEmitter extends EmitterBase {
      *  Iniciará a partida especial, quando todos os jogadores possuem apenas uma carta. 
      *  Todos os jogadores poderão ver as cartas dos outros, porém, não poderão ver a própria carta. 
      *  
-     *  @param cards um objeto mapeando id de jogadores para uma rodada. No caso, a rodada está sendo usada para representar
-     *  as cartas de todos os outros jogadores, exceto o próprio jogador.
+     *  @param cards um objeto mapeando id de jogadores para um conjunto de cartas dos outros jogadores. Todos jogadores devem saber das cartas
+     *  dos outros jogadores, exceto a sua própria carta.
      *  @param firstPlayerId id do jogador que deve começar fazendo o primeiro palpite.
      */
     public emitStartSpecialMatch(cards: { [playerId: string]: SpecialMatchCards }, firstPlayerId: string) {

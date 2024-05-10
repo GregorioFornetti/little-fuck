@@ -20,16 +20,6 @@ interface RoundCard {
 }
 
 /**
- *  Interface que contém as informações de uma rodada, como as cartas que estão na mesa e seus rankings.
- */
-export interface Round {
-    /** Todas as cartas que ainda não foram anuladas ou empatadas. Essa lista está ordenada da carta mais forte para a mais fraca. */
-    onMatch: RoundCard[],
-    /** Uma lista de cartas e seus donos (igual o onMatch). Nesse caso, as cartas estão anuladas (por causa de empate, por exemplo), e não serão contadas na disputa. */
-    anulledCards: RoundCard[]
-}
-
-/**
  *  Interface que contém as informações de uma partida especial, como as cartas que estão na mesa e seus rankings. No caso, os jogadores 
  *  verão as cartas de todos os outros jogadores, e não as suas próprias.
  */
@@ -40,6 +30,25 @@ export interface SpecialMatchCards {
     anulledCards: RoundCard[]
 }
 
+/**
+ *  Interface que contém as informações das cartas de uma rodada.
+ */
+export interface RoundCards {
+    /** Todas as cartas que foram que ainda não foram anuladas ou empatadas. Essa lista está ordenada da carta mais forte para a mais fraca. */
+    onMatch: RoundCard[],
+    /** Uma lista de cartas e seus donos (igual o onMatch). Nesse caso, as cartas estão anuladas (por causa de empate, por exemplo), e não serão contadas na disputa. */
+    anulledCards: RoundCard[]
+}
+
+/**
+ *  Interface que contém as informações de uma rodada, como as cartas que estão na mesa e seus rankings.
+ */
+export interface Round {
+    /** Cartas que estão atualmente na mesa */
+    cards: RoundCards,
+    /** id do jogador que deve jogar a carta atualmente. undefined caso todas já tenham jogado suas cartas */
+    nextPlayerId?: string
+}
 
 /**
  *  Interface que contém as informações de uma partida, como as cartas dos jogadores, os seus palpites, etc.

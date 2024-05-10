@@ -1,6 +1,6 @@
 
 import EmitterBase from "../EmitterBase"
-import { Round } from "../../interfaces/Lobby"
+import { Round, RoundCards } from "../../interfaces/Lobby"
 
 
 
@@ -26,12 +26,12 @@ export default class RoundEventsEmitter extends EmitterBase {
      *  Após um jogador selecionar uma carta, essa mensagem será enviada para que todos clientes da sala
      *  atualizem o status da mesa e saibam qual é o próximo jogador que deve jogar.
      *  
-     *  @param round objeto contendo as informações da rodada atual, ou seja, as cartas que estão em jogo.
+     *  @param cards objeto contendo as informações da rodada atual, ou seja, as cartas que estão em jogo.
      *  @param nextPlayerId string indicando o id do próximo jogador que deverá jogar.
-     *  Caso não tenha um próximo jogador (todos já escolheram as cartas), esse valor será null
+     *  Caso não tenha um próximo jogador (todos já escolheram as cartas), esse valor será undefined
      */
-    public emitTableUpdate(round: Round, nextPlayerId: string|null) {
-        this.emitToLobby("table-update", round, nextPlayerId)
+    public emitTableUpdate(cards: RoundCards, nextPlayerId?: string) {
+        this.emitToLobby("table-update", cards, nextPlayerId)
     }
 
     /**

@@ -9,7 +9,8 @@ import type { SpecialMatchCards } from "@/interfaces/Lobby";
  * 
  *  Após todos os jogadores palpitarem, será acionado o evento table-update, mostrando o estado final da mesa para todos os jogadores
  *  e logo em seguida o evento `end-round` será também acionado. Depois de um tempo, será acionado o evento `end-match`.
- * 
+ *  
+ *  @param cards cartas de todos os outros jogadores, menos a própria carta
  *  @param firstPlayerId id do jogador que deve começar palpitando
  */
 export function handleStartSpecialMatch(cards: SpecialMatchCards, firstPlayerId: string) {

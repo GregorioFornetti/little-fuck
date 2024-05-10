@@ -1,7 +1,7 @@
 
 import EventsEmitter from "../../events/Emitter";
 import { lobbys, players } from "../../global";
-import Lobby, { Card, Round, SpecialMatchCards } from "../../interfaces/Lobby";
+import Lobby, { Card, Round, RoundCards, SpecialMatchCards } from "../../interfaces/Lobby";
 import { io, clientSocket, eventsEmitter, lobbyClientsSockets, lobbyServerSockets } from "./setupTests";
 import { Socket as ClientSocket } from "socket.io-client";
 import { Socket as ServerSocket } from "socket.io";
@@ -489,7 +489,23 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
             let count = { value: 0 }
 
-            lobbyClientsSockets[0].on('table-update', (table: Round, nextPlayerId: string) => {
+            lobbyClientsSockets[0].on('table-update', (cards: RoundCards, nextPlayerId: string) => {
+                expect(cards.onMatch).toHaveLength(2)
+                expect(cards.onMatch[0].card.type).toBe('common')
+                expect(cards.onMatch[0].card.value).toBe(1)
+                expect(cards.onMatch[0].playerId).toBe(lobbyClientsSockets[0].id as string)
+                expect(cards.onMatch[1].card.type).toBe('common')
+                expect(cards.onMatch[1].card.value).toBe(2)
+                expect(cards.onMatch[1].playerId).toBe(lobbyClientsSockets[1].id as string)
+                expect(cards.anulledCards).toHaveLength(0)
+                expect(nextPlayerId).toBe(lobbyClientsSockets[0].id as string);
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyClientsSockets[1].on('table-update', (table: RoundCards, nextPlayerId: string) => {
                 expect(table.onMatch).toHaveLength(2)
                 expect(table.onMatch[0].card.type).toBe('common')
                 expect(table.onMatch[0].card.value).toBe(1)
@@ -505,23 +521,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
                 count.value++
             })
 
-            lobbyClientsSockets[1].on('table-update', (table: Round, nextPlayerId: string) => {
-                expect(table.onMatch).toHaveLength(2)
-                expect(table.onMatch[0].card.type).toBe('common')
-                expect(table.onMatch[0].card.value).toBe(1)
-                expect(table.onMatch[0].playerId).toBe(lobbyClientsSockets[0].id as string)
-                expect(table.onMatch[1].card.type).toBe('common')
-                expect(table.onMatch[1].card.value).toBe(2)
-                expect(table.onMatch[1].playerId).toBe(lobbyClientsSockets[1].id as string)
-                expect(table.anulledCards).toHaveLength(0)
-                expect(nextPlayerId).toBe(lobbyClientsSockets[0].id as string);
-                if (count.value === 1) {
-                    done()
-                }
-                count.value++
-            })
-
-            const table: Round = {
+            const roundCards: RoundCards = {
                 onMatch: [
                     {
                         card: {
@@ -542,7 +542,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
                 ]
             }
-            lobbyEmitter.Round.emitTableUpdate(table, lobbyClientsSockets[0].id as string);
+            lobbyEmitter.Round.emitTableUpdate(roundCards, lobbyClientsSockets[0].id as string);
         })
 
         test("select-card-error", (done) => {

@@ -113,7 +113,7 @@ Indica ao usuário que ele conseguiu entrar na sala. Este receberá uma lista de
             id: ..., // string - id do jogador
             name: ..., // string - nome do jogador
             leader: ..., // bool - verdadeiro se for o líder da sala
-            ready: ... // bool | null - true se o jogador estiver pronto. Pode ser null caso jogo esteja em andamento
+            ready: ... // bool | undefined - true se o jogador estiver pronto. Pode ser undefined caso jogo esteja em andamento
         } 
         ...
     ]
@@ -467,7 +467,7 @@ Evento enviado para um usuário que acabou de reconectar. Este usuário perdeu a
                                 type: ...,  // string: tipo da carta. Ex: common, joker, etc
                                 value: ...  // inteiro: poder da carta
                             },
-                            player: ...  // string: id do player que jogou a carta
+                            playerId: ...  // string: id do player que jogou a carta
                         },
                         ...  // São vários objetos deste tipo
                     ],
@@ -634,9 +634,9 @@ Após um jogador fazer um palpite válido, essa mensagem será enviada para que 
 
 #### Parâmetros
 
-- numWinMatches: inteiro indicando o palpite do jogador que acabou de palpitar.
+- numWinRounds: inteiro indicando o palpite do jogador.
 
-- nextPlayerId: string indicando o id do próximo jogador que deverá palpitar. Pode ser `null` caso todos os jogadores já tenham palpitado.
+- nextPlayerId: string indicando o id do próximo jogador que deverá palpitar. Pode ser `undefined` caso todos os jogadores já tenham palpitado.
 
 ---
 
@@ -680,7 +680,7 @@ Evento enviado para indicar o fim da partida. Uma partida acaba quando todos os 
 - playerHealthUpdate:
 ```javascript
 {
-    idPlayer: healthUpdate,
+    playerId: healthUpdate,
     ...
 }
 // É um objeto tendo como chaves todos os ids dos jogadores do lobby. É um objeto mapeando id de jogadores para o valor que deve ser modificado em sua vida final. Ex: { 123: -1 } = jogador com id 123 perdeu uma vida
@@ -715,14 +715,14 @@ Após todos os jogadores palpitarem, será acionado o evento `table-update`, mos
                     type: ...,  // string: tipo da carta. Ex: common, joker, etc
                     value: ...  // inteiro: poder da carta
                 },
-                player: ...  // string: id do player que jogou a carta
+                playerId: ...  // string: id do player que jogou a carta
             },
             ...  // São vários objetos deste tipo
         ],
         anulledCards: [ ... ]  // Uma lista de cartas e seus donos (igual o onMatch). Nesse caso, as cartas estão anuladas (por causa de empate, por exemplo), e não serão contadas na disputa.
     }
     ```
-- nextPlayer: string contendo o id do jogador que deverá palpitar agora. Caso não tenha um próximo jogador (todos já palpitaram), esse valor será `null`
+- firstPlayerId: id do primeiro jogador que deve palpitar.
 
 ---
 
@@ -820,7 +820,7 @@ Após um jogador selecionar uma carta, essa mensagem será enviada para que todo
         anulledCards: [ ... ]  // Uma lista de cartas e seus donos (igual o onMatch). Nesse caso, as cartas estão anuladas (por causa de empate, por exemplo), e não serão contadas na disputa.
     }
     ```
-- nextPlayerId: string contendo o id do jogador que deverá jogar agora. Caso não tenha um próximo jogador (todos já escolheram as cartas), esse valor será `null`
+- nextPlayerId: string contendo o id do jogador que deverá jogar agora. Caso não tenha um próximo jogador (todos já escolheram as cartas), esse valor será `undefined`
 
 ---
 
@@ -870,6 +870,6 @@ Evento enviado para indicar o fim da rodada. Uma rodada acaba quando todos os jo
 
 #### Parâmetros
 
-- winnerId: string com o id do jogador que ganhou rodada. O valor será `null` caso ninguém tenha ganho a rodada.
+- winnerId: string com o id do jogador que ganhou rodada. O valor será `undefined` caso ninguém tenha ganho a rodada.
 
 - points: inteiro indicando a quantidade de pontos ganhos pelo vencedor nessa rodada.
