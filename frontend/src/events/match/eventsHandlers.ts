@@ -29,7 +29,7 @@ export class MatchEventsHandlersAdder extends EventsListenersAdderBase {
      *  
      *  @param handlerFunction função que será chamada quando o evento for recebido
      */
-    public winRoundsNumberUpdate(handlerFunction: (numWinRounds: number, nextPlayerId: string|null) => void): void {
+    public winRoundsNumberUpdate(handlerFunction: (numWinRounds: number, nextPlayerId?: string) => void): void {
         this.socket.on('win-rounds-number-update', handlerFunction)
     }
 
