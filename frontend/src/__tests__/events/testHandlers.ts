@@ -1,6 +1,6 @@
 
 import { serverSocket, eventsListenersAdder, clientSocket } from "./setupTests";
-import Lobby, { Card, Round, SpecialMatchCards } from "@/interfaces/Lobby";
+import Lobby, { Card, RoundCards, SpecialMatchCards } from "@/interfaces/Lobby";
 
 import { handleJoinLobbySuccess } from "@/events/lobby/handlers/joinLobbySuccess";
 import { handleJoinLobbyError } from "@/events/lobby/handlers/joinLobbyError";
@@ -233,7 +233,7 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
         test("win-rounds-number-update", (done) => {
             addDefaultEventsListeners(clientSocket)
 
-            eventsListenersAdder.match.winRoundsNumberUpdate((numWinRounds: number, nextPlayerId: string|null) => {
+            eventsListenersAdder.match.winRoundsNumberUpdate((numWinRounds: number, nextPlayerId?: string) => {
                 expect(handleWinRoundsNumberUpdate).toHaveBeenCalledWith(numWinRounds, nextPlayerId)
                 done()
             })
@@ -304,7 +304,7 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
         test("table-update", (done) => {
             addDefaultEventsListeners(clientSocket)
 
-            eventsListenersAdder.round.tableUpdate((cards: Round, nextPlayerId: string|null) => {
+            eventsListenersAdder.round.tableUpdate((cards: RoundCards, nextPlayerId?: string) => {
                 expect(handleTableUpdate).toHaveBeenCalledWith(cards, nextPlayerId)
                 done()
             })

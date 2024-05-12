@@ -1,12 +1,13 @@
 
-import type { Round } from "@/interfaces/Lobby";
+import type { Socket } from "socket.io-client";
+import type { RoundCards } from "@/interfaces/Lobby";
+
 import EventsListenersAdderBase from "../EventsListenersAdderBase";
 
 import { handleEndRound } from "./handlers/endRound";
 import { handleSelectCardError } from "./handlers/selectCardError";
 import { handleStartRound } from "./handlers/startRound";
 import { handleTableUpdate } from "./handlers/tableUpdate";
-import type { Socket } from "socket.io-client";
 
 
 export class RoundEventsHandlersAdder extends EventsListenersAdderBase {
@@ -26,7 +27,7 @@ export class RoundEventsHandlersAdder extends EventsListenersAdderBase {
      * 
      *  @param handlerFunction função que será chamada quando o evento for recebido
      */
-    public tableUpdate(handlerFunction: (cards: Round, nextPlayerId: string | null) => void): void {
+    public tableUpdate(handlerFunction: (cards: RoundCards, nextPlayerId?: string) => void): void {
         this.socket.on('table-update', handlerFunction)
     }
 
