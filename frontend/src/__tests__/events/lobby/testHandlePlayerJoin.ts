@@ -1,76 +1,57 @@
 import '../setupTests';
 import { handlePlayerJoin } from '@/events/lobby/handlers/playerJoin';
-import { handleJoinLobbySuccess } from '@/events/lobby/handlers/joinLobbySuccess';
-import Lobby, { Game } from '@/interfaces/Lobby';
+import { Game } from '@/interfaces/Lobby';
 
 describe('handlePlayerJoin', () => {
+  const leaderPlayer = {
+    id: '12345',
+    name: 'leader player',
+    leader: true,
+    ready: true
+  };
+
+  const anotherPlayer = {
+    id: '123',
+    name: 'John joe',
+    leader: false,
+    ready: false
+  };
+
   test('Deve adicionar o jogador ao lobby', () => {
-    const lobbyParam: Lobby = {
-      lobbyId: '123',
-      players: [{
-        id: '12345',
-        name: 'leader player',
-        leader: true,
-        ready: true
-      }]
-    };
-
-    const player = {
-      id: '4321',
-      name: 'john doe'
-    };
-
-    handleJoinLobbySuccess(lobbyParam)
-    handlePlayerJoin(player.id, player.name)
-
     const connection = require('@/connection');
-    
-    const lobby: Lobby = connection.lobby.value;
 
-    const expectedPlayer = { leader: false, ready: false, ...player }
-    
-    expect(lobby.players).toHaveLength(2);
-    expect(lobby.players.pop()).toEqual(expectedPlayer);
+    connection.lobby.value = {
+      lobbyId: '123',
+      players: [leaderPlayer]
+    };
+
+    handlePlayerJoin(anotherPlayer.id, anotherPlayer.name);
+
+    expect(connection.lobby.value.players).toHaveLength(2);
+    expect(connection.lobby.value.players.pop()).toEqual(anotherPlayer);
   });
 
   test('Deve adicionar o jogador ao lobby vazio, e mesmo assim ele não deve ser o líder', () => {
-    const lobbyParam: Lobby = {
+    const connection = require('@/connection');
+
+    connection.lobby.value = {
       lobbyId: '123',
       players: []
     };
 
-    const player = {
-      id: '4321',
-      name: 'john doe'
-    };
-
-    handleJoinLobbySuccess(lobbyParam)
-    handlePlayerJoin(player.id, player.name)
-
-    const connection = require('@/connection');
+    handlePlayerJoin(anotherPlayer.id, anotherPlayer.name)
     
-    const lobby: Lobby = connection.lobby.value;
-
-    const expectedPlayer = { leader: false, ready: false, ...player }
-    
-    expect(lobby.players).toHaveLength(1);
-    expect(lobby.players[0]).toEqual(expectedPlayer);
+    expect(connection.lobby.value.players).toHaveLength(1);
+    expect(connection.lobby.value.players[0]).toEqual(anotherPlayer);
   });
 
   test('Deve emitir um erro se o jogador não estiver em um lobby', () => {
-    const player = {
-      id: '4321',
-      name: 'john doe'
-    };
-    
-    expect(() => handlePlayerJoin(player.id, player.name)).toThrow(Error('Você não está em um lobby !'))
+    expect(() => handlePlayerJoin(anotherPlayer.id, anotherPlayer.name))
+      .toThrow(Error('Você não está em um lobby !'))
   })
 
   test('Deve emitir um erro se um jogo já estiver começado no lobby atual do jogador', () => {
-    const player = {
-      id: '4321',
-      name: 'john doe'
-    };
+    const connection = require('@/connection');
 
     const game: Game = {
       currentWaitTime: 1,
@@ -79,21 +60,13 @@ describe('handlePlayerJoin', () => {
       playersHealth: {},
     }
 
-    const lobbyParam: Lobby = {
+    connection.lobby.value = {
       lobbyId: '123',
       game: game,
-      players: [
-          {
-              id: '123456',
-              name: 'Player1',
-              ready: false,
-              leader: true
-          }
-      ]
+      players: [leaderPlayer]
     }
 
-    handleJoinLobbySuccess(lobbyParam)
-
-    expect(() => handlePlayerJoin(player.id, player.name)).toThrow(Error('Não foi possível adicionar um novo jogador ao seu lobby atual, o jogo já começou !'))
+    expect(() => handlePlayerJoin(anotherPlayer.id, anotherPlayer.name))
+      .toThrow(Error('Não foi possível adicionar um novo jogador ao seu lobby atual, o jogo já começou !'))
   })
 })
