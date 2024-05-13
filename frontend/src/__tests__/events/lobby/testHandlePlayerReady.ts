@@ -3,14 +3,14 @@ import { handlePlayerReady } from '@/events/lobby/handlers/playerReady';
 import Lobby, { Game } from '@/interfaces/Lobby';
 
 describe('handlePlayerReady', () => {
-  const leaderPlayer = {
+  const readyPlayer = {
     id: '12345',
     name: 'leader player',
     leader: true,
     ready: true
   };
   
-  const anotherPlayer = {
+  const unreadyPlayer = {
     id: '123',
     name: 'John joe',
     leader: false,
@@ -22,21 +22,21 @@ describe('handlePlayerReady', () => {
 
     connection.lobby.value = {
       lobbyId: '123',
-      players: [leaderPlayer, anotherPlayer]
+      players: [readyPlayer, unreadyPlayer]
     };
 
     const lobby: Lobby = connection.lobby.value;
 
-    handlePlayerReady(anotherPlayer.id);
+    handlePlayerReady(unreadyPlayer.id);
 
     // Verifica se foi modificado apenas o status de ready para true
-    expect(lobby.players[1]).toEqual({ ...anotherPlayer, ready: true });
+    expect(lobby.players[1]).toEqual({ ...unreadyPlayer, ready: true });
     // Verifica se não modifica outros players no lobby
-    expect(lobby.players[0]).toEqual(leaderPlayer);
+    expect(lobby.players[0]).toEqual(readyPlayer);
   });
 
   test('Deve emitir um erro se o jogador atual não estiver em um lobby', () => {
-    expect(() => handlePlayerReady(anotherPlayer.id)).toThrow('Você não está em um lobby !');
+    expect(() => handlePlayerReady(unreadyPlayer.id)).toThrow('Você não está em um lobby !');
   });
 
   test('Deve emitir um erro se um jogo já estiver começado no lobby atual do jogador', () => {
@@ -52,23 +52,23 @@ describe('handlePlayerReady', () => {
     connection.lobby.value = {
       lobbyId: '123',
       game: game,
-      players: [anotherPlayer]
+      players: [unreadyPlayer]
     }
 
-    expect(() => handlePlayerReady(anotherPlayer.id))
+    expect(() => handlePlayerReady(unreadyPlayer.id))
       .toThrow(Error('Não foi possível adicionar um novo jogador ao seu lobby atual, o jogo já começou !'))
   })
 
   test('Deve emitir um erro se o jogador informado não estiver no lobby', () => {
     const connection = require('@/connection');
     
-    connection.socket = { id: leaderPlayer.id };
+    connection.socket = { id: readyPlayer.id };
     connection.lobby.value = {
       lobbyId: '123',
-      players: [leaderPlayer]
+      players: [readyPlayer]
     };
 
-    expect(() => handlePlayerReady(anotherPlayer.id))
+    expect(() => handlePlayerReady(unreadyPlayer.id))
       .toThrow('Não foi possível atualizar o status de um jogador para preparado: Jogador não encontrado !');
   });
 });
