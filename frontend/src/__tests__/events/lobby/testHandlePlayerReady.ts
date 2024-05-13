@@ -56,7 +56,7 @@ describe('handlePlayerReady', () => {
     }
 
     expect(() => handlePlayerReady(unreadyPlayer.id))
-      .toThrow(Error('Não foi possível adicionar um novo jogador ao seu lobby atual, o jogo já começou !'))
+      .toThrow(Error('Não foi possível atualizar o status de um jogador para preparado: O jogo já começou !'))
   })
 
   test('Deve emitir um erro se o jogador informado não estiver no lobby', () => {

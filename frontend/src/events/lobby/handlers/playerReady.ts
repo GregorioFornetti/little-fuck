@@ -13,7 +13,7 @@ export function handlePlayerReady(id: string) {
   }
 
   if (lobby.value.game) {
-    throw new Error('Não foi possível adicionar um novo jogador ao seu lobby atual, o jogo já começou !');
+    throw new Error('Não foi possível atualizar o status de um jogador para preparado: O jogo já começou !');
   }
 
   const playerIndex = lobby.value.players.findIndex((player) => player.id === id);
