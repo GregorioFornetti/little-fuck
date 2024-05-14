@@ -1,5 +1,4 @@
-
-import { lobby } from '@/connection'
+import { lobby } from '@/connection';
 import type { Game } from '@/interfaces/Lobby';
 
 const INITIAL_HEALTH = 3;

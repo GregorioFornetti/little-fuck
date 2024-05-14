@@ -1,5 +1,3 @@
-
-
 import "../setupTests";
 import { handleStartGame } from "@/events/game/handlers/startGame";
 import { Game } from "@/interfaces/Lobby";
@@ -72,4 +70,4 @@ describe('handleStartGame', () => {
     expect(() => handleStartGame())
       .toThrow(Error('Não foi possível iniciar o jogo: O jogo já começou !'))
   })
-})
+});
