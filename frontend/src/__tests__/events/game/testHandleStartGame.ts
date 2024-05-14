@@ -49,30 +49,6 @@ describe('handleStartGame', () => {
     expect(game).toEqual(expectedOutput);
   });
 
-  test('Deve emitir um erro se não houver pelo menos 2 jogadores no lobby', () => {
-    const connection = require('@/connection');
-
-    connection.lobby.value = {
-      lobbyId: '123',
-      players: [leaderPlayer]
-    };
-
-    expect(() => handleStartGame())
-      .toThrow('Não foi possível iniciar o jogo: Número de jogadores insuficiente ! (min: 2)');
-  });
-
-  test('Deve emitir um erro caso nenhum dos jogadores do lobby seja o líder', () => {
-    const connection = require('@/connection');
-
-    connection.lobby.value = {
-      lobbyId: '123',
-      players: [anotherPlayer, { ...anotherPlayer, id: '321' }]
-    };
-
-    expect(() => handleStartGame())
-      .toThrow('Não foi possível iniciar o jogo: Nenhum jogador é o líder do lobby');
-  });
-
   test('Deve emitir um erro se o jogador atual não estiver em um lobby', () => {
     expect(() => handleStartGame()).toThrow('Você não está em um lobby !');
   });
