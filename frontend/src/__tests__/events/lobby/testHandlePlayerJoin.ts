@@ -1,6 +1,7 @@
 import '../setupTests';
+import type { Game } from '@/interfaces/Lobby';
 import { handlePlayerJoin } from '@/events/lobby/handlers/playerJoin';
-import { Game } from '@/interfaces/Lobby';
+import { i18n } from '@/plugins/i18n';
 
 describe('handlePlayerJoin', () => {
   const leaderPlayer = {
@@ -47,7 +48,7 @@ describe('handlePlayerJoin', () => {
 
   test('Deve emitir um erro se o jogador não estiver em um lobby', () => {
     expect(() => handlePlayerJoin(anotherPlayer.id, anotherPlayer.name))
-      .toThrow(Error('Você não está em um lobby !'))
+      .toThrow(Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY')))
   })
 
   test('Deve emitir um erro se um jogo já estiver começado no lobby atual do jogador', () => {
@@ -67,6 +68,6 @@ describe('handlePlayerJoin', () => {
     }
 
     expect(() => handlePlayerJoin(anotherPlayer.id, anotherPlayer.name))
-      .toThrow(Error('Não foi possível adicionar um novo jogador ao seu lobby atual, o jogo já começou !'))
+      .toThrow(Error(i18n.t('COMMON.ERROR.GAME_ALREADY_STARTED')))
   })
 })

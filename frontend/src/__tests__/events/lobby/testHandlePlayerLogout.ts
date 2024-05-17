@@ -1,6 +1,7 @@
 import '../setupTests';
+import type Lobby from '@/interfaces/Lobby';
 import { handlePlayerLogout } from '@/events/lobby/handlers/playerLogout';
-import Lobby from '@/interfaces/Lobby';
+import { i18n } from '@/plugins/i18n';
 
 describe('handlePlayerLogout', () => {
   const leaderPlayer = {
@@ -54,7 +55,8 @@ describe('handlePlayerLogout', () => {
   });
 
   test('Deve emitir um erro se o jogador atual não estiver em um lobby', () => {
-    expect(() => handlePlayerLogout(leaderPlayer.id)).toThrow('Você não está em um lobby !');
+    expect(() => handlePlayerLogout(leaderPlayer.id))
+      .toThrow(Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY')));
   });
 
   test('Deve emitir um erro se o jogador informado não estiver no lobby', () => {
@@ -67,6 +69,6 @@ describe('handlePlayerLogout', () => {
     };
 
     expect(() => handlePlayerLogout(anotherPlayer.id))
-      .toThrow('Não foi possível remover o jogador do lobby atual: Jogador não encontrado !');
+      .toThrow(Error(i18n.t('COMMON.ERROR.PLAYER_NOT_FOUND')));
   });
 });

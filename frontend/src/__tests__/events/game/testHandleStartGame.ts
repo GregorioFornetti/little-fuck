@@ -1,6 +1,7 @@
 import "../setupTests";
 import { handleStartGame } from "@/events/game/handlers/startGame";
 import { Game } from "@/interfaces/Lobby";
+import { i18n } from "@/plugins/i18n";
 
 describe('handleStartGame', () => {
   const leaderPlayer = {
@@ -48,7 +49,7 @@ describe('handleStartGame', () => {
   });
 
   test('Deve emitir um erro se o jogador atual não estiver em um lobby', () => {
-    expect(() => handleStartGame()).toThrow('Você não está em um lobby !');
+    expect(() => handleStartGame()).toThrow(Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY')));
   });
 
   test('Deve emitir um erro se um jogo já estiver começado no lobby atual do jogador', () => {
@@ -68,6 +69,6 @@ describe('handleStartGame', () => {
     }
 
     expect(() => handleStartGame())
-      .toThrow(Error('Não foi possível iniciar o jogo: O jogo já começou !'))
+      .toThrow(Error(i18n.t('COMMON.ERROR.GAME_ALREADY_STARTED')))
   })
 });

@@ -1,5 +1,6 @@
 
-import { lobby, socket } from '@/connection'
+import { lobby, socket } from '@/connection';
+import { i18n } from '@/plugins/i18n';
 
 /**
  *  Evento indicando que um jogador acaba de sair da sala.
@@ -8,12 +9,12 @@ import { lobby, socket } from '@/connection'
  */
 export function handlePlayerLogout(id: string) {
   if (lobby.value === null) {
-    throw new Error('Você não está em um lobby !');
+    throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
   }
 
   const playerIndex = lobby.value.players.findIndex((player) => player.id === id);
   if (playerIndex === -1) {
-    throw new Error('Não foi possível remover o jogador do lobby atual: Jogador não encontrado !');
+    throw new Error(i18n.t('COMMON.ERROR.PLAYER_NOT_FOUND'));
   }
 
   lobby.value.players.splice(playerIndex, 1);

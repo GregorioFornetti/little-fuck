@@ -1,6 +1,6 @@
 
-import { lobby } from '@/connection'
-
+import { lobby } from '@/connection';
+import { i18n } from '@/plugins/i18n';
 
 /**
  *  Evento enviado para todos os jogadores indicando que um novo jogador entrou na sala.
@@ -10,11 +10,11 @@ import { lobby } from '@/connection'
  */
 export function handlePlayerJoin(id: string, name: string) {
   if (lobby.value === null) {
-    throw new Error('Você não está em um lobby !');
+    throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
   }
 
   if (lobby.value.game) {
-    throw new Error('Não foi possível adicionar um novo jogador ao seu lobby atual, o jogo já começou !');
+    throw new Error(i18n.t('COMMON.ERROR.GAME_ALREADY_STARTED'));
   }
 
   lobby.value.players.push({

@@ -1,7 +1,7 @@
 
 import type Lobby from "@/interfaces/Lobby";
 import { lobby } from '@/connection'
-
+import { i18n } from "@/plugins/i18n";
 
 /**
  *  Indica ao usuário que ele conseguiu entrar na sala.
@@ -13,7 +13,7 @@ import { lobby } from '@/connection'
  */
 export function handleJoinLobbySuccess(lobbyResponse: Lobby) {
     if (lobby.value !== null) {
-        throw new Error('Usuário já está em um lobby !')
+        throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'))
     }
 
     lobby.value = lobbyResponse

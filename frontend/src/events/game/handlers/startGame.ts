@@ -1,5 +1,6 @@
-import { lobby } from '@/connection';
 import type { Game } from '@/interfaces/Lobby';
+import { lobby } from '@/connection';
+import { i18n } from '@/plugins/i18n';
 
 const INITIAL_HEALTH = 3;
 const INITIAL_WAIT_TIME = 5;
@@ -11,11 +12,11 @@ const INITIAL_ROUND_NUMBER = 1;
  */
 export function handleStartGame() {
   if (lobby.value === null) {
-    throw new Error('Você não está em um lobby !');
+    throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
   }
 
   if (lobby.value.game) {
-    throw new Error('Não foi possível iniciar o jogo: O jogo já começou !');
+    throw new Error(i18n.t('COMMON.ERROR.GAME_ALREADY_STARTED'));
   }
 
   const players = lobby.value.players as Array<{ id: string }>;

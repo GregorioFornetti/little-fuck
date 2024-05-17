@@ -1,6 +1,7 @@
 import '../setupTests';
-import { handlePlayerUnready } from '@/events/lobby/handlers/playerUnready';
 import Lobby, { Game } from '@/interfaces/Lobby';
+import { handlePlayerUnready } from '@/events/lobby/handlers/playerUnready';
+import { i18n } from '@/plugins/i18n';
 
 describe('handlePlayerUnready', () => {
   const readyPlayer = {
@@ -36,7 +37,8 @@ describe('handlePlayerUnready', () => {
   });
 
   test('Deve emitir um erro se o jogador atual não estiver em um lobby', () => {
-    expect(() => handlePlayerUnready(unreadyPlayer.id)).toThrow('Você não está em um lobby !');
+    expect(() => handlePlayerUnready(unreadyPlayer.id))
+      .toThrow(Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY')));
   });
 
   test('Deve emitir um erro se um jogo já estiver começado no lobby atual do jogador', () => {
@@ -56,7 +58,7 @@ describe('handlePlayerUnready', () => {
     }
 
     expect(() => handlePlayerUnready(readyPlayer.id))
-      .toThrow(Error('Não foi possível atualizar o status de um jogador para não preparado: O jogo já começou !'))
+      .toThrow(Error(i18n.t('COMMON.ERROR.GAME_ALREADY_STARTED')))
   })
 
   test('Deve emitir um erro se o jogador informado não estiver no lobby', () => {
@@ -69,6 +71,6 @@ describe('handlePlayerUnready', () => {
     };
 
     expect(() => handlePlayerUnready(readyPlayer.id))
-      .toThrow('Não foi possível atualizar o status de um jogador para não preparado: Jogador não encontrado !');
+      .toThrow(Error(i18n.t('COMMON.ERROR.PLAYER_NOT_FOUND')));
   });
 });
