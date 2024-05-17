@@ -88,3 +88,7 @@ Instalará as bibliotecas necessárias para subir o servidor do frontend.
 Este comando irá subir o servidor localmente, e sempre irá re-executar após alguma modificação dos arquivos do frontend.
 Deixar esse terminal aberto e não cancelar a execução, caso contrário, o servidor irá cair.
 O servidor ficará exposto na porta 5173 (http://localhost:5173)
+
+5 - (Opcional) Caso utilize o VSCode com a extensão i18n-ally
+
+Crie um arquivo `.vscode/settings.json` e o atualize com o conteúdo de `.vscode/settings.json.example`, para reconhecer corretamente as mensagens cadastradas para o projeto com a extensão `i18n-ally`
