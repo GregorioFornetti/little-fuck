@@ -1,6 +1,9 @@
 {
-  "COMMONS": {
-    "NOT_IN_LOBBY": "Você não está em um lobby !",
-    "GAME_ALREADY_STARTED": "O jogo já começou !"
+  "COMMON": {
+    "ERROR": {
+      "NOT_IN_LOBBY": "Você não está em um lobby!",
+      "GAME_ALREADY_STARTED": "O jogo já começou!",
+      "PLAYER_NOT_FOUND": "Jogador não encontrado!"
+    }
   }
 }
