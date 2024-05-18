@@ -13,7 +13,7 @@ import { i18n } from "@/plugins/i18n";
  */
 export function handleJoinLobbySuccess(lobbyResponse: Lobby) {
     if (lobby.value !== null) {
-        throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'))
+        throw new Error(i18n.t('COMMON.ERROR.ALREADY_IN_LOBBY'))
     }
 
     lobby.value = lobbyResponse

@@ -37,6 +37,6 @@ describe("handleJoinLobbySuccess", () => {
         }
         require('@/connection').lobby.value = lobbyParam  // Variável global de lobby definida marca que jogador já está em um lobby, e não poderia entrar em outro.
 
-        expect(() => handleJoinLobbySuccess(lobbyParam)).toThrow(Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY')))
+        expect(() => handleJoinLobbySuccess(lobbyParam)).toThrow(Error(i18n.t('COMMON.ERROR.ALREADY_IN_LOBBY')))
     })
 })
