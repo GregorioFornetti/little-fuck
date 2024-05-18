@@ -1,5 +1,5 @@
 import './setupTests';
-import { ptBRLocale } from './_locales';
+import { ptBRLocale } from './locales';
 import i18n from "@/plugins/i18n";
 
 describe('i18n', () => {
