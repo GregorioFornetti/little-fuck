@@ -1,8 +1,9 @@
 
 
 import "../setupTests";
+import type Lobby from "@/interfaces/Lobby";
 import { handleJoinLobbySuccess } from "@/events/lobby/handlers/joinLobbySuccess";
-import Lobby from "@/interfaces/Lobby";
+import { i18n } from "@/plugins/i18n";
 
 describe("handleJoinLobbySuccess", () => {
 
@@ -36,6 +37,6 @@ describe("handleJoinLobbySuccess", () => {
         }
         require('@/connection').lobby.value = lobbyParam  // Variável global de lobby definida marca que jogador já está em um lobby, e não poderia entrar em outro.
 
-        expect(() => handleJoinLobbySuccess(lobbyParam)).toThrow(Error)
+        expect(() => handleJoinLobbySuccess(lobbyParam)).toThrow(Error(i18n.t('COMMON.ERROR.ALREADY_IN_LOBBY')))
     })
 })

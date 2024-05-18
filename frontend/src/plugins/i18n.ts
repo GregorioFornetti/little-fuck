@@ -5,7 +5,7 @@ type MessageSchema  = typeof ptBR;
 
 const environment = process.env.NODE_ENV
 
-const i18n = createI18n<[MessageSchema], 'pt-BR'>({
+const I18n = createI18n<[MessageSchema], 'pt-BR'>({
   // For use with Vue Composition API
   legacy: false,
   // Hide warnings only for test environment
@@ -16,4 +16,6 @@ const i18n = createI18n<[MessageSchema], 'pt-BR'>({
   }
 });
 
-export default i18n;
+export const i18n = I18n.global;
+
+export default I18n;
