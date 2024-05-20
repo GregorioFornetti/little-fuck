@@ -1,6 +1,5 @@
-
-import { lobby } from '@/connection'
-
+import { lobby } from '@/connection';
+import { i18n } from '@/plugins/i18n';
 
 /**
  *  Evento indicando o final de um jogo completo de "Little Fuck".
@@ -9,5 +8,13 @@ import { lobby } from '@/connection'
  *  a segunda é o jogador que ficou em segundo lugar, e assim por diante.
  */
 export function handleEndGame(playerRanks: string[]) {
+  if (lobby.value === null) {
+    throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
+  }
 
+  if (!lobby.value.game) {
+    throw new Error(i18n.t('COMMON.ERROR.GAME_NOT_STARTED'));
+  }
+
+  lobby.value.game = undefined;
 }
