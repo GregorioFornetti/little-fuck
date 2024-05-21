@@ -17,7 +17,12 @@ export function handlePlayerLogout(id: string) {
     throw new Error(i18n.t('COMMON.ERROR.PLAYER_NOT_FOUND'));
   }
 
+  const isLeader = lobby.value.players[playerIndex].leader
   lobby.value.players.splice(playerIndex, 1);
+  
+  if (isLeader) {
+    lobby.value.players[0].leader = true
+  }
 
   if (socket.id === id) {
     lobby.value = null;
