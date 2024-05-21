@@ -5,6 +5,7 @@
       "NOT_IN_LOBBY": "Você não está em um lobby!",
       "GAME_ALREADY_STARTED": "O jogo já começou!",
       "GAME_NOT_STARTED": "O jogo ainda não começou!",
+      "MATCH_ALREADY_STARTED": "A partida já começou!",
       "PLAYER_NOT_FOUND": "Jogador não encontrado!"
     }
   }
