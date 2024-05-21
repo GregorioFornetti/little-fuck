@@ -51,19 +51,24 @@ export interface Round {
 }
 
 /**
+ * Interface que contém as informações de um jogador na Partida
+ */
+export interface PlayerMatch {
+    /** Quantidade de cartas que o jogador possui */
+    numCards: number,
+    /** Quantidade de rodadas ganhas até o momento pelo usuário em questão */
+    numWonRounds: number,
+    /** Quantidade de vitórias palpitadas pelo jogador. Pode ser undefined caso não tenha palpitado ainda */
+    numWinsNeeded?: number
+}
+
+/**
  *  Interface que contém as informações de uma partida, como as cartas dos jogadores, os seus palpites, etc.
  */
 export interface Match {
     /** Informações de cada jogadores na partida */
     players: {
-        [playerId: string]: {
-            /** Quantidade de cartas que o jogador possui */
-            numCards: number,
-            /** Quantidade de rodadas ganhas até o momento pelo usuário em questão */
-            numWonRounds: number,
-            /** Quantidade de vitórias palpitadas pelo jogador. Pode ser undefined caso não tenha palpitado ainda */
-            numWinsNeeded?: number
-        }
+        [playerId: string]: PlayerMatch;
     },
     /** Cartas que o jogador atual possui */
     currentPlayerCards: Card[],
