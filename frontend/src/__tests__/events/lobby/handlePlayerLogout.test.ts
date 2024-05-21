@@ -71,4 +71,23 @@ describe('handlePlayerLogout', () => {
     expect(() => handlePlayerLogout(anotherPlayer.id))
       .toThrow(Error(i18n.t('COMMON.ERROR.PLAYER_NOT_FOUND')));
   });
+
+  test('Deve promover o primeiro jogador da lista a líder do lobby assim que líder atual sair', () => {
+    const connection = require('@/connection');
+
+    connection.lobby.value = {
+      lobbyId: '123',
+      players: [leaderPlayer, anotherPlayer]
+    };
+
+    const lobby = connection.lobby.value;
+
+    handlePlayerLogout(leaderPlayer.id);
+
+    expect(lobby.players).toHaveLength(1)
+    expect(lobby.players[0]).toEqual({
+      ...anotherPlayer, leader: true
+    })
+  }); 
+
 });
