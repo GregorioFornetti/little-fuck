@@ -28,9 +28,9 @@ Ao adicionar um novo evento emitido pelo cliente, é preciso adicionar um novo h
 
 2. No arquivo `eventsHandlers.ts` do subrepositório específico, adicionar uma nova entrada no objeto, associando a função handler criada com o nome do evento. Por exemplo, seguindo o mesmo exemplo da etapa anterior, seria adicionado a seguinte entrada: `skip-turn: handleSkipTurn`;
 
-3. Adicionar um novo teste em `src/\_\_tests\_\_/events/testHandlers.ts` para verificar se o handler foi cadastrado corretamente, ou seja, se a função correta está sendo chamada ao emitir o evento;
+3. Adicionar um novo teste em `src/\_\_tests\_\_/events/handlers.test.ts` para verificar se o handler foi cadastrado corretamente, ou seja, se a função correta está sendo chamada ao emitir o evento;
 
-4. Adicionar testes automatizados para verificar se o handler está se comportando da forma esperada. Seguindo os exemplos anteriores, o teste deveria ser criado em `src/\_\_tests\_\_/events/round/testHandleSkipTurn.ts`.
+4. Adicionar testes automatizados para verificar se o handler está se comportando da forma esperada. Seguindo os exemplos anteriores, o teste deveria ser criado em `src/\_\_tests\_\_/events/round/handleSkipTurn.test.ts`.
 
 ## Adicionando um novo emitter
 
@@ -38,4 +38,4 @@ Ao adicionar um novo evento emitido pelo servidor, é preciso adicionar um novo 
 
 1. Criar um método emissor, no arquivo `eventsEmitter.ts`, em um dos subrepositórios. Por exemplo, se for adicionar um novo evento chamado `skip-turn` à rodada, o emitter deve ser adicionado em `round/eventsEmitter.ts`, com o método se chamando `emitSkipTurn`;
 
-2. Adicionar um novo teste em `src/\_\_tests\_\_/events/testEmitters.ts` para verificar se o emitter está enviando a mensagem corretamente ao cliente.
+2. Adicionar um novo teste em `src/\_\_tests\_\_/events/emitters.test.ts` para verificar se o emitter está enviando a mensagem corretamente ao cliente.
