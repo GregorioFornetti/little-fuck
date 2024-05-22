@@ -36,6 +36,7 @@ describe('handlePlayerLogout', () => {
   });
 
   test('Deve remover o jogador atual do lobby e definir o lobby atual como null', () => {
+    fail()
     const connection = require('@/connection');
     
     connection.socket = { id: leaderPlayer.id };
