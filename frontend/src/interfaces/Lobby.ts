@@ -45,7 +45,7 @@ export interface RoundCards {
  */
 export interface Round {
     /** Cartas que estão atualmente na mesa */
-    cards: RoundCards,
+    cards: RoundCards | SpecialMatchCards,
     /** id do jogador que deve jogar a carta atualmente. undefined caso todas já tenham jogado suas cartas */
     nextPlayerId?: string
 }
