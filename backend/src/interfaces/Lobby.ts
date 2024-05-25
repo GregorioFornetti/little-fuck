@@ -1,4 +1,6 @@
 
+import Timer from "easytimer.js";
+
 /**
  *  Interface que contém as informações 
  */
@@ -83,12 +85,14 @@ export interface Game {
     playersHealth: {
         [playerId: string]: number
     },
-    /** Tempo máximo em segundos até a ocorrência do próximo evento automático. Ex: começar uma rodada, selecionar a carta aleatória de um jogdor que demorou muito para jogar, etc */
-    currentWaitTime: number,
+    /** Timer countdown até a ocorrência do próximo evento automático. Ex: começar uma rodada, selecionar a carta aleatória de um jogdor que demorou muito para jogar, etc */
+    timer: Timer,
     /** Número da partida atual */
     matchNumber: number,
     /** Número da rodada atual */
     roundNumber: number,
+    /** O id do jogador que iniciou palpitando na última (ou atual) partida */
+    currentPlayerId: string,
     /** Informações da partida. Pode ser undefined se ainda não estiver ocorrendo uma partida */
     match?: Match
 }
