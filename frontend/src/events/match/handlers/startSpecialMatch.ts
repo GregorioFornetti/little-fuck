@@ -1,7 +1,6 @@
-
-import { lobby } from '@/connection'
-import type { SpecialMatchCards } from "@/interfaces/Lobby";
-
+import type { Match, PlayerMatch, SpecialMatchCards } from "@/interfaces/Lobby";
+import { lobby } from '@/connection';
+import { i18n } from "@/plugins/i18n";
 
 /**
  *  Iniciará a partida especial, quando todos os jogadores possuem apenas uma carta. 
@@ -14,5 +13,37 @@ import type { SpecialMatchCards } from "@/interfaces/Lobby";
  *  @param firstPlayerId id do jogador que deve começar palpitando
  */
 export function handleStartSpecialMatch(cards: SpecialMatchCards, firstPlayerId: string) {
+  if (lobby.value === null) {
+    throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
+  }
 
+  if (!lobby.value.game) {
+    throw new Error(i18n.t('COMMON.ERROR.GAME_NOT_STARTED'));
+  }
+
+  if (lobby.value.game.match) {
+    throw new Error(i18n.t('COMMON.ERROR.MATCH_ALREADY_STARTED'));
+  }
+
+  const players = lobby.value.players;
+  const playersMatch = players.reduce<Record<string, PlayerMatch>>((playersMatch, player) => {
+    playersMatch[player.id] = {
+      numCards: 1,
+      numWonRounds: 0
+    }
+
+    return playersMatch;
+  }, {});
+
+  const specialMatch: Match = {
+    players: playersMatch,
+    currentPlayerCards: [],
+    numRounds: 1,
+    nextPlayerId: firstPlayerId,
+    round: {
+      cards
+    }
+  }
+
+  lobby.value.game.match = specialMatch;
 }
