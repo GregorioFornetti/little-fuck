@@ -67,8 +67,6 @@ export interface Match {
             numWinsNeeded?: number
         }
     },
-    /** Quantidade de rodadas que devem ocorrer nessa partida (número de cartas que foram dadas à cada jogador). */
-    numRounds: number,
     /** Id do jogador que deve palpitar atualmente. undefined caso todos já tenham palpitado */
     nextPlayerId?: string,
     /** Informações da rodada. Pode ser undefined se ainda não estiver ocorrendo uma rodada */
@@ -93,6 +91,8 @@ export interface Game {
     roundNumber: number,
     /** O id do jogador que iniciou palpitando na última (ou atual) partida */
     currentPlayerId: string,
+    /** Quantidade de rodadas que devem ocorrer na última (ou atual) partida */
+    numRounds: number,
     /** Informações da partida. Pode ser undefined se ainda não estiver ocorrendo uma partida */
     match?: Match
 }

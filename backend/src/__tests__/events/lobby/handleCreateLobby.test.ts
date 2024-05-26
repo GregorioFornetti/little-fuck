@@ -69,7 +69,7 @@ describe("handleCreateLobby", () => {
       clientSocket.on('join-lobby-success', (lobby: Lobby) => {
         // Verifica se as informações do lobby foram salvas corretamente no servidor
         expect(lobbys[lobby.lobbyId]).toEqual(lobby);
-        expect(players[player.playerId]).toEqual(lobby);
+        expect(players[player.playerId].lobby).toEqual(lobby);
         done();
       })
   

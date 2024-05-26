@@ -31,7 +31,7 @@ jest.mock("../../events/round/handlers/selectCard")
 function getPlayer(socket: Socket) {
     return {
         playerId: socket.id,
-        eventsEmitter: new EventsEmitter(io, socket, players[socket.id]?.lobbyId),
+        eventsEmitter: new EventsEmitter(io, socket, players[socket.id]?.lobby?.lobbyId),
         socket: socket,
         io: io,
         lobby: players[socket.id]

@@ -26,8 +26,8 @@ function joinLobby(clientSockets: ClientSocket[], serverSockets: ServerSocket[])
         ]
     }
     lobbys[lobby.lobbyId] = lobby;
-    players[clientSockets[0].id as string] = lobby;
-    players[clientSockets[1].id as string] = lobby;
+    players[clientSockets[0].id as string] = { socket: serverSockets[0], lobby: lobby };
+    players[clientSockets[1].id as string] = { socket: serverSockets[1], lobby: lobby };
     serverSockets[0].leave(lobby.lobbyId)
     serverSockets[1].leave(lobby.lobbyId)
     serverSockets[0].join(lobby.lobbyId);
