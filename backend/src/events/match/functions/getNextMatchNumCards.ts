@@ -13,6 +13,6 @@ import { Card } from "../../../interfaces/Lobby";
  *  @param possibleCards lista de cartas que podem ser fornecidas
  *  @returns o próximo número de cartas que pode ser fornecido
  */
-function getNextMatchNumCards(currentMatchNumCards: number, alivePlayersIds: string[], possibleCards: Card[]): number {
+export function getNextMatchNumCards(currentMatchNumCards: number, alivePlayersIds: string[], possibleCards: Card[]): number {
     
 }

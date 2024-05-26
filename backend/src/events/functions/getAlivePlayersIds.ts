@@ -9,6 +9,6 @@ import Lobby from "../../interfaces/Lobby";
  *  @param lobby informações do lobby (e do jogo) atual
  *  @returns um array contendo todos os ids dos jogadores vivos
  */
-function getNextPlayerId(lobby: Lobby): string[] {
+export function getNextPlayerId(lobby: Lobby): string[] {
     
 }

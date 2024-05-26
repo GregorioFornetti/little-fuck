@@ -7,6 +7,6 @@ import { Card } from "../../interfaces/Lobby";
  * 
  *  @returns uma lista contendo todas as cartas padrões do jogo
  */
-function getDefaultCards(): Card[] {
+export function getDefaultCards(): Card[] {
 
 }

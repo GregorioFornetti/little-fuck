@@ -11,6 +11,6 @@ import Lobby from "../../interfaces/Lobby";
  *  @param lobby informações do lobby (e do jogo) atual
  *  @returns o próximo id
  */
-function getNextPlayerId(currentPlayerId: string, lobby: Lobby): string {
+export function getNextPlayerId(currentPlayerId: string, lobby: Lobby): string {
     
 }
