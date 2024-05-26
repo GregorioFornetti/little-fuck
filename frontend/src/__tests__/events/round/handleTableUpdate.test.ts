@@ -38,25 +38,12 @@ describe('handleTableUpdate', () => {
       nextPlayerId: leaderPlayer.id
     }
 
-    const match: Match = {
-      numRounds: 0,
-      currentPlayerCards: [],
-      players: {},
-      round
-    }
-
-    const game: Game = {
-      currentWaitTime: 1,
-      matchNumber: 1,
-      roundNumber: 1,
-      playersHealth: {},
-      match
-    }
-
     connection.lobby.value = {
       lobbyId: '123',
       players: [leaderPlayer, anotherPlayer],
-      game
+      game: {
+        match: { round }
+      }
     }
 
     handleTableUpdate(FILLED_ROUND_CARDS, anotherPlayer.id);
