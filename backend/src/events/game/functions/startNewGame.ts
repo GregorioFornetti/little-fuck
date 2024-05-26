@@ -9,10 +9,9 @@ import Player from "../../../interfaces/Player";
  *  - Enviar mensagens para todos os jogadores que o jogo começou
  *  - Cadastrar um timer para o início de uma partida
  *  
- *  @param player jogador que solicitou o inicio do jogo
- *  @param playersIds lista de strings contendo os ids dos jogadores que estão no lobby que acaba de iniciar o jogo.
+ *  @param player jogador que iniciou o jogo (líder)
  *  @returns um objeto do tipo Game, contendo as informações iniciais necessárias para o começo do jogo.
  */
-export function startNewGame(player: Player, playersIds: string[]): Game {
-
+export function startNewGame(player: Player): Game {
+    
 }
