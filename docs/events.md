@@ -659,7 +659,7 @@ OBS: também é considerado um palpite inválido no caso do último jogador palp
 
 #### Parâmetros
 
-- type: "not-your-turn" | "negative-is-invalid" | "not-in-lobby" | "num-wins-equals-num-cards"
+- type: "not-your-turn" | "negative-is-invalid" |  "num-wins-equals-num-cards" | "not-in-lobby" | "not-in-game" | "not-in-match"
 
 ---
 
