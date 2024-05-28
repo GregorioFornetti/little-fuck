@@ -91,7 +91,7 @@ export interface Game {
     roundNumber: number,
     /** O id do jogador que iniciou palpitando na última (ou atual) partida */
     currentPlayerId: string,
-    /** Quantidade de rodadas que devem ocorrer na última (ou atual) partida */
+    /** Quantidade de rodadas (ou cartas) que devem ocorrer na última (ou atual) partida */
     numRounds: number,
     /** Informações da partida. Pode ser undefined se ainda não estiver ocorrendo uma partida */
     match?: Match
