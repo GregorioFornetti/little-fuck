@@ -845,7 +845,7 @@ Mensagem enviada quando ocorrer algum erro na seleção de carta de um jogador. 
 
 #### Parâmetros
 
-- type: "not-your-turn" | "invalid-index" | "not-in-lobby"
+- type: "not-your-turn" | "invalid-index" | "not-in-lobby" | "not-in-lobby" | "not-in-game" | "not-in-match" | "not-in-round"
 
 ---
 

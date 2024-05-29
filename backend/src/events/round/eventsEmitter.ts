@@ -43,7 +43,7 @@ export default class RoundEventsEmitter extends EmitterBase {
      * 
      *  @param type tipo de erro que ocorreu ao tentar selecionar uma carta
      */
-    public emitSelectCardError(type: "not-your-turn"|"invalid-index"|"not-in-lobby") {
+    public emitSelectCardError(type: "not-your-turn"|"invalid-index"|"not-in-lobby"|"not-in-game"|"not-in-match"|"not-in-round") {
         this.emitToUser("select-card-error", type)
     }
 
