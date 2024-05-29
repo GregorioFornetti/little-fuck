@@ -14,7 +14,7 @@ export interface Card {
 /**
  *  Interface que contém as informações de uma carta que está na mesa de uma rodada.
  */
-interface RoundCard {
+export interface RoundCard {
     /** Informações da carta contida na mesa da rodada */
     card: Card,
     /** ID do jogador que colocou essa carta na mesa */
