@@ -69,6 +69,8 @@ export interface Match {
     },
     /** Id do jogador que deve palpitar atualmente. undefined caso todos já tenham palpitado */
     nextPlayerId?: string,
+    /** Id do jogador que deve jogar (ou jogou) a primeira carta da rodada que estiver em andamento */
+    roundFirstPlayerId?: string,
     /** Informações da rodada. Pode ser undefined se ainda não estiver ocorrendo uma rodada */
     round?: Round
 }
