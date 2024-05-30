@@ -95,6 +95,8 @@ export interface Game {
     currentPlayerId: string,
     /** Quantidade de rodadas (ou cartas) que devem ocorrer na última (ou atual) partida */
     numRounds: number,
+    /** Lista de ids de jogadores que "morreram" (não possuem mais vidas / foram eliminados). Estará em ordem inversa de eliminação, ou seja, o primeiro da lista será o último que foi eliminado até o momento */
+    deadPlayersIds: string[],
     /** Informações da partida. Pode ser undefined se ainda não estiver ocorrendo uma partida */
     match?: Match
 }

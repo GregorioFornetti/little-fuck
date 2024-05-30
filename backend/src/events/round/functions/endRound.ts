@@ -1,6 +1,4 @@
 
-
-
 /**
  *  Função que finaliza uma rodada de "little-fuck". Essa função é responsável por:
  *  - Desenstanciar o Round
