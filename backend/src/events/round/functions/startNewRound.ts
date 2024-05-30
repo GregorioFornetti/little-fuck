@@ -5,7 +5,7 @@ import Player from "../../../interfaces/Player";
 
 /**
  *  Função que começa uma rodada de "little-fuck". Essa função é responsável por:
- *  - Cria um objeto Round
+ *  - Criar um objeto Round
  *  - Enviar mensagens para todos os jogadores que a rodada começou
  *  - Cadastrar um timer para que o primeiro jogador selecione a carta automaticamente caso ele não selecione a tempo
  *  

@@ -6,7 +6,7 @@ import { generateAutomaticNumWinResponse } from "./generateAutomaticNumWinRespon
 
 /**
  *  Função que começa uma partida de "little-fuck". Essa função é responsável por:
- *  - Cria um objeto Match
+ *  - Criar um objeto Match
  *  - Enviar mensagens para todos os jogadores que a partida começou
  *  - Cadastrar um timer para que o primeiro jogador faça o palpite automaticamente caso ele não palpite a tempo
  *  
