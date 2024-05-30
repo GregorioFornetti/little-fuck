@@ -9,6 +9,6 @@
  *  
  *  @param player um jogador qualquer que está na partida
  */
-export function startNewRound(player: Player): void {
-    
+export function endRound(player: Player): void {
+
 }
