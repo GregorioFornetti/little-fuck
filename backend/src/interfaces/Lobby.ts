@@ -97,6 +97,8 @@ export interface Game {
     numRounds: number,
     /** Lista de ids de jogadores que "morreram" (não possuem mais vidas / foram eliminados). Estará em ordem inversa de eliminação, ou seja, o primeiro da lista será o último que foi eliminado até o momento */
     deadPlayersIds: string[],
+    /** Status do jogo é um texto indicando em qual situação está o jogo. Importante para o momento de recadastrar funções no timer caso um jogador faça logout */
+    status: "starting_match"|"waiting_num_win_response"|"starting_round"|"waiting_select_card"|"ending_match"|"ending_game",
     /** Informações da partida. Pode ser undefined se ainda não estiver ocorrendo uma partida */
     match?: Match
 }
