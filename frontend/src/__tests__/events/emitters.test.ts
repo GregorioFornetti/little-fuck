@@ -24,14 +24,6 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
             eventsEmitter.lobby.emitJoinLoby('123', 'Player1')
         })
 
-        test("logout", (done) => {
-            serverSocket.on('logout', () => {
-                done()
-            })
-
-            eventsEmitter.lobby.emitLogout()
-        })
-
         test("ready", (done) => {
             serverSocket.on('ready', () => {
                 done()
@@ -79,6 +71,16 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
             })
 
             eventsEmitter.round.emitSelectCard(1)
+        })
+    })
+
+    describe("General events", () => {
+        test("logout", (done) => {
+            serverSocket.on('logout', () => {
+                done()
+            })
+
+            eventsEmitter.general.emitLogout()
         })
     })
 })
