@@ -60,7 +60,7 @@ describe("handleJoinLobby", () => {
 
     lobbyClientsSockets[0].on('join-lobby-error', (errorType: string) => {
       expect(errorType).toBe('lobby-in-game');
-      expect(lobbys['123']).toEqual({ lobbyId: '123', players: [{ id: player.playerId, name: 'player1', leader: true, ready: false }], game: { playersHealth: {}, matchNumber: 0, roundNumber: 0, timer: lobbys['123'].game?.timer, numRounds: 1, currentPlayerId: player.playerId }});
+      expect(lobbys['123']).toEqual({ lobbyId: '123', players: [{ id: player.playerId, name: 'player1', leader: true, ready: false }], game: { playersHealth: {}, matchNumber: 0, roundNumber: 0, timer: lobbys['123'].game?.timer, numRounds: 1, currentPlayerId: player.playerId, deadPlayersIds: [], status: 'starting_match' }});
       expect(players[player.playerId].lobby).toBe(lobbys['123']);
       expect(players[joinPlayer.playerId]).toBeUndefined();
       done();
@@ -72,7 +72,9 @@ describe("handleJoinLobby", () => {
       roundNumber: 0,
       timer: new Timer(),
       currentPlayerId: player.playerId,
-      numRounds: 1
+      numRounds: 1,
+      deadPlayersIds: [],
+      status: 'starting_match'
     }
     handleJoinLobby(joinPlayer, '123', 'player2');
   });
