@@ -45,24 +45,6 @@ export default class LobbyEventsEmitter extends EmitterBase {
     }
 
     /**
-     *  Evento indicando que um jogador acaba de sair da sala.
-     *  
-     *  @param id identificador único do jogador que acaba de sair da partida
-     */
-    public emitPlayerLogout(id: string) {
-        this.emitToLobby("player-logout", id)
-    }
-
-    /**
-     *  Evento indicando que ocorreu um erro ao sair de uma sala. Isso pode acontecer caso o cliente não estivesse em uma sala.
-     * 
-     *  @param type tipo de erro que ocorreu ao tentar sair da sala
-     */
-    public emitPlayerLogoutError(type: "not-in-lobby") {
-        this.emitToUser("player-logout-error", type)
-    }
-
-    /**
      *  Indica que um jogador acaba de ficar preparado para um jogo.
      *  Este evento só é acionado caso o jogador que solicitou o "ready" ainda não estivesse pronto.
      * 
