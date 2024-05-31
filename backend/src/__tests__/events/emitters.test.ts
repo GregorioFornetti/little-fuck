@@ -1,7 +1,7 @@
 
 import EventsEmitter from "../../events/Emitter";
 import { lobbys, players } from "../../global";
-import Lobby, { Card, Round, RoundCards, SpecialMatchCards } from "../../interfaces/Lobby";
+import Lobby, { Card, RoundCards, SpecialMatchCards } from "../../interfaces/Lobby";
 import { io, clientSocket, eventsEmitter, lobbyClientsSockets, lobbyServerSockets } from "./setupTests";
 import { Socket as ClientSocket } from "socket.io-client";
 import { Socket as ServerSocket } from "socket.io";
@@ -99,38 +99,6 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
             })
 
             lobbyEmitter.Lobby.emitPlayerJoin('2', 'player2');
-        })
-
-        test("player-logout", (done) => {
-            const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
-
-            lobbyClientsSockets[0].on('player-logout', (id) => {
-                expect(id).toBe('1');
-                if (count.value === 1) {
-                    done()
-                }
-                count.value++
-            })
-
-            lobbyClientsSockets[1].on('player-logout', (id) => {
-                expect(id).toBe('1');
-                if (count.value === 1) {
-                    done()
-                }
-                count.value++
-            })
-
-            lobbyEmitter.Lobby.emitPlayerLogout('1');
-        })
-
-        test("player-logout-error", (done) => {
-            clientSocket.on('player-logout-error', (errorType) => {
-                expect(errorType).toBe('not-in-lobby');
-                done()
-            })
-
-            eventsEmitter.Lobby.emitPlayerLogoutError('not-in-lobby');
         })
 
         test("player-ready", (done) => {
@@ -577,6 +545,40 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
             })
 
             lobbyEmitter.Round.emitEndRound(lobbyClientsSockets[0].id as string, 1);
+        })
+    })
+
+    describe("General events", () => {
+        test("player-logout", (done) => {
+            const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
+            let count = { value: 0 }
+
+            lobbyClientsSockets[0].on('player-logout', (id) => {
+                expect(id).toBe('1');
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyClientsSockets[1].on('player-logout', (id) => {
+                expect(id).toBe('1');
+                if (count.value === 1) {
+                    done()
+                }
+                count.value++
+            })
+
+            lobbyEmitter.General.emitPlayerLogout('1');
+        })
+
+        test("player-logout-error", (done) => {
+            clientSocket.on('player-logout-error', (errorType) => {
+                expect(errorType).toBe('not-in-lobby');
+                done()
+            })
+
+            eventsEmitter.General.emitPlayerLogoutError('not-in-lobby');
         })
     })
 })
