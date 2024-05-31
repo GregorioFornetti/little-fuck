@@ -179,69 +179,6 @@ Evento enviado para todos os jogadores indicando que um novo jogador entrou na s
 
 
 
-### logout
-
-Cliente ----> Servidor (cliente envia a mensagem ao servidor)
-
-#### Descrição
-
-Evento criado quando um jogador deseja sair de uma sala. O jogador sairá da sala caso ele esteja em uma, sendo enviado o evento `player-logout` (que será enviado para todos os outros da sala, para que removam ele da sala também), caso contrário será enviado o evento `logout-error` (apenas para o jogador que tentou sair).
-
----
-
-
-
-
-
-
-
-
-
-### player-logout
-
-Servidor ----> Lobby (servidor envia para todos clientes do lobby)
-
-#### Descrição
-
-Evento indicando que um jogador acaba de sair da sala.
-
-#### Parâmetros
-
-- id: string indicando o jogador que saiu.
-
----
-
-
-
-
-
-
-
-
-
-### player-logout-error
-
-Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
-
-#### Descrição
-
-Evento indicando que ocorreu um erro ao sair de uma sala. Isso pode acontecer caso o cliente não estivesse em uma sala.
-
-#### Parâmetros
-
-- type: "not-in-lobby"
-
----
-
-
-
-
-
-
-
-
-
-
 ### ready
 
 Cliente ----> Servidor (cliente envia a mensagem ao servidor)
@@ -873,3 +810,81 @@ Evento enviado para indicar o fim da rodada. Uma rodada acaba quando todos os jo
 - winnerId: string com o id do jogador que ganhou rodada. O valor será `undefined` caso ninguém tenha ganho a rodada.
 
 - points: inteiro indicando a quantidade de pontos ganhos pelo vencedor nessa rodada.
+
+
+
+
+
+
+
+
+
+
+
+
+
+## General
+
+São eventos gerais, que podem ocorrer (e devem ser lidados) em qualquer momento de comunicação. Por exemplo, o `logout` de um jogador deve ser lidado quando estiver apenas no lobby, quando estiver em jogo, com partida ou rodada. Ou seja, são eventos que precisam ser lidados em qualquer situação.
+
+
+
+
+
+
+
+
+
+### logout
+
+Cliente ----> Servidor (cliente envia a mensagem ao servidor)
+
+#### Descrição
+
+Evento criado quando um jogador deseja sair de uma sala. O jogador sairá da sala caso ele esteja em uma, sendo enviado o evento `player-logout` (que será enviado para todos os outros da sala, para que removam ele da sala também), caso contrário será enviado o evento `logout-error` (apenas para o jogador que tentou sair).
+
+---
+
+
+
+
+
+
+
+
+
+### player-logout
+
+Servidor ----> Lobby (servidor envia para todos clientes do lobby)
+
+#### Descrição
+
+Evento indicando que um jogador acaba de sair da sala.
+
+#### Parâmetros
+
+- id: string indicando o jogador que saiu.
+
+---
+
+
+
+
+
+
+
+
+
+### player-logout-error
+
+Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
+
+#### Descrição
+
+Evento indicando que ocorreu um erro ao sair de uma sala. Isso pode acontecer caso o cliente não estivesse em uma sala.
+
+#### Parâmetros
+
+- type: "not-in-lobby"
+
+---
