@@ -3,10 +3,10 @@ import lobbyEventsHandlers from './lobby/eventsHandlers';
 import gameEventsHandlers from './game/eventsHandlers';
 import matchEventsHandlers from './match/eventsHandlers';
 import roundEventsHandlers from './round/eventsHandlers';
-import { players } from '../global';
+import generalEventsHandlers from './general/eventsHandlers';
 import { Socket, Server } from "socket.io";
 import Player from '../interfaces/Player';
-import EventsEmitter from './Emitter';
+import { createPlayer } from './functions/createPlayer';
 
 
 /**
@@ -20,18 +20,13 @@ export default function addEventsListeners(io: Server, socket: Socket) {
         ...lobbyEventsHandlers,
         ...gameEventsHandlers,
         ...matchEventsHandlers,
-        ...roundEventsHandlers
+        ...roundEventsHandlers,
+        ...generalEventsHandlers
     }
 
     Object.entries(eventsHandlers).forEach(([eventName, eventHandler]) => {
         socket.on(eventName, (...args) => {
-            const player: Player = {
-                playerId: socket.id,
-                eventsEmitter: new EventsEmitter(io, socket, players[socket.id]?.lobby?.lobbyId),
-                socket: socket,
-                io: io,
-                lobby: players[socket.id]?.lobby
-            }
+            const player: Player = createPlayer(socket.id)
             eventHandler(player, ...args)
         })
     })
