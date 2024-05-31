@@ -5,8 +5,6 @@ import EventsListenersAdderBase from "../EventsListenersAdderBase";
 import { handleJoinLobbyError } from "./handlers/joinLobbyError";
 import { handleJoinLobbySuccess } from "./handlers/joinLobbySuccess";
 import { handlePlayerJoin } from "./handlers/playerJoin";
-import { handlePlayerLogout } from "./handlers/playerLogout";
-import { handlePlayerLogoutError } from "./handlers/playerLogoutError";
 import { handlePlayerReady } from "./handlers/playerReady";
 import { handlePlayerReadyError } from "./handlers/playerReadyError";
 import { handlePlayerUnready } from "./handlers/playerUnready";
@@ -48,24 +46,6 @@ export class LobbyEventsHandlersAdder extends EventsListenersAdderBase {
      */
     public playerJoin(handlerFunction: (id: string, name: string) => void): void {
         this.socket.on('player-join', handlerFunction)
-    }
-
-    /**
-     *  Evento indicando que um jogador acaba de sair da sala.
-     * 
-     *  @param handlerFunction função que será chamada quando o evento for recebido
-     */
-    public playerLogout(handlerFunction: (id: string) => void): void {
-        this.socket.on('player-logout', handlerFunction)
-    }
-
-    /**
-     *  Evento indicando que ocorreu um erro ao sair de uma sala. Isso pode acontecer caso o cliente não estivesse em uma sala.
-     * 
-     *  @param handlerFunction função que será chamada quando o evento for recebido
-     */
-    public playerLogoutError(handlerFunction: (type: "not-in-lobby") => void): void {
-        this.socket.on('player-logout-error', handlerFunction)
     }
 
     /**
@@ -141,8 +121,6 @@ export default function addDefaultLobbyHandlers(socket: Socket) {
     lobbyEventsHandlersAdder.joinLobbySuccess(handleJoinLobbySuccess)
     lobbyEventsHandlersAdder.joinLobbyError(handleJoinLobbyError)
     lobbyEventsHandlersAdder.playerJoin(handlePlayerJoin)
-    lobbyEventsHandlersAdder.playerLogout(handlePlayerLogout)
-    lobbyEventsHandlersAdder.playerLogoutError(handlePlayerLogoutError)
     lobbyEventsHandlersAdder.playerReady(handlePlayerReady)
     lobbyEventsHandlersAdder.playerReadyError(handlePlayerReadyError)
     lobbyEventsHandlersAdder.playerUnready(handlePlayerUnready)
