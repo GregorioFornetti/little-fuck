@@ -1,15 +1,21 @@
 
 import { players } from "../../global"
 import EventsEmitter from "../Emitter"
-import { io } from "../../index"
 import Player from "../../interfaces/Player"
+import i18n from "../../plugins/i18n"
+import { Server } from "socket.io"
 
 
-
-export function createPlayer(playerId: string): Player {
+/**
+ *  Cria um objeto Player com base no id do jogador.
+ * 
+ *  @param io Servidor do socket.io (deve ser pego do index.ts)
+ *  @param playerId Id do jogador
+ */
+export function createPlayer(io: Server, playerId: string): Player {
     const playerInfo = players[playerId]
     if (!playerInfo) {
-        throw new Error("Player not found")  // COLOCAR ERRO CERTO AQUI
+        throw new Error(i18n.t("COMMON.ERROR.PLAYER_NOT_FOUND"))
     }
 
     const lobbyId = playerInfo.lobby ? playerInfo.lobby.lobbyId : undefined

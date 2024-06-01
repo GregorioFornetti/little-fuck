@@ -26,7 +26,7 @@ export default function addEventsListeners(io: Server, socket: Socket) {
 
     Object.entries(eventsHandlers).forEach(([eventName, eventHandler]) => {
         socket.on(eventName, (...args) => {
-            const player: Player = createPlayer(socket.id)
+            const player: Player = createPlayer(io, socket.id)
             eventHandler(player, ...args)
         })
     })

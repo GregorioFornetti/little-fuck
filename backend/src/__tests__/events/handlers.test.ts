@@ -14,9 +14,6 @@ import { handleSelectCard } from "../../events/round/handlers/selectCard";
 
 import { handleLogout } from "../../events/general/handlers/logout";
 
-import EventsEmitter from "../../events/Emitter";
-import { Socket } from "socket.io";
-import { players } from "../../global";
 import { createPlayer } from "../../events/functions/createPlayer";
 
 
@@ -43,7 +40,7 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
             addEventsListeners(io, serverSocket)
 
             serverSocket.on("create-lobby", (name: string) => {
-                expect(handleCreateLobby).toHaveBeenCalledWith(createPlayer(serverSocket.id), name)
+                expect(handleCreateLobby).toHaveBeenCalledWith(createPlayer(io, serverSocket.id), name)
                 done()
             })
 
@@ -54,7 +51,7 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
             addEventsListeners(io, serverSocket)
 
             serverSocket.on("join-lobby", (lobbyId: string, name: string) => {
-                expect(handleJoinLobby).toHaveBeenCalledWith(createPlayer(serverSocket.id), lobbyId, name)
+                expect(handleJoinLobby).toHaveBeenCalledWith(createPlayer(io, serverSocket.id), lobbyId, name)
                 done()
             })
 
@@ -65,7 +62,7 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
             addEventsListeners(io, serverSocket)
 
             serverSocket.on("ready", () => {
-                expect(handleReady).toHaveBeenCalledWith(createPlayer(serverSocket.id))
+                expect(handleReady).toHaveBeenCalledWith(createPlayer(io, serverSocket.id))
                 done()
             })
 
@@ -76,7 +73,7 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
             addEventsListeners(io, serverSocket)
 
             serverSocket.on("start-game-request", () => {
-                expect(handleStartGameRequest).toHaveBeenCalledWith(createPlayer(serverSocket.id))
+                expect(handleStartGameRequest).toHaveBeenCalledWith(createPlayer(io, serverSocket.id))
                 done()
             })
 
@@ -87,7 +84,7 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
             addEventsListeners(io, serverSocket)
 
             serverSocket.on("unready", () => {
-                expect(handleUnready).toHaveBeenCalledWith(createPlayer(serverSocket.id))
+                expect(handleUnready).toHaveBeenCalledWith(createPlayer(io, serverSocket.id))
                 done()
             })
 
@@ -104,7 +101,7 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
             addEventsListeners(io, serverSocket)
 
             serverSocket.on("win-rounds-number-response", (winRoundsNumber: number) => {
-                expect(handleWinRoundsNumberResponse).toHaveBeenCalledWith(createPlayer(serverSocket.id), winRoundsNumber)
+                expect(handleWinRoundsNumberResponse).toHaveBeenCalledWith(createPlayer(io, serverSocket.id), winRoundsNumber)
                 done()
             })
 
@@ -117,7 +114,7 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
             addEventsListeners(io, serverSocket)
 
             serverSocket.on("select-card", (card: number) => {
-                expect(handleSelectCard).toHaveBeenCalledWith(createPlayer(serverSocket.id), card)
+                expect(handleSelectCard).toHaveBeenCalledWith(createPlayer(io, serverSocket.id), card)
                 done()
             })
 
@@ -130,7 +127,7 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
             addEventsListeners(io, serverSocket)
 
             serverSocket.on("logout", () => {
-                expect(handleLogout).toHaveBeenCalledWith(createPlayer(serverSocket.id))
+                expect(handleLogout).toHaveBeenCalledWith(createPlayer(io, serverSocket.id))
                 done()
             })
 
