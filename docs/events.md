@@ -903,7 +903,7 @@ Evento indicando que ocorreu um erro ao sair de uma sala. Isso pode acontecer ca
 
 ### internal-server-error
 
-Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
+Servidor ----> Lobby (servidor envia para todos clientes do lobby)
 
 #### Descrição
 
