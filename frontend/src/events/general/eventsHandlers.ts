@@ -3,6 +3,7 @@ import EventsListenersAdderBase from "../EventsListenersAdderBase";
 
 import { handlePlayerLogout } from "./handlers/playerLogout";
 import { handlePlayerLogoutError } from "./handlers/playerLogoutError";
+import { handleInternalServerError } from "./handlers/internalServerError";
 import type { Socket } from "socket.io-client";
 
 
@@ -25,6 +26,16 @@ export class GeneralEventsHandlersAdder extends EventsListenersAdderBase {
     public playerLogoutError(handlerFunction: (type: "not-in-lobby") => void): void {
         this.socket.on('player-logout-error', handlerFunction)
     }
+
+    /**
+     *  Evento indicando que um erro ocorreu no servidor. 
+     *  Esse erro não era esperado, e provavelmente faria com que o servidor parasse, mas foi "contido".
+     *  Quando isso ocorrer, o lobby será desfeito imediatamente,
+     *  e um log desse evento será feito no servidor para posterior correção...
+     */
+    public internalServerError(handlerFunction: () => void): void {
+        this.socket.on('internal-server-error', handlerFunction)
+    }
 }
 
 
@@ -33,4 +44,5 @@ export default function addDefaultGeneralHandlers(socket: Socket) {
 
     generalEventsHandlersAdder.playerLogout(handlePlayerLogout)
     generalEventsHandlersAdder.playerLogoutError(handlePlayerLogoutError)
+    generalEventsHandlersAdder.internalServerError(handleInternalServerError)
 }
