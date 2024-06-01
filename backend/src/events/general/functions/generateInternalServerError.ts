@@ -6,6 +6,6 @@
  * 
  *  @param errorMessage Mensagem de erro que será registrada no console do servidor.
  */
-export function generateInternalServerError(errorMessage: string): void {
+export function generateInternalServerError(errorMessage: Error): void {
 
 }
