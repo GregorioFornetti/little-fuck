@@ -1,5 +1,5 @@
 
-import { clientSocket, player, io, eventsEmitter } from "../setupTests";
+import { player, io } from "../setupTests";
 import i18n from "../../../plugins/i18n"
 import { players } from "../../../global";
 import { createPlayer } from "../../../events/functions/createPlayer"
