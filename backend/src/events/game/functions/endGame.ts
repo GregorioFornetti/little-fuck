@@ -1,3 +1,4 @@
+import Player from "../../../interfaces/Player";
 
 /**
  *  Função que finaliza uma jogo de "little-fuck". Essa função é responsável por:
