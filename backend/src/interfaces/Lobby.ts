@@ -85,7 +85,7 @@ export interface Game {
     playersHealth: {
         [playerId: string]: number
     },
-    /** Timer countdown até a ocorrência do próximo evento automático. Ex: começar uma rodada, selecionar a carta aleatória de um jogdor que demorou muito para jogar, etc */
+    /** Timer countdown até a ocorrência do próximo evento automático. Ex: começar uma rodada, selecionar a carta aleatória de um jogador que demorou muito para jogar, etc */
     timer: Timer,
     /** Número da partida atual */
     matchNumber: number,
