@@ -5,6 +5,7 @@ import LobbyEventsEmitter from "./lobby/eventsEmitter";
 import GameEventsEmitter from "./game/eventsEmitter";
 import MatchEventsEmitter from "./match/eventsEmitter";
 import RoundEventsEmitter from "./round/eventsEmitter";
+import GeneralEventsEmitter from "./general/eventsEmitter";
 
 
 /**
@@ -17,11 +18,13 @@ export default class EventsEmitter {
     public Game: GameEventsEmitter;
     public Match: MatchEventsEmitter;
     public Round: RoundEventsEmitter;
+    public General: GeneralEventsEmitter
     
     constructor(io: Server, socket: Socket|ClientSocket, lobbyId?: string) {
         this.Lobby = new LobbyEventsEmitter(io, socket, lobbyId);
         this.Game = new GameEventsEmitter(io, socket, lobbyId);
         this.Match = new MatchEventsEmitter(io, socket, lobbyId);
         this.Round = new RoundEventsEmitter(io, socket, lobbyId);
+        this.General = new GeneralEventsEmitter(io, socket, lobbyId);
     }
 }

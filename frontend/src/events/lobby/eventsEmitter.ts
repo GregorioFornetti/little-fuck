@@ -38,15 +38,6 @@ export default class LobbyEventsEmitter extends EventsEmitterBase {
     }
 
     /**
-     *  Evento criado quando um jogador deseja sair de uma sala.
-     *  O jogador sairá da sala caso ele esteja em uma, sendo enviado o evento `player-logout` (que será enviado para todos os outros da sala,
-     *  para que removam ele da sala também), caso contrário será enviado o evento `logout-error` (apenas para o jogador que tentou sair).
-     */
-    public emitLogout() {
-        this.socket.emit('logout');
-    }
-
-    /**
      *  Evento enviado quando o jogador está preparado para começar a partida. 
      *  Caso o jogador não estivesse preparado antes, e este esteja em uma sala de um jogo que ainda não está em andamento e não seja o líder,
      *  será atualizado o status desse jogador para todos os outros integrantes da sala (chamando o evento `player-ready`).

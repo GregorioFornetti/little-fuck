@@ -7,6 +7,7 @@ import Player from "../../../interfaces/Player";
 import { clientSocket, player, io, lobbyClientsSockets, lobbyServerSockets, serverSocket } from "../setupTests";
 import EventsEmitter from "../../../events/Emitter";
 import { Socket } from "socket.io";
+import Timer from "easytimer.js";
 
 
 function createLobby(player: Player) {
@@ -22,7 +23,7 @@ function createLobby(player: Player) {
     ]
   }
   player.lobby = lobbys['123'];
-  players[player.playerId] = lobbys['123'];
+  players[player.playerId] = { socket: player.socket, lobby: lobbys['123'] };
 }
 
 
@@ -40,7 +41,7 @@ describe("handleJoinLobby", () => {
     lobbyClientsSockets[0].on('join-lobby-error', (errorType: string) => {
       expect(errorType).toBe('inexistent-lobby');
       expect(lobbys['123']).toEqual({ lobbyId: '123', players: [{ id: player.playerId, name: 'player1', leader: true, ready: false }] });
-      expect(players[player.playerId]).toBe(lobbys['123']);
+      expect(players[player.playerId].lobby).toBe(lobbys['123']);
       expect(players[joinPlayer.playerId]).toBeUndefined();
       done();
     })
@@ -59,17 +60,21 @@ describe("handleJoinLobby", () => {
 
     lobbyClientsSockets[0].on('join-lobby-error', (errorType: string) => {
       expect(errorType).toBe('lobby-in-game');
-      expect(lobbys['123']).toEqual({ lobbyId: '123', players: [{ id: player.playerId, name: 'player1', leader: true, ready: false }], game: { playersHealth: {}, currentWaitTime: 0, matchNumber: 0, roundNumber: 0 }});
-      expect(players[player.playerId]).toBe(lobbys['123']);
+      expect(lobbys['123']).toEqual({ lobbyId: '123', players: [{ id: player.playerId, name: 'player1', leader: true, ready: false }], game: { playersHealth: {}, matchNumber: 0, roundNumber: 0, timer: lobbys['123'].game?.timer, numRounds: 1, currentPlayerId: player.playerId, deadPlayersIds: [], status: 'starting_match' }});
+      expect(players[player.playerId].lobby).toBe(lobbys['123']);
       expect(players[joinPlayer.playerId]).toBeUndefined();
       done();
     })
 
     lobbys['123'].game = {  // Adicionando um jogo em andamento (game precisa ser definido para que o lobby seja considerado em jogo)
       playersHealth: {},
-      currentWaitTime: 0,
       matchNumber: 0,
-      roundNumber: 0
+      roundNumber: 0,
+      timer: new Timer(),
+      currentPlayerId: player.playerId,
+      numRounds: 1,
+      deadPlayersIds: [],
+      status: 'starting_match'
     }
     handleJoinLobby(joinPlayer, '123', 'player2');
   });
@@ -86,7 +91,7 @@ describe("handleJoinLobby", () => {
     lobbyClientsSockets[0].on('join-lobby-error', (errorType: string) => {
       expect(errorType).toBe('no-name');
       expect(lobbys['123']).toEqual({ lobbyId: '123', players: [{ id: player.playerId, name: 'player1', leader: true, ready: false }] });
-      expect(players[player.playerId]).toBe(lobbys['123']);
+      expect(players[player.playerId].lobby).toBe(lobbys['123']);
       expect(players[joinPlayer.playerId]).toBeUndefined();
       done();
     })
@@ -106,7 +111,7 @@ describe("handleJoinLobby", () => {
     lobbyClientsSockets[0].on('join-lobby-error', (errorType: string) => {
       expect(errorType).toBe('no-name');
       expect(lobbys['123']).toEqual({ lobbyId: '123', players: [{ id: player.playerId, name: 'player1', leader: true, ready: false }] });
-      expect(players[player.playerId]).toBe(lobbys['123']);
+      expect(players[player.playerId].lobby).toBe(lobbys['123']);
       expect(players[joinPlayer.playerId]).toBeUndefined();
       done();
     })
@@ -126,7 +131,7 @@ describe("handleJoinLobby", () => {
     lobbyClientsSockets[0].on('join-lobby-error', (errorType: string) => {
       expect(errorType).toBe('repeated-name');
       expect(lobbys['123']).toEqual({ lobbyId: '123', players: [{ id: player.playerId, name: 'player1', leader: true, ready: false }] });
-      expect(players[player.playerId]).toBe(lobbys['123']);
+      expect(players[player.playerId].lobby).toBe(lobbys['123']);
       expect(players[joinPlayer.playerId]).toBeUndefined();
       done();
     })
@@ -140,7 +145,7 @@ describe("handleJoinLobby", () => {
     clientSocket.on('join-lobby-error', (errorType: string) => {
       expect(errorType).toBe('player-already-in-lobby');
       expect(lobbys['123']).toEqual({ lobbyId: '123', players: [{ id: player.playerId, name: 'player1', leader: true, ready: false }] });
-      expect(players[player.playerId]).toBe(lobbys['123']);
+      expect(players[player.playerId].lobby).toBe(lobbys['123']);
       done();
     })
 
@@ -187,7 +192,7 @@ describe("handleJoinLobby", () => {
       test("Deve cadastar o lobby no jogador", () => {
         addPlayerToLobby(player, lobbyServerSockets[0], 'player2');
 
-        expect(players[lobbyServerSockets[0].id]).toBe(lobbys['123']);
+        expect(players[lobbyServerSockets[0].id].lobby).toBe(lobbys['123']);
       })
       
 
@@ -247,8 +252,8 @@ describe("handleJoinLobby", () => {
         addPlayerToLobby(player, lobbyServerSockets[0], 'player2');
         addPlayerToLobby(player, lobbyServerSockets[1], 'player3');
 
-        expect(players[lobbyServerSockets[0].id]).toBe(lobbys['123']);
-        expect(players[lobbyServerSockets[1].id]).toBe(lobbys['123']);
+        expect(players[lobbyServerSockets[0].id].lobby).toBe(lobbys['123']);
+        expect(players[lobbyServerSockets[1].id].lobby).toBe(lobbys['123']);
       })
       
 

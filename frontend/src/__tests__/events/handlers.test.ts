@@ -5,8 +5,6 @@ import Lobby, { Card, RoundCards, SpecialMatchCards } from "@/interfaces/Lobby";
 import { handleJoinLobbySuccess } from "@/events/lobby/handlers/joinLobbySuccess";
 import { handleJoinLobbyError } from "@/events/lobby/handlers/joinLobbyError";
 import { handlePlayerJoin } from "@/events/lobby/handlers/playerJoin";
-import { handlePlayerLogout } from "@/events/lobby/handlers/playerLogout";
-import { handlePlayerLogoutError } from "@/events/lobby/handlers/playerLogoutError";
 import { handlePlayerReady } from "@/events/lobby/handlers/playerReady";
 import { handlePlayerReadyError } from "@/events/lobby/handlers/playerReadyError";
 import { handlePlayerUnready } from "@/events/lobby/handlers/playerUnready";
@@ -28,14 +26,16 @@ import { handleTableUpdate } from "@/events/round/handlers/tableUpdate";
 import { handleSelectCardError } from "@/events/round/handlers/selectCardError";
 import { handleEndRound } from "@/events/round/handlers/endRound";
 
+import { handlePlayerLogout } from "@/events/general/handlers/playerLogout";
+import { handlePlayerLogoutError } from "@/events/general/handlers/playerLogoutError";
+import { handleInternalServerError } from "@/events/general/handlers/internalServerError";
+
 import addDefaultEventsListeners from "@/events/addDefaultEventsListeners";
-import { on } from "events";
+
 
 jest.mock("../../events/lobby/handlers/joinLobbySuccess");
 jest.mock("../../events/lobby/handlers/joinLobbyError");
 jest.mock("../../events/lobby/handlers/playerJoin");
-jest.mock("../../events/lobby/handlers/playerLogout");
-jest.mock("../../events/lobby/handlers/playerLogoutError");
 jest.mock("../../events/lobby/handlers/playerReady");
 jest.mock("../../events/lobby/handlers/playerReadyError");
 jest.mock("../../events/lobby/handlers/playerUnready");
@@ -56,6 +56,10 @@ jest.mock("../../events/round/handlers/startRound")
 jest.mock("../../events/round/handlers/tableUpdate")
 jest.mock("../../events/round/handlers/selectCardError")
 jest.mock("../../events/round/handlers/endRound")
+
+jest.mock("../../events/general/handlers/playerLogout");
+jest.mock("../../events/general/handlers/playerLogoutError");
+jest.mock("../../events/general/handlers/internalServerError");
 
 
 describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
@@ -96,28 +100,6 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
             })
 
             serverSocket.emit("player-join", "Lobby1", "Player1")
-        })
-
-        test("player-logout", (done) => {
-            addDefaultEventsListeners(clientSocket)
-
-            eventsListenersAdder.lobby.playerLogout((id: string) => {
-                expect(handlePlayerLogout).toHaveBeenCalledWith(id)
-                done()
-            })
-
-            serverSocket.emit("player-logout", "Player1")
-        })
-
-        test("player-logout-error", (done) => {
-            addDefaultEventsListeners(clientSocket)
-
-            eventsListenersAdder.lobby.playerLogoutError((error: string) => {
-                expect(handlePlayerLogoutError).toHaveBeenCalledWith(error)
-                done()
-            })
-
-            serverSocket.emit("player-logout-error", "not-in-lobby")
         })
 
         test("player-ready", (done) => {
@@ -341,6 +323,41 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
             })
 
             serverSocket.emit("end-round", "Player1", 10)
+        })
+    })
+
+    describe("General events", () => {
+        test("player-logout", (done) => {
+            addDefaultEventsListeners(clientSocket)
+
+            eventsListenersAdder.general.playerLogout((id: string) => {
+                expect(handlePlayerLogout).toHaveBeenCalledWith(id)
+                done()
+            })
+
+            serverSocket.emit("player-logout", "Player1")
+        })
+
+        test("player-logout-error", (done) => {
+            addDefaultEventsListeners(clientSocket)
+
+            eventsListenersAdder.general.playerLogoutError((error: string) => {
+                expect(handlePlayerLogoutError).toHaveBeenCalledWith(error)
+                done()
+            })
+
+            serverSocket.emit("player-logout-error", "not-in-lobby")
+        })
+
+        test("internal-server-error", (done) => {
+            addDefaultEventsListeners(clientSocket)
+
+            eventsListenersAdder.general.internalServerError(() => {
+                expect(handleInternalServerError).toHaveBeenCalled()
+                done()
+            })
+
+            serverSocket.emit("internal-server-error")
         })
     })
 })

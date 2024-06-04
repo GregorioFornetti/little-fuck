@@ -28,7 +28,7 @@ Ao adicionar um novo evento emitido pelo servidor, é preciso adicionar um novo 
 
 1. Criar o código handler em um dos subrepositório. Por exemplo, se for adicionar um novo evento chamado `skip-turn` à rodada, o handler deve ser criado em `round/handlers/skipTurn.ts`;
 
-2. No arquivo `eventsHandlers.ts` do subrepositório específico, adicionar um novo método na classe de EventsListenersAdder e adicionar o handler na função adicionadore de handlers padrão. Seguindo o mesmo exemplo da etapa anterior, deverá ser criado o método `skipTurn` na classe `RoundEventsHandlersAdder`, e o handler padrão deverá ser cadastrado na função `addDefaultRoundHandlers` da seguinte forma: `roundEventsHandlersAdder.skipTurn(handleSkipTurn)`;
+2. No arquivo `eventsHandlers.ts` do subrepositório específico, adicionar um novo método na classe de EventsListenersAdder e adicionar o handler na função adicionadora de handlers padrão. Seguindo o mesmo exemplo da etapa anterior, deverá ser criado o método `skipTurn` na classe `RoundEventsHandlersAdder`, e o handler padrão deverá ser cadastrado na função `addDefaultRoundHandlers` da seguinte forma: `roundEventsHandlersAdder.skipTurn(handleSkipTurn)`;
 
 3. Adicionar um novo teste em `src/\_\_tests\_\_/events/handlers.test.ts` para verificar se o handler foi cadastrado corretamente, ou seja, se a função correta está sendo chamada ao emitir o evento;
 

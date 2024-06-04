@@ -39,6 +39,6 @@ export function handleCreateLobby(player: Player, name: string) {
         ]
     }
     lobbys[lobby.lobbyId] = lobby
-    players[player.playerId] = lobby
+    players[player.playerId] = { socket: player.socket, lobby: lobby }
     player.eventsEmitter.Lobby.emitJoinLobbySuccess(lobby)
 }

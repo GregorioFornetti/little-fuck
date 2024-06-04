@@ -3,6 +3,7 @@ import addDefaultLobbyEventsHandlers from './lobby/eventsHandlers';
 import addDefaultGameEventsHandlers from './game/eventsHandlers';
 import addDefaultMatchEventsHandlers from './match/eventsHandlers';
 import addDefaultRoundEventsHandlers from './round/eventsHandlers';
+import addDefaultGeneralEventsHandlers from './general/eventsHandlers';
 import type { Socket } from 'socket.io-client';
 
 
@@ -21,4 +22,5 @@ export default function addDefaultEventsListeners(socket: Socket) {
     addDefaultGameEventsHandlers(socket)
     addDefaultMatchEventsHandlers(socket)
     addDefaultRoundEventsHandlers(socket)
+    addDefaultGeneralEventsHandlers(socket)
 }

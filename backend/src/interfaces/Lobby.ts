@@ -1,4 +1,6 @@
 
+import Timer from "easytimer.js";
+
 /**
  *  Interface que contém as informações 
  */
@@ -12,7 +14,7 @@ export interface Card {
 /**
  *  Interface que contém as informações de uma carta que está na mesa de uma rodada.
  */
-interface RoundCard {
+export interface RoundCard {
     /** Informações da carta contida na mesa da rodada */
     card: Card,
     /** ID do jogador que colocou essa carta na mesa */
@@ -65,10 +67,10 @@ export interface Match {
             numWinsNeeded?: number
         }
     },
-    /** Quantidade de rodadas que devem ocorrer nessa partida (número de cartas que foram dadas à cada jogador). */
-    numRounds: number,
     /** Id do jogador que deve palpitar atualmente. undefined caso todos já tenham palpitado */
     nextPlayerId?: string,
+    /** Id do jogador que deve jogar (ou jogou) a primeira carta da rodada que estiver em andamento */
+    roundFirstPlayerId?: string,
     /** Informações da rodada. Pode ser undefined se ainda não estiver ocorrendo uma rodada */
     round?: Round
 }
@@ -83,12 +85,20 @@ export interface Game {
     playersHealth: {
         [playerId: string]: number
     },
-    /** Tempo máximo em segundos até a ocorrência do próximo evento automático. Ex: começar uma rodada, selecionar a carta aleatória de um jogdor que demorou muito para jogar, etc */
-    currentWaitTime: number,
+    /** Timer countdown até a ocorrência do próximo evento automático. Ex: começar uma rodada, selecionar a carta aleatória de um jogador que demorou muito para jogar, etc */
+    timer: Timer,
     /** Número da partida atual */
     matchNumber: number,
     /** Número da rodada atual */
     roundNumber: number,
+    /** O id do jogador que iniciou palpitando na última (ou atual) partida */
+    currentPlayerId: string,
+    /** Quantidade de rodadas (ou cartas) que devem ocorrer na última (ou atual) partida */
+    numRounds: number,
+    /** Lista de ids de jogadores que "morreram" (não possuem mais vidas / foram eliminados). Estará em ordem inversa de eliminação, ou seja, o primeiro da lista será o último que foi eliminado até o momento */
+    deadPlayersIds: string[],
+    /** Status do jogo é um texto indicando em qual situação está o jogo. Importante para o momento de recadastrar funções no timer caso um jogador faça logout */
+    status: "starting_match"|"waiting_num_win_response"|"starting_round"|"waiting_select_card"|"ending_match"|"ending_special_match"|"ending_game",
     /** Informações da partida. Pode ser undefined se ainda não estiver ocorrendo uma partida */
     match?: Match
 }

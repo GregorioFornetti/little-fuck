@@ -1,6 +1,6 @@
 import '../setupTests';
 import type Lobby from '@/interfaces/Lobby';
-import { handlePlayerLogout } from '@/events/lobby/handlers/playerLogout';
+import { handlePlayerLogout } from '@/events/general/handlers/playerLogout';
 import { i18n } from '@/plugins/i18n';
 
 describe('handlePlayerLogout', () => {

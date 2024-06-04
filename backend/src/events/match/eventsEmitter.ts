@@ -56,7 +56,7 @@ export default class MatchEventsEmitter extends EmitterBase {
      * 
      *  @param type tipo de erro que ocorreu ao tentar palpitar um número de vitórias
      */
-    public emitWinRoundsNumberError(type: "not-your-turn"|"negative-is-invalid"|"not-in-lobby"|"num-wins-equals-num-cards") {
+    public emitWinRoundsNumberError(type: "not-your-turn"|"negative-is-invalid"|"num-wins-equals-num-cards"|"not-in-lobby"|"not-in-game"|"not-in-match") {
         this.emitToUser("win-rounds-number-error", type)
     }
 
