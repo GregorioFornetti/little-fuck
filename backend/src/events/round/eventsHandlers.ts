@@ -1,6 +1,5 @@
-
-import { handleSelectCard } from "./handlers/selectCard";
+import { handleSelectCard } from './handlers/selectCard';
 
 export default {
-    'select-card': handleSelectCard,
-}
+  'select-card': handleSelectCard,
+};

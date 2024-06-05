@@ -1,11 +1,11 @@
 
-import { createServer } from "node:http";
-import { AddressInfo } from "net";
-import { io as ioc, Socket as ClientSocket } from "socket.io-client";
-import { Server, Socket as ServerSocket } from "socket.io";
-import { lobbys, players } from "../../global";
-import Player from "../../interfaces/Player";
-import EventsEmitter from "../../events/Emitter";
+import { createServer } from 'node:http';
+import { AddressInfo } from 'net';
+import { io as ioc, Socket as ClientSocket } from 'socket.io-client';
+import { Server, Socket as ServerSocket } from 'socket.io';
+import { lobbys, players } from '../../global';
+import Player from '../../interfaces/Player';
+import EventsEmitter from '../../events/Emitter';
 
 const httpServer = createServer();
 let io: Server;
@@ -21,7 +21,7 @@ beforeAll((done) => {
   httpServer.listen(() => {
     const port = (httpServer.address() as AddressInfo).port;
     clientSocket = ioc(`http://localhost:${port}`);
-    io.on("connection", (socket) => {
+    io.on('connection', (socket) => {
       if (serverSocket) {
         lobbyServerSockets.push(socket);
         return;
@@ -47,9 +47,9 @@ beforeAll((done) => {
         eventsEmitter: new EventsEmitter(io, serverSocket),
       };
       lobbyClientsSockets.push(ioc(`http://localhost:${port}`));
-      lobbyClientsSockets[lobbyClientsSockets.length - 1].on("connect", handleConnect);
-    }
-    clientSocket.on("connect", handleConnect);
+      lobbyClientsSockets[lobbyClientsSockets.length - 1].on('connect', handleConnect);
+    };
+    clientSocket.on('connect', handleConnect);
   });
 });
 
@@ -69,11 +69,11 @@ afterEach(() => {
 });
 
 afterAll(() => {
-  httpServer.close()
+  httpServer.close();
   io.close();
   clientSocket.disconnect();
   for (const socket of lobbyClientsSockets) {
-    socket.disconnect()
+    socket.disconnect();
   }
 });
 
