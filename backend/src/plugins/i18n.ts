@@ -1,7 +1,7 @@
 import i18next from 'i18next';
 import ptBR from '../locales/pt-BR.json';
 
-type MessageSchema  = typeof ptBR;
+type MessageSchema = typeof ptBR;
 
 i18next.init<MessageSchema>({
   lng: 'pt-BR',
@@ -13,5 +13,4 @@ i18next.init<MessageSchema>({
   }
 });
 
-
-export default i18next
+export default i18next;

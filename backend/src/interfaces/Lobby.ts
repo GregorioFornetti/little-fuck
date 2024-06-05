@@ -1,12 +1,11 @@
-
-import Timer from "easytimer.js";
+import Timer from 'easytimer.js';
 
 /**
- *  Interface que contém as informações 
+ *  Interface que contém as informações
  */
 export interface Card {
     /** Tipo da carta */
-    type: "common",
+    type: 'common',
     /** O poder da carta. Cartas com valores mais altos ganham das outras com valores mais baixos. */
     value: number
 }
@@ -22,7 +21,7 @@ export interface RoundCard {
 }
 
 /**
- *  Interface que contém as informações de uma partida especial, como as cartas que estão na mesa e seus rankings. No caso, os jogadores 
+ *  Interface que contém as informações de uma partida especial, como as cartas que estão na mesa e seus rankings. No caso, os jogadores
  *  verão as cartas de todos os outros jogadores, e não as suas próprias.
  */
 export interface SpecialMatchCards {
@@ -48,7 +47,7 @@ export interface RoundCards {
 export interface Round {
     /** Cartas que estão atualmente na mesa */
     cards: RoundCards,
-    /** id do jogador que deve jogar a carta atualmente. undefined caso todas já tenham jogado suas cartas */
+    /** Id do jogador que deve jogar a carta atualmente. undefined caso todas já tenham jogado suas cartas */
     nextPlayerId?: string
 }
 
@@ -75,9 +74,8 @@ export interface Match {
     round?: Round
 }
 
-
 /**
- *  Interface que contém as informações de um jogo completo de "little fuck". 
+ *  Interface que contém as informações de um jogo completo de "little fuck".
  *  Contém informações da quantidade de vidas dos jogadores, de partidas e rodadas em andamento
  */
 export interface Game {
@@ -98,7 +96,7 @@ export interface Game {
     /** Lista de ids de jogadores que "morreram" (não possuem mais vidas / foram eliminados). Estará em ordem inversa de eliminação, ou seja, o primeiro da lista será o último que foi eliminado até o momento */
     deadPlayersIds: string[],
     /** Status do jogo é um texto indicando em qual situação está o jogo. Importante para o momento de recadastrar funções no timer caso um jogador faça logout */
-    status: "starting_match"|"waiting_num_win_response"|"starting_round"|"waiting_select_card"|"ending_match"|"ending_special_match"|"ending_game",
+    status: 'starting_match'|'waiting_num_win_response'|'starting_round'|'waiting_select_card'|'ending_match'|'ending_special_match'|'ending_game',
     /** Informações da partida. Pode ser undefined se ainda não estiver ocorrendo uma partida */
     match?: Match
 }
@@ -122,4 +120,4 @@ export default interface Lobby {
     }[],
     /** Informações do jogo. Pode ser undefined se ainda não estiver ocorrendo um jogo */
     game?: Game
-}
+};;;;;;;;;;;;;;;;

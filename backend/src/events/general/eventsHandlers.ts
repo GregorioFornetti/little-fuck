@@ -1,7 +1,5 @@
-
-import { handleLogout } from "./handlers/logout"
-
+import { handleLogout } from './handlers/logout';
 
 export default {
-    'logout': handleLogout,
-}
+  'logout': handleLogout,
+};
