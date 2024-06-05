@@ -13,8 +13,8 @@ let clientSocket: ClientSocket;
 let serverSocket: ServerSocket;
 let player: Player;
 let eventsEmitter: EventsEmitter;
-let lobbyClientsSockets: ClientSocket[] = [];
-let lobbyServerSockets: ServerSocket[] = [];
+const lobbyClientsSockets: ClientSocket[] = [];
+const lobbyServerSockets: ServerSocket[] = [];
 
 beforeAll((done) => {
   io = new Server(httpServer);
@@ -54,14 +54,14 @@ beforeAll((done) => {
 });
 
 afterEach(() => {
-  for (let lobby in lobbys) {
+  for (const lobby in lobbys) {
     delete lobbys[lobby];
   }
-  for (let player in players) {
+  for (const player in players) {
     delete players[player];
   }
   clientSocket.removeAllListeners();
-  for (let socket of lobbyClientsSockets) {
+  for (const socket of lobbyClientsSockets) {
     socket.removeAllListeners();
   }
   clientSocket.removeAllListeners('player-join');
@@ -72,7 +72,7 @@ afterAll(() => {
   httpServer.close()
   io.close();
   clientSocket.disconnect();
-  for (let socket of lobbyClientsSockets) {
+  for (const socket of lobbyClientsSockets) {
     socket.disconnect()
   }
 });
