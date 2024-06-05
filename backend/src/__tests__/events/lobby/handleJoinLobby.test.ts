@@ -197,7 +197,7 @@ describe("handleJoinLobby", () => {
       
 
       test("Deve emitir para todos os jogadores do lobby que um novo jogador entrou", (done) => {
-        let count = { value: 0 }
+        const count = { value: 0 }
         addPlayerToLobby(player, lobbyServerSockets[0], 'player2');
 
         const handler = (id: string, name: string) => {

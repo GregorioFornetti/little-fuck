@@ -78,7 +78,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
         test("player-join", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('player-join', (id: string, name: string) => {
                 expect(id).toBe('2');
@@ -103,7 +103,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
         test("player-ready", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('player-ready', (id) => {
                 expect(id).toBe('1');
@@ -135,7 +135,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
         test("player-unready", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('player-unready', (id) => {
                 expect(id).toBe('1');
@@ -202,7 +202,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
     describe("Game events", () => {
         test("start-game", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('start-game', (a) => {
                 if (count.value === 1) {
@@ -223,7 +223,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
         test("end-game", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('end-game', (playersRanks) => {
                 expect(playersRanks).toHaveLength(2);
@@ -252,7 +252,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
     describe("Match events", () => {
         test("start-match", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('start-match', (cards: Card[], firstPlayerId: string) => {
                 expect(cards).toHaveLength(2);
@@ -306,7 +306,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
         test("win-rounds-number-update", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('win-rounds-number-update', (numWinMatches: number, nextPlayerId: string) => {
                 expect(numWinMatches).toBe(2);
@@ -340,7 +340,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
         test("end-match", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('end-match', (healthUpdates: { [playerId: string]: number }) => {
                 expect(healthUpdates[lobbyClientsSockets[0].id as string]).toBe(-1);
@@ -368,7 +368,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
         test("start-special-match", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('start-special-match', (cards: SpecialMatchCards, firstPlayerId: string) => {
                 expect(cards.onMatch).toHaveLength(1)
@@ -432,7 +432,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
     describe("Round events", () => {
         test("start-round", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('start-round', (firstPlayerId: string) => {
                 expect(firstPlayerId).toBe(lobbyClientsSockets[0].id as string);
@@ -455,7 +455,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
         test("table-update", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('table-update', (cards: RoundCards, nextPlayerId: string) => {
                 expect(cards.onMatch).toHaveLength(2)
@@ -524,7 +524,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
         test("end-round", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('end-round', (winnerId: string, points: number) => {
                 expect(winnerId).toBe(lobbyClientsSockets[0].id as string);
@@ -551,7 +551,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
     describe("General events", () => {
         test("player-logout", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('player-logout', (id) => {
                 expect(id).toBe('1');
@@ -583,7 +583,7 @@ describe("Testes de envio de mensagem / eventos pelo servidor", () => {
 
         test("internal-server-error", (done) => {
             const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
-            let count = { value: 0 }
+            const count = { value: 0 }
 
             lobbyClientsSockets[0].on('internal-server-error', () => {
                 if (count.value === 1) {
