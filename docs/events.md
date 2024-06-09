@@ -908,3 +908,27 @@ Servidor ----> Lobby (servidor envia para todos clientes do lobby)
 #### Descrição
 
 Evento indicando que um erro ocorreu no servidor. Esse erro não era esperado, e provavelmente faria com que o servidor parasse, mas foi "contido". Quando isso ocorrer, o lobby será desfeito imediatamente, e um log desse evento será feito no servidor para posterior correção...
+
+
+
+
+
+
+
+
+
+
+
+
+
+### debug
+
+Servidor ----> Lobby (servidor envia para todos clientes do lobby)
+
+#### Descrição
+
+Evento que é enviado após cada modificação ocorrida no `backend`. Esse evento irá transmitir o estado das informações de forma "cru" para o frontend, para fins de debug. Este evento só sera acionado quando o servidor for executado em modo de debug (através do comando `npm run debug`).
+
+#### Parâmetros
+
+- lobby: um objeto (JSON) contendo as informações "cru" do lobby no servidor
