@@ -37,17 +37,4 @@ export default class GeneralEventsEmitter extends EmitterBase {
   public emitInternalServerError() {
     this.emitToLobby('internal-server-error');
   }
-
-  /**
-   *  Evento que é enviado após cada modificação ocorrida no `backend`. 
-   *  Esse evento irá transmitir o estado das informações de forma "cru" para o frontend, para fins de debug.
-   *  Este evento só sera acionado quando o servidor for executado em modo de debug (através do comando `npm run debug`).
-   */
-  public emitDebug(lobby: Lobby) {
-    if (!process.env.DEBUG) {
-      throw new Error(i18n.t('COMMON.ERROR.NO_DEBUG_MODE'))
-    }
-    this.emitToLobby('debug', lobby);
-    // this.emitToLobby('debug', lobby);
-  }
 }
