@@ -1,6 +1,4 @@
-import Lobby from '../../interfaces/Lobby';
 import EmitterBase from '../EmitterBase';
-import i18n from '../../plugins/i18n'
 
 /**
  *  Objetos dessa classe emitem eventos a respeito de um lobby (sala).

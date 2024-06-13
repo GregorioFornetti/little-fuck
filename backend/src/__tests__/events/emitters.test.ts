@@ -5,7 +5,6 @@ import Lobby, { Card, RoundCards, SpecialMatchCards } from '../../interfaces/Lob
 import { io, clientSocket, eventsEmitter, lobbyClientsSockets, lobbyServerSockets } from './setupTests';
 import { Socket as ClientSocket } from 'socket.io-client';
 import { Socket as ServerSocket } from 'socket.io';
-import i18n from '../../plugins/i18n';
 
 function joinLobby(clientSockets: ClientSocket[], serverSockets: ServerSocket[]) {
   const lobby: Lobby = {

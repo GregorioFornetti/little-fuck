@@ -12,8 +12,7 @@
       "INVALID_NEXT_PLAYER_ID_IN_ROUND": "next player id not found in the players list of the round",
       "PLAYER_NOT_FOUND": "player not found",
       "NO_PLAYERS_ALIVE": "no players alive",
-      "NO_CARDS": "no cards",
-      "NO_DEBUG_MODE": "this event shoul only be used in debug mode"
+      "NO_CARDS": "no cards"
     }
   }
 }
