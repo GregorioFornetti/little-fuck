@@ -53,7 +53,7 @@ describe('addDebugEmitAfterEachEmit', () => {
       }
 
       serverSocket.emit('test')
-      clientSocket.on('debug', (lobby: any) => {
+      clientSocket.on('debug', (_lobby: Lobby) => {
         done()
       })
     
@@ -87,7 +87,7 @@ describe('addDebugEmitAfterEachEmit', () => {
       }
 
       serverSocket.emit('test')
-      clientSocket.on('debug', (lobby: any) => {
+      clientSocket.on('debug', (_lobby: Lobby) => {
         fail('Não deveria ter emitido o evento debug')
       })
       
