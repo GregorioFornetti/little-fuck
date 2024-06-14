@@ -1,3 +1,4 @@
+import Lobby from '../../../interfaces/Lobby';
 
 import { addDebugEmitAfterEachEmit } from "../../../debug/addDebugEmitAfterEachEmit"
 
@@ -71,7 +72,7 @@ describe('addDebugEmitAfterEachEmit', () => {
       }
 
       serverSocket.emit('test')
-      clientSocket.on('debug', (lobby: any) => {
+      clientSocket.on('debug', (lobby: Lobby) => {
         expect(lobby.lobbyId).toBe('123')
         expect(lobby.players).toStrictEqual([])
         done()
