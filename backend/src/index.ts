@@ -3,6 +3,7 @@ import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import addEventsListeners from './events/addEventsListeners';
+import { players } from './global';
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ const port = process.env.PORT || 3000;
 app.use(process.env.SERVER_PATH || '/', express.static('../frontend/dist'));
 
 io.on('connection', (socket) => {
+  players[socket.id] = { socket: socket };
   addEventsListeners(io, socket);
 });
 
