@@ -29,7 +29,6 @@ import { handleEndRound } from "@/events/round/handlers/endRound";
 import { handlePlayerLogout } from "@/events/general/handlers/playerLogout";
 import { handlePlayerLogoutError } from "@/events/general/handlers/playerLogoutError";
 import { handleInternalServerError } from "@/events/general/handlers/internalServerError";
-import { handleDebug } from "@/events/general/handlers/debug";
 
 import addDefaultEventsListeners from "@/events/addDefaultEventsListeners";
 
@@ -61,7 +60,6 @@ jest.mock("../../events/round/handlers/endRound")
 jest.mock("../../events/general/handlers/playerLogout");
 jest.mock("../../events/general/handlers/playerLogoutError");
 jest.mock("../../events/general/handlers/internalServerError");
-jest.mock("../../events/general/handlers/debug");
 
 
 describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
@@ -360,17 +358,6 @@ describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
             })
 
             serverSocket.emit("internal-server-error")
-        })
-
-        test("debug", (done) => {
-            addDefaultEventsListeners(clientSocket)
-
-            eventsListenersAdder.general.debug((lobby: any) => {
-                expect(handleDebug).toHaveBeenCalledWith(lobby)
-                done()
-            })
-
-            serverSocket.emit("debug", { lobbyId: "Lobby1", players: [] })
         })
     })
 })
