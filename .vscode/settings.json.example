@@ -5,5 +5,19 @@
   "i18n-ally.keystyle": "nested",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
-  }
+  },
+  "eslint.workingDirectories": [
+    {
+      "directory": "./frontend",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "./backend",
+      "changeProcessCWD": true
+    }
+  ],
+  "eslint.options": {
+    "overrideConfigFile": "eslint.config.mjs"
+  },
+  "eslint.experimental.useFlatConfig": true
 }
