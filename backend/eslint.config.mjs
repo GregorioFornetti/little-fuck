@@ -10,7 +10,7 @@ export default [
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
       'indent': ['error', 2],
-      'linebreak-style': ['error', 'unix'],
+      'linebreak-style': 0,
       'capitalized-comments': ['warn'],
       'eol-last': ['error', 'always'],
       'quotes': ['error', 'single'],
@@ -27,6 +27,7 @@ export default [
       'object-curly-spacing': ['error', 'always'],
       'spaced-comment': ['error', 'always'],
       'space-before-blocks': ['error', 'always'],
+      '@typescript-eslint/no-explicit-any': 'off'
     }
   }
 ];
