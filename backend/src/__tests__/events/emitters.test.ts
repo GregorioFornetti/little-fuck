@@ -200,14 +200,14 @@ describe('Testes de envio de mensagem / eventos pelo servidor', () => {
       const lobbyEmitter = joinLobby(lobbyClientsSockets, lobbyServerSockets);
       const count = { value: 0 };
 
-      lobbyClientsSockets[0].on('start-game', (a) => {
+      lobbyClientsSockets[0].on('start-game', () => {
         if (count.value === 1) {
           done();
         }
         count.value++;
       });
 
-      lobbyClientsSockets[1].on('start-game', (a) => {
+      lobbyClientsSockets[1].on('start-game', () => {
         if (count.value === 1) {
           done();
         }

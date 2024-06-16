@@ -11,6 +11,8 @@ import { Card } from '../../../interfaces/Lobby';
  *  @param possibleCards lista de cartas que podem ser fornecidas
  *  @returns o próximo número de cartas que pode ser fornecido
  */
+// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getNextMatchNumCards(currentMatchNumCards: number, alivePlayersIds: string[], possibleCards: Card[]): number {
 
 }

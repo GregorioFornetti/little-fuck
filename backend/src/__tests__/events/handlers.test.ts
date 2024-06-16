@@ -1,5 +1,5 @@
 
-import { io, clientSocket, serverSocket, player } from './setupTests';
+import { io, clientSocket, serverSocket } from './setupTests';
 import addEventsListeners from '../../events/addEventsListeners';
 
 import { handleCreateLobby } from '../../events/lobby/handlers/createLobby';

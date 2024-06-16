@@ -7,6 +7,8 @@ import Lobby from '../../../interfaces/Lobby';
  *
  *  @param lobby informações da sala
  */
+// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function generateAutomaticSelectCard(lobby?: Lobby) {
 
 }

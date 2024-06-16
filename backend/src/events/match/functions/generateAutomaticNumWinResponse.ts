@@ -1,6 +1,4 @@
 import Lobby from '../../../interfaces/Lobby';
-import Player from '../../../interfaces/Player';
-import { players } from '../../../global';
 
 /**
  *  Gera uma resposta automática para o palpite de um usuário. Isso deve acontecer quando o usuário demora muito para palpitar.
@@ -9,6 +7,8 @@ import { players } from '../../../global';
  *
  *  @param lobby informações da sala
  */
+// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function generateAutomaticNumWinResponse(lobby?: Lobby): void {
 
 }

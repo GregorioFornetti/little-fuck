@@ -8,6 +8,8 @@ import Player from '../../../interfaces/Player';
  *
  *  @param player Objeto contendo informações do jogador que acaba de chamar o evento
  */
+// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function handleStartGameRequest(player: Player) {
 
 }

@@ -18,6 +18,8 @@ import Player from '../../../interfaces/Player';
  *  @param player Objeto contendo informações do jogador que acaba de chamar o evento
  *  @param numWinsRounds Número de rodadas que o jogador acha que irá vencer
  */
+// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function handleWinRoundsNumberResponse(player: Player, numWinsRounds: number) {
 
 }

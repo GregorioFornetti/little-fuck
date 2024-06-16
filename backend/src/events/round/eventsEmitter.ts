@@ -1,5 +1,5 @@
 import EmitterBase from '../EmitterBase';
-import { Round, RoundCards } from '../../interfaces/Lobby';
+import { RoundCards } from '../../interfaces/Lobby';
 
 /**
  *  Objetos dessa classe emitem eventos a respeito de uma rodada.

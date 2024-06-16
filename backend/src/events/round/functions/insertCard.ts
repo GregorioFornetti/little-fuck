@@ -8,6 +8,8 @@ import { RoundCard, RoundCards } from '../../../interfaces/Lobby';
  *  @param cards São as cartas (mesa) da rodada atual
  *  @param card É a carta que será inserida na mesa
  */
+// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function insertCard(cards: RoundCards, card: RoundCard): RoundCards {
 
 }
