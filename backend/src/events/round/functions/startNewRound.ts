@@ -10,6 +10,8 @@ import Player from '../../../interfaces/Player';
  *  @param player um jogador qualquer que está na partida
  *  @returns um objeto do tipo Round, com as informações da partida que irá começar agora
  */
+// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function startNewRound(player: Player): Round {
 
 }

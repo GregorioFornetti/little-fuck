@@ -9,6 +9,8 @@ import Lobby from '../../interfaces/Lobby';
  *  @param lobby informações do lobby (e do jogo) atual
  *  @returns o próximo id
  */
+// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getNextPlayerId(currentPlayerId: string, lobby: Lobby): string {
 
 }

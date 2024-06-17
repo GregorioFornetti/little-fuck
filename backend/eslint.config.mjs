@@ -27,6 +27,7 @@ export default [
       'object-curly-spacing': ['error', 'always'],
       'spaced-comment': ['error', 'always'],
       'space-before-blocks': ['error', 'always'],
+      '@typescript-eslint/no-explicit-any': 'off'
     }
   }
 ];
