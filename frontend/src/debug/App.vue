@@ -1,4 +1,4 @@
 
 <template>
-    <h1>DEBUG FUNCIONOU ?</h1>
+  <h1>DEBUG FUNCIONOU ?</h1>
 </template>

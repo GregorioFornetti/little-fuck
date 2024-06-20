@@ -1,14 +1,14 @@
-import type { Match, PlayerMatch, SpecialMatchCards } from "@/interfaces/Lobby";
+import type { Match, PlayerMatch, SpecialMatchCards } from '@/interfaces/Lobby';
 import { lobby } from '@/connection';
-import { i18n } from "@/plugins/i18n";
+import { i18n } from '@/plugins/i18n';
 
 /**
- *  Iniciará a partida especial, quando todos os jogadores possuem apenas uma carta. 
+ *  Iniciará a partida especial, quando todos os jogadores possuem apenas uma carta.
  *  Todos os jogadores poderão ver as cartas dos outros, porém, não poderão ver a própria carta.
- * 
+ *
  *  Após todos os jogadores palpitarem, será acionado o evento table-update, mostrando o estado final da mesa para todos os jogadores
  *  e logo em seguida o evento `end-round` será também acionado. Depois de um tempo, será acionado o evento `end-match`.
- *  
+ *
  *  @param cards cartas de todos os outros jogadores, menos a própria carta
  *  @param firstPlayerId id do jogador que deve começar palpitando
  */
@@ -30,7 +30,7 @@ export function handleStartSpecialMatch(cards: SpecialMatchCards, firstPlayerId:
     playersMatch[player.id] = {
       numCards: 1,
       numWonRounds: 0
-    }
+    };
 
     return playersMatch;
   }, {});
@@ -43,7 +43,7 @@ export function handleStartSpecialMatch(cards: SpecialMatchCards, firstPlayerId:
     round: {
       cards
     }
-  }
+  };
 
   lobby.value.game.match = specialMatch;
 }

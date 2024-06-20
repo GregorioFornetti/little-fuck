@@ -1,6 +1,6 @@
 import './setupTests';
 import { ptBRLocale } from './locales';
-import i18n from "@/plugins/i18n";
+import i18n from '@/plugins/i18n';
 
 describe('i18n', () => {
   test('Deve exibir a mensagem definida no locale em pt-BR', () => {

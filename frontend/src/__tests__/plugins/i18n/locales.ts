@@ -1,3 +1,3 @@
 export const ptBRLocale = {
-  MESSAGE_CODE: "Mocket message"
-}
+  MESSAGE_CODE: 'Mocket message'
+};

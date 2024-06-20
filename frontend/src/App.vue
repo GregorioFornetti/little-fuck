@@ -1,31 +1,37 @@
 <script setup lang="ts">
-  import { socket, lobby } from "./connection";
-  import { ref } from "vue";
+import { socket } from './connection';
+import { ref } from 'vue';
 
-  import HomePage from "./components/pages/HomePage.vue";
-  import Spinner from "./components/Spinner.vue";
+import HomePage from './components/pages/HomePage.vue';
+import LoadingSpinner from './components/LoadingSpinner.vue';
 
-  const connectionStatus = ref<"loading" | "connected" | "disconnected">("loading")
+const connectionStatus = ref < 'loading' | 'connected' | 'disconnected' > ('loading');
 
-  socket.on("connect", () => {
-    console.log("connected")
-    connectionStatus.value = "connected"
-  });
+socket.on('connect', () => {
+  console.log('connected');
+  connectionStatus.value = 'connected';
+});
 
-  socket.on("connect_error", (err) => {
-    console.log(`connect_error due to ${err.message}`);
-    connectionStatus.value = "disconnected"
-  });
+socket.on('connect_error', (err) => {
+  console.log(`connect_error due to ${err.message}`);
+  connectionStatus.value = 'disconnected';
+});
 
 </script>
 
 <template>
   <!-- Connecting -->
-  <div class="h-screen v-screen flex justify-center items-center" v-if="connectionStatus === 'loading'">
-    <Spinner :size="70" />
+  <div
+    v-if="connectionStatus === 'loading'"
+    class="h-screen v-screen flex justify-center items-center"
+  >
+    <LoadingSpinner :size="70" />
   </div>
   <!-- Connection error -->
-  <div class="h-screen v-screen flex justify-center items-center" v-if="connectionStatus === 'disconnected'">
+  <div
+    v-if="connectionStatus === 'disconnected'"
+    class="h-screen v-screen flex justify-center items-center"
+  >
     <h1>Não foi possível se conectar ao servidor.<br>Tente novamente mais tarde</h1>
   </div>
   <!-- Connection success -->

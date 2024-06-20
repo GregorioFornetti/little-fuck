@@ -1,7 +1,9 @@
+
 import '../setupTests';
-import Lobby, { Game, Match, SpecialMatchCards } from '@/interfaces/Lobby';
+import { Game, Match, SpecialMatchCards } from '@/interfaces/Lobby';
 import { handleStartSpecialMatch } from '@/events/match/handlers/startSpecialMatch';
 import { i18n } from '@/plugins/i18n';
+import { lobby } from '@/connection';
 
 describe('handleStartSpecialMatch', () => {
   const leaderPlayer = {
@@ -10,7 +12,7 @@ describe('handleStartSpecialMatch', () => {
     leader: true,
     ready: true
   };
-  
+
   const anotherPlayer = {
     id: '123',
     name: 'John joe',
@@ -25,26 +27,22 @@ describe('handleStartSpecialMatch', () => {
   const EXPECTED_PLAYER_NUM_WON_ROUNDS = 0;
 
   test('Deve iniciar uma nova partida especial', () => {
-    const connection = require('@/connection');
-
     const game: Game = {
       currentWaitTime: 1,
       matchNumber: 1,
       roundNumber: 1,
       playersHealth: {}
-    }
+    };
 
-    connection.lobby.value = {
+    lobby.value = {
       lobbyId: '123',
       players: [leaderPlayer, anotherPlayer],
       game
-    }
+    };
 
     handleStartSpecialMatch(EMPTY_SPECIAL_MATCH_CARDS, anotherPlayer.id);
 
-    const lobby: Lobby = connection.lobby.value
-    
-    expect(lobby.game?.match).toEqual<Match>({
+    expect(lobby.value.game?.match).toEqual<Match>({
       nextPlayerId: anotherPlayer.id,
       numRounds: EXPECTED_NUM_ROUNDS,
       currentPlayerCards: [],
@@ -70,25 +68,21 @@ describe('handleStartSpecialMatch', () => {
   });
 
   test('Deve emitir um erro se nenhum jogo estiver começado no lobby atual do jogador', () => {
-    const connection = require('@/connection');
-
-    connection.lobby.value = {
+    lobby.value = {
       lobbyId: '123',
       players: [anotherPlayer]
-    }
+    };
 
     expect(() => handleStartSpecialMatch(EMPTY_SPECIAL_MATCH_CARDS, anotherPlayer.id))
-      .toThrow(Error(i18n.t('COMMON.ERROR.GAME_NOT_STARTED')))
-  })
+      .toThrow(Error(i18n.t('COMMON.ERROR.GAME_NOT_STARTED')));
+  });
 
   test('Deve emitir um erro se uma partida já estiver começado no lobby atual do jogador', () => {
-    const connection = require('@/connection');
-
     const match: Match = {
       numRounds: 0,
       currentPlayerCards: [],
       players: {},
-    }
+    };
 
     const game: Game = {
       currentWaitTime: 1,
@@ -96,13 +90,13 @@ describe('handleStartSpecialMatch', () => {
       roundNumber: 1,
       playersHealth: {},
       match
-    }
+    };
 
-    connection.lobby.value = {
+    lobby.value = {
       lobbyId: '123',
       game: game,
       players: [anotherPlayer]
-    }
+    };
 
     expect(() => handleStartSpecialMatch(EMPTY_SPECIAL_MATCH_CARDS, anotherPlayer.id))
       .toThrow(Error(i18n.t('COMMON.ERROR.MATCH_ALREADY_STARTED')));
