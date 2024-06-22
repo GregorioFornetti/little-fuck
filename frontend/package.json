@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "lint": "eslint src/ --fix"
   },
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
@@ -20,18 +21,23 @@
     "vue-i18n": "^9.13.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.5.0",
     "@tsconfig/node20": "^20.1.2",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.10",
     "@vitejs/plugin-vue": "^5.0.3",
     "@vue/tsconfig": "^0.5.1",
     "autoprefixer": "^10.4.17",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.26.0",
+    "globals": "^15.6.0",
     "jest": "^29.7.0",
     "npm-run-all2": "^6.1.1",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.1.2",
     "typescript": "~5.3.0",
+    "typescript-eslint": "^7.13.1",
     "vite": "^5.2.11",
     "vite-plugin-html": "^3.2.2",
     "vue-tsc": "^1.8.27"

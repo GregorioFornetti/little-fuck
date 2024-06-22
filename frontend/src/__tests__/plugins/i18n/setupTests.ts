@@ -1,3 +1,3 @@
-import { ptBRLocale } from "./locales";
+import { ptBRLocale } from './locales';
 
-jest.mock("@/locales/pt-BR", () => ptBRLocale);
+jest.mock('@/locales/pt-BR', () => ptBRLocale);

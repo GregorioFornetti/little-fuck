@@ -5,7 +5,7 @@ import { i18n } from '@/plugins/i18n';
 /**
  *  Indica que um jogador acaba de ficar despreparado para um jogo.
  *  Este evento só é acionado caso o jogador que solicitou o "unready" ainda não estivesse despreparado.
- * 
+ *
  *  @param id identificador do jogador que acabou de ficar despreparado
  */
 export function handlePlayerUnready(id: string) {
