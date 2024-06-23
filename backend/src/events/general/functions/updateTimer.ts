@@ -1,3 +1,4 @@
+
 import Timer from 'easytimer.js';
 import Lobby from '../../../interfaces/Lobby';
 
@@ -8,7 +9,8 @@ import Lobby from '../../../interfaces/Lobby';
  *  @param lobby lobby que possui o timer a ser atualizado
  *  @returns o timer atualizado
  */
-
+// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function updateTimer(lobby: Lobby): Timer {
 
 }

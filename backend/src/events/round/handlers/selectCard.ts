@@ -9,6 +9,8 @@ import Player from '../../../interfaces/Player';
  *  @param player Objeto contendo informações do jogador que acaba de chamar o evento
  *  @param cardIndex Índice da carta que o jogador deseja jogar
  */
+// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function handleSelectCard(player: Player, cardIndex: number) {
 
 }

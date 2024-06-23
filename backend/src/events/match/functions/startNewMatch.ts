@@ -1,6 +1,5 @@
 import { Match } from '../../../interfaces/Lobby';
 import Player from '../../../interfaces/Player';
-import { generateAutomaticNumWinResponse } from './generateAutomaticNumWinResponse';
 
 /**
  *  Função que começa uma partida de "little-fuck". Essa função é responsável por:
@@ -11,6 +10,8 @@ import { generateAutomaticNumWinResponse } from './generateAutomaticNumWinRespon
  *  @param player um jogador qualquer que está na partida
  *  @returns um objeto do tipo Match, com as informações da partida que irá começar agora
  */
+// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function startNewMatch(player: Player): Match {
 
 }

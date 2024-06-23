@@ -4,7 +4,7 @@ import { handleJoinLobby } from '../../../events/lobby/handlers/joinLobby';
 import Lobby from '../../../interfaces/Lobby';
 import Player from '../../../interfaces/Player';
 
-import { clientSocket, player, io, lobbyClientsSockets, lobbyServerSockets, serverSocket } from '../setupTests';
+import { clientSocket, player, io, lobbyClientsSockets, lobbyServerSockets } from '../setupTests';
 import EventsEmitter from '../../../events/Emitter';
 import { Socket } from 'socket.io';
 import Timer from 'easytimer.js';

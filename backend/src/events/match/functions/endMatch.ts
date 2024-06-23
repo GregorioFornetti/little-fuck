@@ -8,6 +8,8 @@ import Player from '../../../interfaces/Player';
  *
  *  @param player um jogador qualquer que está na partida
  */
+// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function endMatch(player: Player): void {
 
 }
