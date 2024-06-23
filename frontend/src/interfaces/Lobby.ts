@@ -1,10 +1,10 @@
 
 /**
- *  Interface que contém as informações 
+ *  Interface que contém as informações
  */
 export interface Card {
     /** Tipo da carta */
-    type: "common",
+    type: 'common',
     /** O poder da carta. Cartas com valores mais altos ganham das outras com valores mais baixos. */
     value: number
 }
@@ -20,7 +20,7 @@ export interface RoundCard {
 }
 
 /**
- *  Interface que contém as informações de uma partida especial, como as cartas que estão na mesa e seus rankings. No caso, os jogadores 
+ *  Interface que contém as informações de uma partida especial, como as cartas que estão na mesa e seus rankings. No caso, os jogadores
  *  verão as cartas de todos os outros jogadores, e não as suas próprias.
  */
 export interface SpecialMatchCards {
@@ -46,7 +46,7 @@ export interface RoundCards {
 export interface Round {
     /** Cartas que estão atualmente na mesa */
     cards: RoundCards | SpecialMatchCards,
-    /** id do jogador que deve jogar a carta atualmente. undefined caso todas já tenham jogado suas cartas */
+    /** Id do jogador que deve jogar a carta atualmente. undefined caso todas já tenham jogado suas cartas */
     nextPlayerId?: string
 }
 
@@ -80,9 +80,8 @@ export interface Match {
     round?: Round
 }
 
-
 /**
- *  Interface que contém as informações de um jogo completo de "little fuck". 
+ *  Interface que contém as informações de um jogo completo de "little fuck".
  *  Contém informações da quantidade de vidas dos jogadores, de partidas e rodadas em andamento
  */
 export interface Game {
@@ -103,7 +102,7 @@ export interface Game {
 /**
  *  Interface que contém as informações de um lobby, por exemplo, jogadores, informações do jogo em andamento, etc.
  */
-export default interface Lobby {
+export interface Lobby {
     /** Identficador único do lobby atual */
     lobbyId: string,
     /** Informações dos jogadores que estão no lobby */
