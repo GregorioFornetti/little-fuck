@@ -1,78 +1,72 @@
 
-import "../../setupTests"
-import { handleUpdateFrontendHistory } from "@/debug/handlers/handleUpdateFrotendHistory";
-import { frontendLobbyHistoryList } from "@/debug/globals";
+import '../../setupTests';
+import { handleUpdateFrontendHistory } from '@/debug/handlers/handleUpdateFrotendHistory';
+import { frontendLobbyHistoryList } from '@/debug/globals';
+import { lobby } from '@/connection';
 
 beforeEach(() => {
-    frontendLobbyHistoryList.value = []
-})
-
+  frontendLobbyHistoryList.value = [];
+});
 
 describe('handleUpdateFrontendHistory', () => {
 
-    test("Deve ser possível cadastrar um lobby de frontend no histórico", (done) => {
-        const connection = require('@/connection');
+  test('Deve ser possível cadastrar um lobby de frontend no histórico', (done) => {
+    lobby.value = {
+      lobbyId: '123',
+      players: []
+    };
 
-        connection.lobby.value = {
-            lobbyId: '123',
-            players: []
-        }
+    handleUpdateFrontendHistory('any event', 'arg1', 'arg2');
 
-        handleUpdateFrontendHistory('any event', 'arg1', 'arg2')
+    expect(frontendLobbyHistoryList.value).toHaveLength(1);
+    expect(frontendLobbyHistoryList.value[0]?.lobbyId).toBe('123');
+    expect(frontendLobbyHistoryList.value[0]?.players).toHaveLength(0);
 
-        expect(frontendLobbyHistoryList.value).toHaveLength(1)
-        expect(frontendLobbyHistoryList.value[0]?.lobbyId).toBe('123')
-        expect(frontendLobbyHistoryList.value[0]?.players).toHaveLength(0)
+    done();
+  });
 
-        done()
-    })
+  test('Deve ser possível cadastrar dois lobbys de frontend no histórico em seguida', (done) => {
+    lobby.value = null;
 
-    test("Deve ser possível cadastrar dois lobbys de frontend no histórico em seguida", (done) => {
-        const connection = require('@/connection');
+    handleUpdateFrontendHistory('any event', 'arg1', 'arg2');
 
-        connection.lobby.value = null
+    expect(frontendLobbyHistoryList.value).toHaveLength(1);
+    expect(frontendLobbyHistoryList.value[0]).toBe(null);
 
-        handleUpdateFrontendHistory('any event', 'arg1', 'arg2')
+    lobby.value = {
+      lobbyId: '123',
+      players: [{
+        id: '123',
+        name: 'Teste',
+        leader: true,
+        ready: false
+      }]
+    };
 
-        expect(frontendLobbyHistoryList.value).toHaveLength(1)
-        expect(frontendLobbyHistoryList.value[0]).toBe(null)
+    handleUpdateFrontendHistory('any event', 'arg1', 'arg2');
 
-        connection.lobby.value = {
-            lobbyId: '123',
-            players: [{
-                id: '123',
-                name: 'Teste',
-                leader: true,
-                ready: false
-            }]
-        }
+    expect(frontendLobbyHistoryList.value).toHaveLength(2);
+    expect(frontendLobbyHistoryList.value[0]).toBe(null);
+    expect(frontendLobbyHistoryList.value[1]?.lobbyId).toBe('123');
+    expect(frontendLobbyHistoryList.value[1]?.players).toHaveLength(1);
+    expect(frontendLobbyHistoryList.value[1]?.players[0].id).toBe('123');
+    expect(frontendLobbyHistoryList.value[1]?.players[0].name).toBe('Teste');
+    expect(frontendLobbyHistoryList.value[1]?.players[0].leader).toBe(true);
+    expect(frontendLobbyHistoryList.value[1]?.players[0].ready).toBe(false);
 
-        handleUpdateFrontendHistory('any event', 'arg1', 'arg2')
+    done();
+  });
 
-        expect(frontendLobbyHistoryList.value).toHaveLength(2)
-        expect(frontendLobbyHistoryList.value[0]).toBe(null)
-        expect(frontendLobbyHistoryList.value[1]?.lobbyId).toBe('123')
-        expect(frontendLobbyHistoryList.value[1]?.players).toHaveLength(1)
-        expect(frontendLobbyHistoryList.value[1]?.players[0].id).toBe('123')
-        expect(frontendLobbyHistoryList.value[1]?.players[0].name).toBe('Teste')
-        expect(frontendLobbyHistoryList.value[1]?.players[0].leader).toBe(true)
-        expect(frontendLobbyHistoryList.value[1]?.players[0].ready).toBe(false)
+  test('Não deve adicionar lobby ao histórico se o evento for \'debug\'', (done) => {
+    lobby.value = {
+      lobbyId: '123',
+      players: []
+    };
 
-        done()
-    })
+    handleUpdateFrontendHistory('debug', 'arg1', 'arg2');
 
-    test("Não deve adicionar lobby ao histórico se o evento for 'debug'", (done) => {
-        const connection = require('@/connection');
+    expect(frontendLobbyHistoryList.value).toHaveLength(0);
 
-        connection.lobby.value = {
-            lobbyId: '123',
-            players: []
-        }
-
-        handleUpdateFrontendHistory('debug', 'arg1', 'arg2')
-
-        expect(frontendLobbyHistoryList.value).toHaveLength(0)
-
-        done()
-    })
-})
+    done();
+  });
+});
