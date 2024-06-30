@@ -1,4 +1,6 @@
 
+import { backendLobbyHistoryList } from '../globals';
+
 /**
  *  Evento que é enviado após cada modificação ocorrida no `backend`. Esse evento irá transmitir o estado das informações de forma "cru"
  *  para o frontend, para fins de debug. Este evento só sera acionado quando o servidor for executado em modo de debug
@@ -11,7 +13,6 @@
  *  @param lobby um objeto (JSON) contendo as informações "cru" do lobby no servidor.
  *  Pode ser indefinido caso não tenha nenhuma informação de lobby para ser informada.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function handleDebug(lobby: any) {
-
+  backendLobbyHistoryList.value = [...backendLobbyHistoryList.value, lobby];
 }
