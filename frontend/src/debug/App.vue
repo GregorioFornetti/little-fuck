@@ -6,6 +6,7 @@ addHandlersForDebugMode(socket);
 
 import { ref } from 'vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import DebugPage from './components/DebugPage.vue';
 
 const connectionStatus = ref<'loading' | 'connected' | 'disconnected'>('loading');
 
@@ -38,6 +39,6 @@ socket.on('connect_error', (err) => {
   </div>
   <!-- Connection success -->
   <div v-if="connectionStatus === 'connected'">
-    <h1>conectou</h1>
+    <DebugPage />
   </div>
 </template>
