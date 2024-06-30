@@ -13,7 +13,6 @@ import { backendLobbyHistoryList } from '../globals';
  *  @param lobby um objeto (JSON) contendo as informações "cru" do lobby no servidor.
  *  Pode ser indefinido caso não tenha nenhuma informação de lobby para ser informada.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function handleDebug(lobby: any) {
   backendLobbyHistoryList.value = [...backendLobbyHistoryList.value, lobby];
 }
