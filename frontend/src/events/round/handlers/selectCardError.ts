@@ -1,4 +1,6 @@
 
+import { i18n } from '@/plugins/i18n';
+
 /**
  *  Mensagem enviada quando ocorrer algum erro na seleção de carta de um jogador.
  *  Este erro pode ocorrer quando um jogador enviar uma seleção de carta quando não é sua vez
@@ -8,7 +10,12 @@
  *
  *  @param type tipo de erro que ocorreu
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function handleSelectCardError(type: 'not-your-turn'|'invalid-index'|'not-in-lobby') {
-
+  if (type === 'not-your-turn') {
+    throw new Error(i18n.t('COMMON.ERROR.NOT_YOUR_TURN'));
+  } else if (type === 'invalid-index') {
+    throw new Error(i18n.t('COMMON.ERROR.INVALID_INDEX'));
+  } else if (type === 'not-in-lobby') {
+    throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
+  }
 }
