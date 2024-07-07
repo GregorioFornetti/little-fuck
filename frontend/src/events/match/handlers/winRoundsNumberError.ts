@@ -1,4 +1,6 @@
 
+import { i18n } from '@/plugins/i18n';
+
 /**
  *  Mensagem enviada quando ocorrer algum erro no palpite escolhido pelo usuário.
  *  Este erro pode ocorrer quando um jogador palpitar um número negativo, não estiver em um lobby ou não for o turno do jogador.
@@ -10,7 +12,14 @@
  *
  *  @param type tipo de erro que ocorreu
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function handleWinRoundsNumberError(type: 'not-your-turn'|'negative-is-invalid'|'not-in-lobby'|'num-wins-equals-num-cards') {
-
+  if (type === 'not-your-turn') {
+    throw new Error(i18n.t('COMMON.ERROR.NOT_YOUR_TURN'));
+  } else if (type === 'negative-is-invalid') {
+    throw new Error(i18n.t('COMMON.ERROR.NEGATIVE_IS_INVALID'));
+  } else if (type === 'not-in-lobby') {
+    throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
+  } else if (type === 'num-wins-equals-num-cards') {
+    throw new Error(i18n.t('COMMON.ERROR.NUM_WINS_EQUALS_NUM_CARDS'));
+  }
 }
