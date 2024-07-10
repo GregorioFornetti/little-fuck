@@ -1,6 +1,8 @@
 
 import { Game } from '../../../interfaces/Lobby';
 import Player from '../../../interfaces/Player';
+import { generateInternalServerError } from '../../general/functions/generateInternalServerError';
+import i18n from '../../../plugins/i18n';
 
 /**
  *  Função que começa um jogo de "little-fuck". Essa função é responsável por:
@@ -14,5 +16,7 @@ import Player from '../../../interfaces/Player';
 // Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function startNewGame(player: Player): Game {
-
+  if (!player.lobby) {
+    generateInternalServerError(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
+  }
 }

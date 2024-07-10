@@ -65,4 +65,8 @@ export default class EmitterBase {
       throw new Error(`Jogador de id ${this.socket.id} tentou emitir um evento para a sala, mas não está em nenhuma sala.`);
     }
   }
+
+  public get playerInLobby() {
+    return this.lobbyId !== undefined;
+  }
 }
