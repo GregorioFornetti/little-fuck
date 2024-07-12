@@ -1,9 +1,9 @@
-import { Match } from '../../../interfaces/Lobby';
+
 import Player from '../../../interfaces/Player';
 
 /**
  *  Função que começa uma partida de "little-fuck". Essa função é responsável por:
- *  - Criar um objeto Match
+ *  - Criar um objeto Match (de forma in-place, ou seja, modifica o objeto `player.lobby` diretamente)
  *  - Enviar mensagens para todos os jogadores que a partida começou
  *  - Cadastrar um timer para que o primeiro jogador faça o palpite automaticamente caso ele não palpite a tempo
  *
@@ -12,6 +12,6 @@ import Player from '../../../interfaces/Player';
  */
 // Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function startNewMatch(player: Player): Match {
+export function startNewMatch(player: Player): void {
 
 }
