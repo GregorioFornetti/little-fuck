@@ -91,7 +91,7 @@ export interface Game {
     roundNumber: number,
     /** O id do jogador que iniciou palpitando na última (ou atual) partida */
     currentPlayerId: string,
-    /** Quantidade de rodadas (ou cartas) que devem ocorrer na última (ou atual) partida */
+    /** Quantidade de rodadas (ou cartas) que devem ocorrer na partida atual (ou que ocorreram na última partida) */
     numRounds: number,
     /** Lista de ids de jogadores que "morreram" (não possuem mais vidas / foram eliminados). Estará em ordem inversa de eliminação, ou seja, o primeiro da lista será o último que foi eliminado até o momento */
     deadPlayersIds: string[],
