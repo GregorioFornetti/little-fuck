@@ -14,8 +14,6 @@ import { startNewMatch } from '../../match/functions/startNewMatch';
  *
  *  @param player jogador que iniciou o jogo (líder)
  */
-// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function startNewGame(player: Player): void {
   const lobby = player.lobby;
   if (!lobby) {
