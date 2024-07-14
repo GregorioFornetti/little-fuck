@@ -7,6 +7,8 @@
       "GAME_NOT_STARTED": "O jogo ainda não começou!",
       "MATCH_ALREADY_STARTED": "A partida já começou!",
       "MATCH_NOT_STARTED": "A partida ainda não começou!",
+      "NO_MATCH_NEXT_PLAYER": "É preciso ter um jogador definido em `match.nextPlayerId` para receber um palpite do servidor!",
+      "ROUND_ALREADY_STARTED": "A rodada já começou!",
       "ROUND_NOT_STARTED": "A rodada ainda não começou!",
       "PLAYER_NOT_FOUND": "Jogador não encontrado!",
       "LOBBY_NOT_FOUND": "Lobby especificado não foi encontrado!",
