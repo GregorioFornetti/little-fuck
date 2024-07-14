@@ -1,10 +1,7 @@
 
 <script setup lang="ts">
-// Remover comentário abaixo quando implementar o componente, juntamente com esse comentário atual
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ref } from 'vue';
 import HistoricModal from './HistoricModal.vue';
-// Remover comentário abaixo quando implementar o componente, juntamente com esse comentário atual
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import JSONViewer from './JSONViewer.vue';
 
 defineProps<{
@@ -12,4 +9,30 @@ defineProps<{
   jsonLabel: string,
   jsonList: object[],
 }>();
+
+const showModal = ref(false);
 </script>
+
+<template>
+  <div class="w-full h-full flex flex-col p-5 border-solid border-2 rounded-xl">
+    <span class="font-bold ">{{ jsonLabel }}</span>
+    <div class="grow">
+      <JSONViewer :json="jsonList.length > 0 ? jsonList[jsonList.length - 1] : {}" />
+    </div>
+
+    <button
+      class="grow-0 bg-blue-600 hover:bg-blue-800 text-white font-bold py-1 rounded w-40 mt-2"
+      @click="showModal = true"
+    >
+      Abrir histórico
+    </button>
+  </div>
+
+  <HistoricModal
+    :title="modalTitle"
+    :show="showModal"
+    :json-label="jsonLabel"
+    :json-list="jsonList"
+    :close-modal="() => showModal = false"
+  />
+</template>
