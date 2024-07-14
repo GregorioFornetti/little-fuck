@@ -1,18 +1,17 @@
 
 <script setup lang="ts">
 
-const IDENT_SIZE = 2;
+const INDENT_SIZE = 2;
 
 const props = defineProps<{
   json: object
 }>();
 
-const jsonToDisplay = JSON.stringify(props.json, null, IDENT_SIZE);
 </script>
 
 <template>
   <div class="w-full h-full overflow-auto rounded-lg bg-neutral-800 text-white scroll">
-    <pre>{{ jsonToDisplay }}</pre>
+    <pre>{{ JSON.stringify(props.json, null, INDENT_SIZE) }}</pre>
   </div>
 </template>
 
