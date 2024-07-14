@@ -23,7 +23,7 @@ describe('handleWinRoundsNumberUpdate', () => {
   const EXPECTED_PLAYER_NUM_WONS_ROUNDS = 1;
   const EXPECTED_NEXT_PLAYER_ID = anotherPlayer.id;
 
-  test('Deve atual', () => {
+  test('Deve atualizar corretamente o número de rodadas que o jogador atual acredita que irá vencer', () => {
     const match: Match = {
       players: {
         [leaderPlayer.id]: {
