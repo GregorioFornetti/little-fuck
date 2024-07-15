@@ -38,7 +38,7 @@ describe('startNewGame', () => {
     expect(startNewMatch).toHaveBeenCalledWith(player);
   });
 
-  test('Deve enviar mensagem de incio de jogo para todos os jogadores', () => {
+  test('Deve enviar mensagem de início de jogo para todos os jogadores', () => {
     createLobby();
 
     const emitSpy = jest.spyOn(player.eventsEmitter.Game, 'emitStartGame');
