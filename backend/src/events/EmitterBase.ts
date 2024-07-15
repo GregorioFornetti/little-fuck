@@ -66,7 +66,7 @@ export default class EmitterBase {
     }
   }
 
-  public get playerInLobby() {
+  public get isPlayerInLobby() {
     return this.lobbyId !== undefined;
   }
 }

@@ -33,7 +33,7 @@ export default class GeneralEventsEmitter extends EmitterBase {
      *  e um log desse evento será feito no servidor para posterior correção...
      */
   public emitInternalServerError() {
-    if (this.playerInLobby) {
+    if (this.isPlayerInLobby) {
       this.emitToLobby('internal-server-error');
     } else {
       this.emitToUser('internal-server-error');
