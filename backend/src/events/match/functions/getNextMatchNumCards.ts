@@ -1,4 +1,5 @@
 import { Card } from '../../../interfaces/Lobby';
+import i18n from '../../../plugins/i18n';
 
 /**
  *  Coleta o próximo número de cartas que é possível de fornecer para todos os jogadores vivos.
@@ -11,8 +12,18 @@ import { Card } from '../../../interfaces/Lobby';
  *  @param possibleCards lista de cartas que podem ser fornecidas
  *  @returns o próximo número de cartas que pode ser fornecido
  */
-// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getNextMatchNumCards(currentMatchNumCards: number, alivePlayersIds: string[], possibleCards: Card[]): number {
+  if (alivePlayersIds.length === 0) {
+    throw new Error(i18n.t('COMMON.ERROR.NO_PLAYERS_ALIVE'));
+  }
 
+  if (possibleCards.length === 0) {
+    throw new Error(i18n.t('COMMON.ERROR.NO_CARDS'));
+  }
+
+  if ((currentMatchNumCards + 1) * alivePlayersIds.length <= possibleCards.length) {
+    return currentMatchNumCards + 1;
+  } else {
+    return 1;
+  }
 }
