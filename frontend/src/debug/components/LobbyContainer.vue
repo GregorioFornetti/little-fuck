@@ -7,7 +7,7 @@ import JSONViewer from './JSONViewer.vue';
 defineProps<{
   modalTitle: string,
   jsonLabel: string,
-  jsonList: object[],
+  jsonList: any[],
 }>();
 
 const showModal = ref(false);
@@ -16,7 +16,7 @@ const showModal = ref(false);
 <template>
   <div class="w-full h-full flex flex-col p-5 border-solid border-2 rounded-xl">
     <span class="font-bold ">{{ jsonLabel }}</span>
-    <div class="grow">
+    <div class="grow overflow-auto">
       <JSONViewer :json="jsonList.length > 0 ? jsonList[jsonList.length - 1] : {}" />
     </div>
 
