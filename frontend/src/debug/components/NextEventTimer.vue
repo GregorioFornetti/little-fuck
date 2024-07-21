@@ -10,15 +10,17 @@ defineProps<{
 </script>
 
 <template>
-  <div class="component-container">
-    <div class="clock-container">
-      <img
-        :src="clockImage"
-        alt="Clock"
-        class="clock-image"
-      >
-      <div class="clock-number">
-        {{ nextEventTime }}
+  <div class="flex flex-col border-solid border-2 rounded-xl justify-center items-center w-full h-full">
+    <div class="component-container">
+      <div class="clock-container">
+        <img
+          :src="clockImage"
+          alt="Clock"
+          class="clock-image"
+        >
+        <div class="clock-number">
+          {{ nextEventTime }}
+        </div>
       </div>
     </div>
     <p class="text-lg text-center">
