@@ -17,10 +17,6 @@ export function getPlayersCards(alivePlayersIds: string[], cards: Card[], numCar
     throw new Error(i18n.t('COMMON.ERROR.NO_PLAYERS_ALIVE'));
   }
 
-  if (cards.length === 0) {
-    throw new Error(i18n.t('COMMON.ERROR.NO_CARDS'));
-  }
-
   if (numCards < 1) {
     throw new Error(i18n.t('COMMON.ERROR.INVALID_NEGATIVE_NUM_CARDS'));
   }
