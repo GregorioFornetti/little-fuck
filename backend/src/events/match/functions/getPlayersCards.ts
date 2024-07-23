@@ -12,7 +12,7 @@ import { shuffle } from '../../../functions/shuffle';
  *  @returns um objeto contendo as cartas sorteadas para cada jogador. A chave é o id do jogador e o valor é um
  *  array de `numCards` cartas.
  */
-export default function getPlayersCards(alivePlayersIds: string[], cards: Card[], numCards: number): { [playerId: string]: Card[] } {
+export function getPlayersCards(alivePlayersIds: string[], cards: Card[], numCards: number): { [playerId: string]: Card[] } {
   if (alivePlayersIds.length === 0) {
     throw new Error(i18n.t('COMMON.ERROR.NO_PLAYERS_ALIVE'));
   }
