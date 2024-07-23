@@ -21,7 +21,7 @@ export function getPlayersCards(alivePlayersIds: string[], cards: Card[], numCar
     throw new Error(i18n.t('COMMON.ERROR.INVALID_NEGATIVE_NUM_CARDS'));
   }
 
-  if (numCards > cards.length * alivePlayersIds.length) {
+  if (numCards * alivePlayersIds.length > cards.length) {
     throw new Error(i18n.t('COMMON.ERROR.NOT_ENOUGH_CARDS'));
   }
 
