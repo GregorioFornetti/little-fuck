@@ -66,6 +66,9 @@ afterEach(() => {
   }
   clientSocket.removeAllListeners('player-join');
   lobbyClientsSockets[0].removeAllListeners('player-join');
+
+  player.lobby = undefined;
+  player.eventsEmitter = new EventsEmitter(io, player.socket);
 });
 
 afterAll(() => {
@@ -77,4 +80,28 @@ afterAll(() => {
   }
 });
 
-export { io, clientSocket, serverSocket, player, eventsEmitter, lobbyClientsSockets, lobbyServerSockets };
+function createLobby() {
+  lobbys['123'] = {
+    lobbyId: '123',
+    players: [
+      {
+        id: player.playerId,
+        name: 'player1',
+        leader: true,
+        ready: true,
+      },
+      {
+        id: lobbyServerSockets[0].id!,
+        name: 'player2',
+        leader: false,
+        ready: true
+      }
+    ]
+  };
+  player.lobby = lobbys['123'];
+  player.eventsEmitter = new EventsEmitter(io, player.socket, '123');
+  players[player.playerId] = { socket: player.socket, lobby: lobbys['123'] };
+  players[lobbyServerSockets[0].id!] = { socket: lobbyServerSockets[0], lobby: lobbys['123'] };
+}
+
+export { io, clientSocket, serverSocket, player, eventsEmitter, lobbyClientsSockets, lobbyServerSockets, createLobby };
