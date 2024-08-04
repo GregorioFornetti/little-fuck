@@ -6,7 +6,6 @@ import i18n from '../../../plugins/i18n';
  *  Caso o número atual seja o maior possível, será retornado 1.
  *  Caso seja fornecido uma lista vazia de jogadores ou cartas, será lançado um erro.
  *
- *
  *  @param currentMatchNumCards número atual de cartas que foi fornecido
  *  @param alivePlayersIds lista de ids dos jogadores vivos
  *  @param possibleCards lista de cartas que podem ser fornecidas
