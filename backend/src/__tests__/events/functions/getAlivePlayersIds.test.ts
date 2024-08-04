@@ -87,6 +87,6 @@ describe('getAlivePlayersIds', () => {
     const lobby = getInitialLobby();
     lobby.game = undefined;
 
-    expect(() => getAlivePlayersIds(lobby)).toThrowError(i18n.t('COMMON.ERROR.NOT_IN_GAME'));
+    expect(() => getAlivePlayersIds(lobby)).toThrow(i18n.t('COMMON.ERROR.NOT_IN_GAME'));
   });
 });
