@@ -7,5 +7,17 @@ import { Card } from '../../interfaces/Lobby';
  *  @returns uma lista contendo todas as cartas padrões do jogo
  */
 export function getDefaultCards(): Card[] {
+  const cards: Card[] = [];
 
+  for (let i = 1; i <= 12; i++) {
+    for (let j = 0; j < 4; j++) {
+      cards.push({ value: i, type: 'common' });
+    }
+  }
+
+  for (let i = 13; i <= 16; i++) {
+    cards.push({ value: i, type: 'common' });
+  }
+
+  return cards;
 }
