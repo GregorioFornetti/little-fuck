@@ -11,8 +11,6 @@ import { getNextPlayerId } from '../../functions/getNextPlayerId';
  *  @param currentGuess palpite atual do jogador
  *  @returns `true` caso o palpite seja válido, `false` caso contrário
  */
-// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function checkValidFinalGuess(lobby: Lobby, currentGuess: number): boolean {
   if (!lobby.game) {
     throw new Error(i18n.t('COMMON.ERROR.NOT_IN_GAME'));
@@ -32,12 +30,12 @@ export function checkValidFinalGuess(lobby: Lobby, currentGuess: number): boolea
 
   let totalWinGuesses = 0;
   for (const playerId in lobby.game.match.players) {
-    if (lobby.game.match.players[playerId].numWinsNeeded) {
-      totalWinGuesses += lobby.game.match.players[playerId].numWinsNeeded;
+    if (lobby.game.match.players[playerId].numWinsNeeded !== undefined) {
+      totalWinGuesses += lobby.game.match.players[playerId].numWinsNeeded!;
     }
   }
   totalWinGuesses += currentGuess;
   const isGuessesSumEqualToCurrentNumCards = totalWinGuesses === lobby.game.numRounds;
 
-  return isCurrentPlayerLast && isGuessesSumEqualToCurrentNumCards;
+  return !(isCurrentPlayerLast && isGuessesSumEqualToCurrentNumCards);
 }
