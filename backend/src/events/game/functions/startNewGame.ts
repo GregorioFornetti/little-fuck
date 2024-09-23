@@ -1,8 +1,10 @@
 
-import Player from '../../../interfaces/Player';
 import i18n from '../../../plugins/i18n';
 import Timer from 'easytimer.js';
 import { startNewMatch } from '../../match/functions/startNewMatch';
+import Lobby from '../../../interfaces/Lobby';
+import { io } from '../../../index';
+import { createPlayer } from '../../functions/createPlayer';
 
 /**
  *  Função que começa um jogo de "little-fuck". Essa função é responsável por:
@@ -14,11 +16,7 @@ import { startNewMatch } from '../../match/functions/startNewMatch';
  *
  *  @param player jogador que iniciou o jogo (líder)
  */
-export function startNewGame(player: Player): void {
-  const lobby = player.lobby;
-  if (!lobby) {
-    throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
-  }
+export function startNewGame(lobby: Lobby): void {
 
   const playersHealth: { [playerId: string]: number} = {};
   for (const player of lobby.players) {
@@ -28,7 +26,7 @@ export function startNewGame(player: Player): void {
   const timer = new Timer();
   timer.start({ countdown: true, startValues: { seconds: 5 } });
   timer.addEventListener('targetAchieved', () => {
-    startNewMatch(player);
+    startNewMatch(lobby);
   });
 
   lobby.game = {
@@ -42,5 +40,6 @@ export function startNewGame(player: Player): void {
     timer,
   };
 
+  const player = createPlayer(io, lobby.game.currentPlayerId);
   player.eventsEmitter.Game.emitStartGame();
 }
