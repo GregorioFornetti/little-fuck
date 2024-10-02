@@ -1,5 +1,4 @@
 
-import i18n from '../../../plugins/i18n';
 import Timer from 'easytimer.js';
 import { startNewMatch } from '../../match/functions/startNewMatch';
 import Lobby from '../../../interfaces/Lobby';
