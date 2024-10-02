@@ -3,7 +3,7 @@ import { player, lobbyClientsSockets, createLobby } from '../setupTests';
 import { startNewGame } from '../../../events/game/functions/startNewGame';
 import { startNewMatch } from '../../../events/match/functions/startNewMatch';
 
-const emitStartGame = jest.fn(); // Mock emitStartGame
+const emitStartGame = jest.fn();
 
 jest.mock('../../../events/match/functions/startNewMatch.ts', () => ({
   startNewMatch: jest.fn(),
