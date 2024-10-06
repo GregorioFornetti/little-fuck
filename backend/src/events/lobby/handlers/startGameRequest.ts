@@ -22,7 +22,7 @@ export function handleStartGameRequest(player: Player) {
     return;
   }
 
-  if (!player.lobby.game) {
+  if (player.lobby.game) {
     player.eventsEmitter.Lobby.emitStartGameError('already-in-game');
     return;
   }
