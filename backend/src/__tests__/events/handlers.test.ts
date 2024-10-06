@@ -30,6 +30,14 @@ jest.mock('../../events/general/handlers/logout');
 
 jest.mock('../../events/functions/createPlayer.ts');
 
+jest.mock('../../events/game/functions/startNewGame.ts', () => ({
+  startNewGame: jest.fn(),
+}));
+jest.mock('../../events/match/functions/startNewMatch.ts', () => ({
+  startNewMatch: jest.fn(),
+}));
+jest.mock('../../events/general/functions/generateInternalServerError.ts');
+
 describe('Testes de recebimento de mensagem / eventos pelo servidor', () => {
 
   describe('Lobby events', () => {
