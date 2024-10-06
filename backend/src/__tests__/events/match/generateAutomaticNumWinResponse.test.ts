@@ -196,16 +196,16 @@ describe('generateAutomaticNumWinResponse', () => {
   test('Se não houver um próximo jogador na partida, deve lançar um erro', () => {
 
     const lobby = generateLobbyInMatch();
-      lobby.game!.match!.nextPlayerId = undefined;
+    lobby.game!.match!.nextPlayerId = undefined;
 
-      generateAutomaticNumWinResponse(lobby);
+    generateAutomaticNumWinResponse(lobby);
 
-      expect(createPlayer).not.toHaveBeenCalled();
-      expect(handleWinRoundsNumberResponse).not.toHaveBeenCalled();
-      expect(generateInternalServerError).toHaveBeenCalledWith(
-        lobby,
-        new Error(i18n.t('COMMON.ERROR.NO_NEXT_PLAYER_IN_MATCH'))
-      );
+    expect(createPlayer).not.toHaveBeenCalled();
+    expect(handleWinRoundsNumberResponse).not.toHaveBeenCalled();
+    expect(generateInternalServerError).toHaveBeenCalledWith(
+      lobby,
+      new Error(i18n.t('COMMON.ERROR.NO_NEXT_PLAYER_IN_MATCH'))
+    );
   });
 
   test('Se o próximo jogador for inválido (id não pertencente ao lobby), deve lançar um erro', () => {
