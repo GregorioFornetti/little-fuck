@@ -90,7 +90,7 @@ describe('checkValidFinalGuess', () => {
     const lobby = generateLobbyInMatch();
 
     (getNextPlayerId as jest.Mock).mockImplementation((_lobby, _currentGuess) => {
-      return lobby.game?.currentPlayerId; // Próximo jogador não é o primeiro (logo, o jogador atual não é o último)
+      return lobby.game?.currentPlayerId;
     });
 
     const currentGuess = 0;
@@ -106,7 +106,7 @@ describe('checkValidFinalGuess', () => {
     const lobby = generateLobbyInMatch();
 
     (getNextPlayerId as jest.Mock).mockImplementation((_lobby, _currentGuess) => {
-      return lobby.game?.currentPlayerId; // Próximo jogador não é o primeiro (logo, o jogador atual não é o último)
+      return lobby.game?.currentPlayerId;
     });
 
     const currentGuess = 2;
@@ -122,7 +122,7 @@ describe('checkValidFinalGuess', () => {
     const lobby = generateLobbyInMatch();
 
     (getNextPlayerId as jest.Mock).mockImplementation((_lobby, _currentGuess) => {
-      return lobby.game?.currentPlayerId; // Próximo jogador não é o primeiro (logo, o jogador atual não é o último)
+      return lobby.game?.currentPlayerId;
     });
 
     const currentGuess = 1;
