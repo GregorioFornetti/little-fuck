@@ -1,13 +1,31 @@
 
 import { player, lobbyClientsSockets, createLobby } from '../setupTests';
-import i18n from '../../../plugins/i18n';
 import { startNewGame } from '../../../events/game/functions/startNewGame';
 import { startNewMatch } from '../../../events/match/functions/startNewMatch';
 
-jest.mock('../../../events/match/functions/startNewMatch.ts');
+const emitStartGame = jest.fn();
+
+jest.mock('../../../events/match/functions/startNewMatch.ts', () => ({
+  startNewMatch: jest.fn(),
+}));
+jest.mock('../../../index.ts', () => ({
+  io: 'mocked io',
+}));
+jest.mock('../../../events/functions/createPlayer.ts', () => ({
+  createPlayer: jest.fn((_io, _playerId) => {
+    return {
+      eventsEmitter: {
+        Game: {
+          emitStartGame: emitStartGame
+        }
+      }
+    };
+  })
+}));
 
 describe('startNewGame', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
     jest.useFakeTimers();
   });
 
@@ -18,7 +36,7 @@ describe('startNewGame', () => {
   test('Deve criar o objeto Game corretamente', () => {
     createLobby();
 
-    startNewGame(player);
+    startNewGame(player.lobby!);
 
     expect(player.lobby?.game?.matchNumber).toBe(1);
     expect(player.lobby?.game?.roundNumber).toBe(1);
@@ -35,20 +53,14 @@ describe('startNewGame', () => {
     expect(player.lobby?.game?.timer.getConfig().countdown).toBe(true);
     expect(player.lobby?.game?.timer.getTimeValues().seconds).toBe(5);
     jest.advanceTimersByTime(5000);
-    expect(startNewMatch).toHaveBeenCalledWith(player);
+    expect(startNewMatch).toHaveBeenCalledWith(player.lobby!);
   });
 
   test('Deve enviar mensagem de início de jogo para todos os jogadores', () => {
     createLobby();
 
-    const emitSpy = jest.spyOn(player.eventsEmitter.Game, 'emitStartGame');
+    startNewGame(player.lobby!);
 
-    startNewGame(player);
-
-    expect(emitSpy).toHaveBeenCalledTimes(1);
-  });
-
-  test('Deve lançar uma exceção caso o jogador não esteja em um lobby', () => {
-    expect(() => startNewGame(player)).toThrow(new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY')));
+    expect(emitStartGame).toHaveBeenCalledTimes(1);
   });
 });

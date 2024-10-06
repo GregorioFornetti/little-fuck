@@ -1,24 +1,19 @@
 
-import Player from '../../../interfaces/Player';
-import i18n from '../../../plugins/i18n';
 import Timer from 'easytimer.js';
 import { startNewMatch } from '../../match/functions/startNewMatch';
+import Lobby from '../../../interfaces/Lobby';
+import { io } from '../../../index';
+import { createPlayer } from '../../functions/createPlayer';
 
 /**
  *  Função que começa um jogo de "little-fuck". Essa função é responsável por:
- *  - Criar a versão inicial do objeto Game (de forma in-place, ou seja, modifica o objeto `player.lobby` diretamente)
+ *  - Criar a versão inicial do objeto Game no Lobby atual
  *  - Enviar mensagens para todos os jogadores que o jogo começou
  *  - Cadastrar um timer para o início de uma partida
  *
- *  OBS: pode lançar uma exceção caso o jogador não esteja em um lobby
- *
- *  @param player jogador que iniciou o jogo (líder)
+ *  @param lobby informações do lobby atual
  */
-export function startNewGame(player: Player): void {
-  const lobby = player.lobby;
-  if (!lobby) {
-    throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
-  }
+export function startNewGame(lobby: Lobby): void {
 
   const playersHealth: { [playerId: string]: number} = {};
   for (const player of lobby.players) {
@@ -28,7 +23,7 @@ export function startNewGame(player: Player): void {
   const timer = new Timer();
   timer.start({ countdown: true, startValues: { seconds: 5 } });
   timer.addEventListener('targetAchieved', () => {
-    startNewMatch(player);
+    startNewMatch(lobby);
   });
 
   lobby.game = {
@@ -42,5 +37,6 @@ export function startNewGame(player: Player): void {
     timer,
   };
 
+  const player = createPlayer(io, lobby.game.currentPlayerId);
   player.eventsEmitter.Game.emitStartGame();
 }
