@@ -142,11 +142,8 @@ describe('startNewMatch', () => {
 
     startNewMatch(lobby);
 
-    console.log(lobby);
-
     expect(getPlayersCards).toHaveBeenCalledWith(alivePlayersIds, defaultCards, 2);
 
-    console.log(lobby.game!.match);
     const matchPlayers = lobby.game!.match!.players;
     for (const alivePlayerId of alivePlayersIds) {
       expect(matchPlayers[alivePlayerId]).toEqual({
