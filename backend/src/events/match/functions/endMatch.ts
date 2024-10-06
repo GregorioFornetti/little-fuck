@@ -1,5 +1,4 @@
 import Lobby from '../../../interfaces/Lobby';
-import Player from '../../../interfaces/Player';
 
 /**
  *  Função que finaliza uma partida de "little-fuck". Essa função é responsável por:
