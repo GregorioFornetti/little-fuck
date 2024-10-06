@@ -1,3 +1,4 @@
+import Lobby from '../../../interfaces/Lobby';
 import Player from '../../../interfaces/Player';
 
 /**
@@ -6,10 +7,10 @@ import Player from '../../../interfaces/Player';
  *  - Enviar mensagens para todos os jogadores que a partida finalizou
  *  - Cadastrar um timer para o ínicio de uma nova partida ou para o fim de um jogo
  *
- *  @param player um jogador qualquer que está na partida
+ *  @param lobby Objeto contendo informações do lobby
  */
 // Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function endMatch(player: Player): void {
+export function endMatch(lobby: Lobby): void {
 
 }
