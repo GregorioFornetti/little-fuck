@@ -37,6 +37,9 @@ jest.mock('../../events/match/functions/startNewMatch.ts', () => ({
   startNewMatch: jest.fn(),
 }));
 jest.mock('../../events/general/functions/generateInternalServerError.ts');
+jest.mock('../../index.ts', () => ({
+  io: 'mocked io',
+}));
 
 describe('Testes de recebimento de mensagem / eventos pelo servidor', () => {
 
