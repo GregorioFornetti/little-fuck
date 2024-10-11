@@ -60,6 +60,9 @@ export function insertCard(cards: RoundCards, toInsertRoundCard: RoundCard): Rou
       newRoundCards.anulledCards.push(annuledCard);
       newRoundCards.anulledCards.push(toInsertRoundCard);
     }
+  } else {
+    // Se não houve empate ao adicionar a carta atual, basta copiar as cartas anuladas da rodada anterior
+    newRoundCards.anulledCards = [...cards.anulledCards];
   }
 
   return newRoundCards;
