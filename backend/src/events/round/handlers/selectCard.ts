@@ -1,7 +1,6 @@
 
 import Player from '../../../interfaces/Player';
 import { generateInternalServerError } from '../../general/functions/generateInternalServerError';
-import Timer from 'easytimer.js';
 import { insertCard } from '../functions/insertCard';
 import { getNextPlayerId } from '../../functions/getNextPlayerId';
 import { endRound } from '../functions/endRound';
