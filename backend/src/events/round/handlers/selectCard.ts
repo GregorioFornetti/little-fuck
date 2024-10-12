@@ -5,6 +5,7 @@ import { insertCard } from '../functions/insertCard';
 import { getNextPlayerId } from '../../functions/getNextPlayerId';
 import { endRound } from '../functions/endRound';
 import { generateAutomaticSelectCard } from '../functions/generateAutomaticSelectCard';
+import Timer from 'easytimer.js';
 
 /**
  *  Evento enviado para selecionar a carta que o jogador jogará na rodada atual.
@@ -48,6 +49,7 @@ export function handleSelectCard(player: Player, cardIndex: number): void {
       lobby.game.match.round.cards,
       { card: lobby.game.match.players[player.playerId].cards[cardIndex], playerId: player.playerId }
     );
+    lobby.game.match.round.cards = newTableCards;
 
     lobby.game.match.round.nextPlayerId = getNextPlayerId(lobby.game.match.round.nextPlayerId, lobby);
     if (lobby.game.match.roundFirstPlayerId === lobby.game.match.round.nextPlayerId) {
@@ -56,6 +58,7 @@ export function handleSelectCard(player: Player, cardIndex: number): void {
       endRound(lobby);
     } else {
       // Ainda há jogadores que precisam selecionar cartas. Deve iniciar um timer para selecionar uma carta automaticamente caso o jogador não selecione a tempo
+      lobby.game.timer = new Timer();
       lobby.game.timer.start({ countdown: true, startValues: { seconds: 15 } });
       lobby.game.timer.addEventListener('targetAchieved', () => {
         generateAutomaticSelectCard(lobby);
