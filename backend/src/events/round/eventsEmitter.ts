@@ -47,8 +47,8 @@ export default class RoundEventsEmitter extends EmitterBase {
   /**
      *  Evento enviado para indicar o fim da rodada. Uma rodada acaba quando todos os jogadores já jogaram as suas cartas.
      *
-     *  @param winnerId Id do jogador que venceu a rodada
-     *  @param points número de pontos que o jogador vencedor ganhou
+     *  @param winnerId Id do jogador que venceu a rodada. Se for empate, esse valor será um id qualquer dentro do lobby.
+     *  @param points número de pontos que o jogador vencedor ganhou. Se for um empate, esse valor será 0.
      */
   public emitEndRound(winnerId: string, points: number) {
     this.emitToLobby('end-round', winnerId, points);
