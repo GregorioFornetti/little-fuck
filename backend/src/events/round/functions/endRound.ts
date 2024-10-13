@@ -35,6 +35,7 @@ export function endRound(lobby: Lobby): void {
   if (lobby.game.match.round.cards.onMatch.length > 0) {
     // Ainda existe pelo menos uma carta em jogo, então teve um vencedor nessa rodada (o que estiver primeiro rankeado)
     winnerId = lobby.game.match.round.cards.onMatch[0].playerId;
+    lobby.game.match.roundFirstPlayerId = winnerId;
   } else {
     // Se não tiver nenhuma carta em jogo, quer dizer que todas foram anuladas (empate). Então tanto faz quem ganhou, pois este receberá 0 pontos
     points = 0;
