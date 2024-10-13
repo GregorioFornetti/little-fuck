@@ -807,9 +807,9 @@ Evento enviado para indicar o fim da rodada. Uma rodada acaba quando todos os jo
 
 #### Parâmetros
 
-- winnerId: string com o id do jogador que ganhou rodada. O valor será `undefined` caso ninguém tenha ganho a rodada.
+- winnerId: string com o id do jogador que ganhou rodada. O valor será um id qualquer que estiver no lobby no caso de ninguém tenha ganho a rodada.
 
-- points: inteiro indicando a quantidade de pontos ganhos pelo vencedor nessa rodada.
+- points: inteiro indicando a quantidade de pontos ganhos pelo vencedor nessa rodada. Será 0 caso tenha acontecido um empate.
 
 
 

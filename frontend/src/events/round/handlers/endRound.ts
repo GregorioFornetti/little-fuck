@@ -5,8 +5,8 @@ import { i18n } from '@/plugins/i18n';
 /**
  *  Evento enviado para indicar o fim da rodada. Uma rodada acaba quando todos os jogadores já jogaram as suas cartas.
  *
- *  @param winnerId id do jogador que ganhou a rodada
- *  @param points pontos que o jogador ganhador fez nessa rodada
+ *  @param winnerId Id do jogador que venceu a rodada. Se for empate, esse valor será um id qualquer dentro do lobby.
+ *  @param points número de pontos que o jogador vencedor ganhou. Se for um empate, esse valor será 0.
  */
 export function handleEndRound(winnerId: string, points: number) {
   if (lobby.value === null) {
