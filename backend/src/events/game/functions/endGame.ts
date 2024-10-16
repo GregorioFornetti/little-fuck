@@ -29,7 +29,7 @@ export function endGame(lobby: Lobby): void {
     }
   }
 
-  player.eventsEmitter.Game.emitEndGame(playersRanks);
+  player.eventsEmitter.Game.emitEndGame(playersRanks.reverse());
 
   lobby.game = undefined;
 }
