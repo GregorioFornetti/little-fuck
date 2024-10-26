@@ -1,10 +1,10 @@
-import type { Card, Match, PlayerMatch } from "@/interfaces/Lobby";
-import { lobby } from '@/connection'
-import { i18n } from "@/plugins/i18n";
+import type { Card, Match, PlayerMatch } from '@/interfaces/Lobby';
+import { lobby } from '@/connection';
+import { i18n } from '@/plugins/i18n';
 
 /**
  *  Evento enviado para indicar o início da partida.
- * 
+ *
  *  @param cards cartas que o jogador atual possui
  *  @param firstPlayerId id do jogador que deve começar a partida
  */
@@ -26,7 +26,7 @@ export function handleStartMatch(cards: Card[], firstPlayerId: string) {
     playersMatch[player.id] = {
       numCards: cards.length,
       numWonRounds: 0
-    }
+    };
 
     return playersMatch;
   }, {});
@@ -36,7 +36,7 @@ export function handleStartMatch(cards: Card[], firstPlayerId: string) {
     currentPlayerCards: cards,
     numRounds: cards.length,
     nextPlayerId: firstPlayerId
-  }
+  };
 
   lobby.value.game.match = match;
 }

@@ -1,9 +1,9 @@
 import { createI18n } from 'vue-i18n';
 import ptBR from '@/locales/pt-BR.json';
 
-type MessageSchema  = typeof ptBR;
+type MessageSchema = typeof ptBR;
 
-const environment = process.env.NODE_ENV
+const environment = process.env.NODE_ENV;
 
 const I18n = createI18n<[MessageSchema], 'pt-BR'>({
   // For use with Vue Composition API

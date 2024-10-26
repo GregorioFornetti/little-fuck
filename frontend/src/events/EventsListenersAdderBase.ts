@@ -1,18 +1,17 @@
 
-import type { Socket } from "socket.io-client"
-
+import type { Socket } from 'socket.io-client';
 
 /**
  *  Classe base para os adicionadores de listeners de eventos.
- * 
+ *
  *  Os listenersAdder extedem essa classe para usar métodos genéricos de envio de mensagens.
  */
 export default class EventsListenersAdderBase {
 
-    protected socket: Socket
+  protected socket: Socket;
 
-    constructor(socket: Socket) {
-        this.socket = socket
-    }
+  constructor(socket: Socket) {
+    this.socket = socket;
+  }
 }
 

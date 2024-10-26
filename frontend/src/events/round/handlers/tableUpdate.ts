@@ -1,11 +1,11 @@
-import type { RoundCards } from "@/interfaces/Lobby";
+import type { RoundCards } from '@/interfaces/Lobby';
 import { lobby } from '@/connection';
-import { i18n } from "@/plugins/i18n";
+import { i18n } from '@/plugins/i18n';
 
 /**
  *  Após um jogador selecionar uma carta, essa mensagem será enviada para que todos clientes da sala atualizem
  *  o status da mesa e saibam qual é o próximo jogador que deve jogar
- * 
+ *
  *  @param cards cartas jogadas até o momento
  *  @param nextPlayerId id do próximo jogador que deve jogar. Pode ser undefined caso todos os jogadores já tenham jogado
  */

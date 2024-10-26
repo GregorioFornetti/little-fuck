@@ -1,140 +1,145 @@
 
-import { io, clientSocket, serverSocket, player } from "./setupTests";
-import addEventsListeners from "../../events/addEventsListeners";
+import { io, clientSocket, serverSocket } from './setupTests';
+import addEventsListeners from '../../events/addEventsListeners';
 
-import { handleCreateLobby } from "../../events/lobby/handlers/createLobby";
-import { handleJoinLobby } from "../../events/lobby/handlers/joinLobby";
-import { handleLogout } from "../../events/lobby/handlers/logout";
-import { handleReady } from "../../events/lobby/handlers/ready";
-import { handleStartGameRequest } from "../../events/lobby/handlers/startGameRequest";
-import { handleUnready } from "../../events/lobby/handlers/unready";
-import { handleWinRoundsNumberResponse } from "../../events/match/handlers/winRoundsNumberResponse";
-import { handleSelectCard } from "../../events/round/handlers/selectCard";
+import { handleCreateLobby } from '../../events/lobby/handlers/createLobby';
+import { handleJoinLobby } from '../../events/lobby/handlers/joinLobby';
+import { handleReady } from '../../events/lobby/handlers/ready';
+import { handleStartGameRequest } from '../../events/lobby/handlers/startGameRequest';
+import { handleUnready } from '../../events/lobby/handlers/unready';
 
-import EventsEmitter from "../../events/Emitter";
-import { Socket } from "socket.io";
-import { players } from "../../global";
+import { handleWinRoundsNumberResponse } from '../../events/match/handlers/winRoundsNumberResponse';
 
+import { handleSelectCard } from '../../events/round/handlers/selectCard';
 
-jest.mock("../../events/lobby/handlers/createLobby");
-jest.mock("../../events/lobby/handlers/joinLobby");
-jest.mock("../../events/lobby/handlers/logout");
-jest.mock("../../events/lobby/handlers/ready");
-jest.mock("../../events/lobby/handlers/startGameRequest");
-jest.mock("../../events/lobby/handlers/unready");
+import { handleLogout } from '../../events/general/handlers/logout';
 
-jest.mock("../../events/match/handlers/winRoundsNumberResponse")
+import { createPlayer } from '../../events/functions/createPlayer';
 
-jest.mock("../../events/round/handlers/selectCard")
+jest.mock('../../events/lobby/handlers/createLobby');
+jest.mock('../../events/lobby/handlers/joinLobby');
+jest.mock('../../events/lobby/handlers/ready');
+jest.mock('../../events/lobby/handlers/startGameRequest');
+jest.mock('../../events/lobby/handlers/unready');
 
+jest.mock('../../events/match/handlers/winRoundsNumberResponse');
 
-function getPlayer(socket: Socket) {
-    return {
-        playerId: socket.id,
-        eventsEmitter: new EventsEmitter(io, socket, players[socket.id]?.lobbyId),
-        socket: socket,
-        io: io,
-        lobby: players[socket.id]
-    }
-}
+jest.mock('../../events/round/handlers/selectCard');
 
-describe("Testes de recebimento de mensagem / eventos pelo servidor", () => {
+jest.mock('../../events/general/handlers/logout');
 
-    describe("Lobby events", () => {
-        test("create-lobby", (done) => {
-            addEventsListeners(io, serverSocket)
+jest.mock('../../events/functions/createPlayer.ts');
 
-            serverSocket.on("create-lobby", (name: string) => {
-                expect(handleCreateLobby).toHaveBeenCalledWith(getPlayer(serverSocket), name)
-                done()
-            })
+jest.mock('../../events/game/functions/startNewGame.ts', () => ({
+  startNewGame: jest.fn(),
+}));
+jest.mock('../../events/match/functions/startNewMatch.ts', () => ({
+  startNewMatch: jest.fn(),
+}));
+jest.mock('../../events/general/functions/generateInternalServerError.ts');
+jest.mock('../../index.ts', () => ({
+  io: 'mocked io',
+}));
 
-            clientSocket.emit("create-lobby", "Player1")
-        })
+describe('Testes de recebimento de mensagem / eventos pelo servidor', () => {
 
-        test("join-lobby", (done) => {
-            addEventsListeners(io, serverSocket)
+  describe('Lobby events', () => {
+    test('create-lobby', (done) => {
+      addEventsListeners(io, serverSocket);
 
-            serverSocket.on("join-lobby", (lobbyId: string, name: string) => {
-                expect(handleJoinLobby).toHaveBeenCalledWith(getPlayer(serverSocket), lobbyId, name)
-                done()
-            })
+      serverSocket.on('create-lobby', (name: string) => {
+        expect(handleCreateLobby).toHaveBeenCalledWith(createPlayer(io, serverSocket.id), name);
+        done();
+      });
 
-            clientSocket.emit("join-lobby", "Lobby1", "Player1")
-        })
+      clientSocket.emit('create-lobby', 'Player1');
+    });
 
-        test("logout", (done) => {
-            addEventsListeners(io, serverSocket)
+    test('join-lobby', (done) => {
+      addEventsListeners(io, serverSocket);
 
-            serverSocket.on("logout", () => {
-                expect(handleLogout).toHaveBeenCalledWith(getPlayer(serverSocket))
-                done()
-            })
+      serverSocket.on('join-lobby', (lobbyId: string, name: string) => {
+        expect(handleJoinLobby).toHaveBeenCalledWith(createPlayer(io, serverSocket.id), lobbyId, name);
+        done();
+      });
 
-            clientSocket.emit("logout")
-        })
+      clientSocket.emit('join-lobby', 'Lobby1', 'Player1');
+    });
 
-        test("ready", (done) => {
-            addEventsListeners(io, serverSocket)
+    test('ready', (done) => {
+      addEventsListeners(io, serverSocket);
 
-            serverSocket.on("ready", () => {
-                expect(handleReady).toHaveBeenCalledWith(getPlayer(serverSocket))
-                done()
-            })
+      serverSocket.on('ready', () => {
+        expect(handleReady).toHaveBeenCalledWith(createPlayer(io, serverSocket.id));
+        done();
+      });
 
-            clientSocket.emit("ready")
-        })
+      clientSocket.emit('ready');
+    });
 
-        test("start-game-request", (done) => {
-            addEventsListeners(io, serverSocket)
+    test('start-game-request', (done) => {
+      addEventsListeners(io, serverSocket);
 
-            serverSocket.on("start-game-request", () => {
-                expect(handleStartGameRequest).toHaveBeenCalledWith(getPlayer(serverSocket))
-                done()
-            })
+      serverSocket.on('start-game-request', () => {
+        expect(handleStartGameRequest).toHaveBeenCalledWith(createPlayer(io, serverSocket.id));
+        done();
+      });
 
-            clientSocket.emit("start-game-request")
-        })
+      clientSocket.emit('start-game-request');
+    });
 
-        test("unready", (done) => {
-            addEventsListeners(io, serverSocket)
+    test('unready', (done) => {
+      addEventsListeners(io, serverSocket);
 
-            serverSocket.on("unready", () => {
-                expect(handleUnready).toHaveBeenCalledWith(getPlayer(serverSocket))
-                done()
-            })
+      serverSocket.on('unready', () => {
+        expect(handleUnready).toHaveBeenCalledWith(createPlayer(io, serverSocket.id));
+        done();
+      });
 
-            clientSocket.emit("unready")
-        })
-    })
+      clientSocket.emit('unready');
+    });
+  });
 
-    describe("Game events", () => {
+  describe('Game events', () => {
 
-    })
+  });
 
-    describe("Match events", () => {
-        test("win-rounds-number-response", (done) => {
-            addEventsListeners(io, serverSocket)
+  describe('Match events', () => {
+    test('win-rounds-number-response', (done) => {
+      addEventsListeners(io, serverSocket);
 
-            serverSocket.on("win-rounds-number-response", (winRoundsNumber: number) => {
-                expect(handleWinRoundsNumberResponse).toHaveBeenCalledWith(getPlayer(serverSocket), winRoundsNumber)
-                done()
-            })
+      serverSocket.on('win-rounds-number-response', (winRoundsNumber: number) => {
+        expect(handleWinRoundsNumberResponse).toHaveBeenCalledWith(createPlayer(io, serverSocket.id), winRoundsNumber);
+        done();
+      });
 
-            clientSocket.emit("win-rounds-number-response", 3)
-        })
-    })
+      clientSocket.emit('win-rounds-number-response', 3);
+    });
+  });
 
-    describe("Round events", () => {
-        test("select-card", (done) => {
-            addEventsListeners(io, serverSocket)
+  describe('Round events', () => {
+    test('select-card', (done) => {
+      addEventsListeners(io, serverSocket);
 
-            serverSocket.on("select-card", (card: number) => {
-                expect(handleSelectCard).toHaveBeenCalledWith(getPlayer(serverSocket), card)
-                done()
-            })
+      serverSocket.on('select-card', (card: number) => {
+        expect(handleSelectCard).toHaveBeenCalledWith(createPlayer(io, serverSocket.id), card);
+        done();
+      });
 
-            clientSocket.emit("select-card", 3)
-        })
-    })
-})
+      clientSocket.emit('select-card', 3);
+    });
+  });
+
+  describe('General events', () => {
+    test('logout', (done) => {
+      addEventsListeners(io, serverSocket);
+
+      serverSocket.on('logout', () => {
+        expect(handleLogout).toHaveBeenCalledWith(createPlayer(io, serverSocket.id));
+        done();
+      });
+
+      clientSocket.emit('logout');
+    });
+  });
+});

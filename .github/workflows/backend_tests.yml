@@ -5,7 +5,8 @@ name: Test backend
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - '**'
 
 jobs:
   build:

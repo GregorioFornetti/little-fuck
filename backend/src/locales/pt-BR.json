@@ -1,0 +1,20 @@
+{
+  "COMMON": {
+    "ERROR": {
+      "NOT_IN_LOBBY": "not in lobby",
+      "NOT_IN_GAME": "not in game",
+      "NOT_IN_MATCH": "not in match",
+      "NOT_IN_ROUND": "not in round",
+      "NO_NEXT_PLAYER_IN_MATCH": "no next player in match (undefined)",
+      "INVALID_NEXT_PLAYER_ID_IN_MATCH": "next player id not found in the players list of the match",
+      "NO_FIRST_PLAYER_ID_IN_ROUND": "no first player id for round (undefined)",
+      "NO_NEXT_PLAYER_IN_ROUND": "no next player in round (undefined)",
+      "INVALID_NEXT_PLAYER_ID_IN_ROUND": "next player id not found in the players list of the round",
+      "PLAYER_NOT_FOUND": "player not found",
+      "NO_PLAYERS_ALIVE": "no players alive",
+      "NO_CARDS": "no cards",
+      "INVALID_NEGATIVE_NUM_CARDS": "negative num cards number is invalid",
+      "NOT_ENOUGH_CARDS": "not enough cards for all players"
+    }
+  }
+}

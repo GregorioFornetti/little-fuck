@@ -1,10 +1,11 @@
+import Timer from 'easytimer.js';
 
 /**
- *  Interface que contém as informações 
+ *  Interface que contém as informações
  */
 export interface Card {
     /** Tipo da carta */
-    type: "common",
+    type: 'common',
     /** O poder da carta. Cartas com valores mais altos ganham das outras com valores mais baixos. */
     value: number
 }
@@ -12,7 +13,7 @@ export interface Card {
 /**
  *  Interface que contém as informações de uma carta que está na mesa de uma rodada.
  */
-interface RoundCard {
+export interface RoundCard {
     /** Informações da carta contida na mesa da rodada */
     card: Card,
     /** ID do jogador que colocou essa carta na mesa */
@@ -20,7 +21,7 @@ interface RoundCard {
 }
 
 /**
- *  Interface que contém as informações de uma partida especial, como as cartas que estão na mesa e seus rankings. No caso, os jogadores 
+ *  Interface que contém as informações de uma partida especial, como as cartas que estão na mesa e seus rankings. No caso, os jogadores
  *  verão as cartas de todos os outros jogadores, e não as suas próprias.
  */
 export interface SpecialMatchCards {
@@ -46,7 +47,7 @@ export interface RoundCards {
 export interface Round {
     /** Cartas que estão atualmente na mesa */
     cards: RoundCards,
-    /** id do jogador que deve jogar a carta atualmente. undefined caso todas já tenham jogado suas cartas */
+    /** Id do jogador que deve jogar a carta atualmente. undefined caso todas já tenham jogado suas cartas */
     nextPlayerId?: string
 }
 
@@ -65,17 +66,16 @@ export interface Match {
             numWinsNeeded?: number
         }
     },
-    /** Quantidade de rodadas que devem ocorrer nessa partida (número de cartas que foram dadas à cada jogador). */
-    numRounds: number,
     /** Id do jogador que deve palpitar atualmente. undefined caso todos já tenham palpitado */
     nextPlayerId?: string,
+    /** Id do jogador que deve jogar (ou jogou) a primeira carta da rodada que estiver em andamento */
+    roundFirstPlayerId?: string,
     /** Informações da rodada. Pode ser undefined se ainda não estiver ocorrendo uma rodada */
     round?: Round
 }
 
-
 /**
- *  Interface que contém as informações de um jogo completo de "little fuck". 
+ *  Interface que contém as informações de um jogo completo de "little fuck".
  *  Contém informações da quantidade de vidas dos jogadores, de partidas e rodadas em andamento
  */
 export interface Game {
@@ -83,12 +83,20 @@ export interface Game {
     playersHealth: {
         [playerId: string]: number
     },
-    /** Tempo máximo em segundos até a ocorrência do próximo evento automático. Ex: começar uma rodada, selecionar a carta aleatória de um jogdor que demorou muito para jogar, etc */
-    currentWaitTime: number,
+    /** Timer countdown até a ocorrência do próximo evento automático. Ex: começar uma rodada, selecionar a carta aleatória de um jogador que demorou muito para jogar, etc */
+    timer: Timer,
     /** Número da partida atual */
     matchNumber: number,
     /** Número da rodada atual */
     roundNumber: number,
+    /** O id do jogador que iniciou palpitando na última (ou atual) partida */
+    currentPlayerId: string,
+    /** Quantidade de rodadas (ou cartas) que devem ocorrer na partida atual (ou que ocorreram na última partida) */
+    numRounds: number,
+    /** Lista de ids de jogadores que "morreram" (não possuem mais vidas / foram eliminados). Estará em ordem inversa de eliminação, ou seja, o primeiro da lista será o último que foi eliminado até o momento */
+    deadPlayersIds: string[],
+    /** Status do jogo é um texto indicando em qual situação está o jogo. Importante para o momento de recadastrar funções no timer caso um jogador faça logout */
+    status: 'starting_match'|'waiting_num_win_response'|'starting_round'|'waiting_select_card'|'ending_match'|'ending_special_match'|'ending_game',
     /** Informações da partida. Pode ser undefined se ainda não estiver ocorrendo uma partida */
     match?: Match
 }
@@ -96,7 +104,7 @@ export interface Game {
 /**
  *  Interface que contém as informações de um lobby, por exemplo, jogadores, informações do jogo em andamento, etc.
  */
-export default interface Lobby {
+interface Lobby {
     /** Identficador único do lobby atual */
     lobbyId: string,
     /** Informações dos jogadores que estão no lobby */
@@ -113,3 +121,4 @@ export default interface Lobby {
     /** Informações do jogo. Pode ser undefined se ainda não estiver ocorrendo um jogo */
     game?: Game
 }
+export default Lobby;

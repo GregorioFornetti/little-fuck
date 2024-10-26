@@ -73,21 +73,25 @@ Com tudo instalado, para começar a desenvolver, siga os passos abaixo:
 
 Instalará as bibliotecas necessárias para subir o servidor do backend.
 
-2 - Na mesma pasta, executar comando `npm run dev`
+2 - Na mesma pasta, executar comando `npm run dev` ou `npm run debug`
 
 Este comando irá subir o servidor localmente, e sempre irá re-executar após alguma modificação dos arquivos do backend.
 Deixar esse terminal aberto e não cancelar a execução, caso contrário, o servidor irá cair.
 O servidor ficará exposto na porta 3000 (http://localhost:3000)
 
+Caso execute em modo de debug, mensagens extras serão enviadas ao frontend para melhor entendimento das trocas de mensagens e parâmetros enviados/recebidos.
+
 3- Na pasta `frontend`, agora em outro terminal, executar o comando `npm install`
 
 Instalará as bibliotecas necessárias para subir o servidor do frontend.
 
-4 - Na mesma pasta, executar comando `npm run dev`
+4 - Na mesma pasta, executar comando `npm run dev` ou `npm run debug`
 
 Este comando irá subir o servidor localmente, e sempre irá re-executar após alguma modificação dos arquivos do frontend.
 Deixar esse terminal aberto e não cancelar a execução, caso contrário, o servidor irá cair.
 O servidor ficará exposto na porta 5173 (http://localhost:5173)
+
+Caso execute em modo de debug, uma interface customizada será utilizada, mostrando mais informações a respeito das trocas de mensagens entre backend e frontend. 
 
 5 - (Opcional) Caso utilize o VSCode com a extensão i18n-ally
 

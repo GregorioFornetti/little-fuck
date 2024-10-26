@@ -1,7 +1,8 @@
-import "../setupTests";
-import type { Game } from "@/interfaces/Lobby";
-import { handleEndGame } from "@/events/game/handlers/endGame";
-import { i18n } from "@/plugins/i18n";
+import '../setupTests';
+import type { Game } from '@/interfaces/Lobby';
+import { handleEndGame } from '@/events/game/handlers/endGame';
+import { i18n } from '@/plugins/i18n';
+import { lobby } from '@/connection';
 
 describe('handleStartGame', () => {
   const leaderPlayer = {
@@ -10,7 +11,7 @@ describe('handleStartGame', () => {
     leader: true,
     ready: true
   };
-  
+
   const anotherPlayer = {
     id: '123',
     name: 'John joe',
@@ -19,26 +20,22 @@ describe('handleStartGame', () => {
   };
 
   test('Deve encerrar um jogo', () => {
-    const connection = require('@/connection');
-
     const game: Game = {
       currentWaitTime: 1,
       matchNumber: 1,
       roundNumber: 1,
       playersHealth: {},
-    }
+    };
 
-    connection.lobby.value = {
+    lobby.value = {
       lobbyId: '123',
       game: game,
       players: [leaderPlayer, anotherPlayer]
-    }
+    };
 
     handleEndGame([]);
 
-    const lobby = connection.lobby.value;
-
-    expect(lobby.game).toBeUndefined();
+    expect(lobby.value.game).toBeUndefined();
   });
 
   test('Deve emitir um erro se o jogador atual não estiver em um lobby', () => {
@@ -46,14 +43,12 @@ describe('handleStartGame', () => {
   });
 
   test('Deve emitir um erro se nenhum jogo estiver começado no lobby atual do jogador', () => {
-    const connection = require('@/connection');
-
-    connection.lobby.value = {
+    lobby.value = {
       lobbyId: '123',
       players: [leaderPlayer, anotherPlayer]
-    }
+    };
 
     expect(() => handleEndGame([]))
-      .toThrow(Error(i18n.t('COMMON.ERROR.GAME_NOT_STARTED')))
+      .toThrow(Error(i18n.t('COMMON.ERROR.GAME_NOT_STARTED')));
   });
 });

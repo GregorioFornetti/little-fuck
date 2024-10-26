@@ -7,8 +7,20 @@
       "GAME_NOT_STARTED": "O jogo ainda não começou!",
       "MATCH_ALREADY_STARTED": "A partida já começou!",
       "MATCH_NOT_STARTED": "A partida ainda não começou!",
+      "NO_MATCH_NEXT_PLAYER": "É preciso ter um jogador definido em `match.nextPlayerId` para receber um palpite do servidor!",
+      "ROUND_ALREADY_STARTED": "A rodada já começou!",
       "ROUND_NOT_STARTED": "A rodada ainda não começou!",
-      "PLAYER_NOT_FOUND": "Jogador não encontrado!"
+      "PLAYER_NOT_FOUND": "Jogador não encontrado!",
+      "LOBBY_NOT_FOUND": "Lobby especificado não foi encontrado!",
+      "NO_NAME": "É preciso fornecer um nome para poder jogar!",
+      "REPEATED_NAME": "Já existe uma pessoa com o mesmo nome no lobby que você deseja entrar. Tente um outro nome!",
+      "LEADER_CANNOT_READY": "O líder não pode dar pronto. O líder tem o poder de começar a partida quando todos os outros estiverem prontos!",
+      "NOT_LEADER": "Apenas o líder da sala pode solicitar que a partida seja iniciada!",
+      "NOT_ALL_READY": "Para começar a partida todos os jogadores precisam estar prontos!",
+      "NOT_YOUR_TURN": "Não é sua vez de tomar uma ação!",
+      "NEGATIVE_IS_INVALID": "Um valor negativo como resposta nesse caso não é válido!",
+      "NUM_WINS_EQUALS_NUM_CARDS": "O último jogador a palpitar não pode deixar com que o somatório de todos os palpites seja igual ao número de cartas da partida!",
+      "INVALID_INDEX": "Não pode escolher uma carta usando um índice negativo ou um índice maior ou igual à quantidade de cartas que o jogador possui!"
     }
   }
 }
