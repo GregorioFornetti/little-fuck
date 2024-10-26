@@ -1,12 +1,18 @@
-import { clientSocket, player, io, serverSocket } from "../setupTests";
+import { player } from "../setupTests";
 import type Lobby from "../../../interfaces/Lobby";
 import { Game } from "../../../interfaces/Lobby";
-import Player from "../../../interfaces/Player";
 import { lobbys, players } from "../../../global";
 import { handleReady } from "../../../events/lobby/handlers/ready";
-import EventsEmitter from "../../../events/Emitter";
+
+const emitPlayerReady = jest.fn();
+const emitPlayerReadyError = jest.fn();
 
 describe("handleReady", () => {
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   const leaderPlayer = {
     id: '12345',
     name: 'leader player',
@@ -21,14 +27,19 @@ describe("handleReady", () => {
     ready: false
   };
 
-  function createLobby(player: Player, lobby: Lobby) {
+  function createLobby(player: any, lobby: Lobby) {
     player.lobby = lobby;
-    player.eventsEmitter = new EventsEmitter(io, serverSocket, lobby.lobbyId);
+    player.eventsEmitter = {
+      Lobby: {
+        emitPlayerReady: emitPlayerReady,
+        emitPlayerReadyError: emitPlayerReadyError
+      }
+    }
     lobbys[lobby.lobbyId] = lobby;
     players[player.playerId] = lobby;
   }
 
-  test("Deve atualizar os valores do jogador para preparado", (done) => {
+  test("Deve atualizar os valores do jogador para preparado caso este não estivesse preparado. Deve emitir para os outros essa troca de status", () => {
     const currentPlayer = { ...anotherPlayer, id: player.playerId };
     const lobby: Lobby = { 
       lobbyId: '123',
@@ -40,29 +51,63 @@ describe("handleReady", () => {
 
     createLobby(player, lobby);
 
-    clientSocket.on('player-ready', (playerId) => {
-      expect(playerId).toBe(player.playerId);
-      expect(player.lobby?.players).toEqual([
+    handleReady(player);
+
+    expect(emitPlayerReady).toHaveBeenCalledWith(player.playerId);
+
+    expect(lobby).toEqual({
+      lobbyId: '123',
+      players: [
         { ...currentPlayer, ready: true },
         anotherPlayer
-      ]);
-
-      done();
-    });
- 
-    handleReady(player);
+      ]
+     })
   });
 
-  test("Deve emitir um erro caso o jogador atual não esteja em um lobby", (done) => {
-    clientSocket.on('player-ready-error', (type) => {
-      expect(type).toBe('not-in-lobby');
-      done();
-    });
+  test("Deve manter o jogador como preparado caso este já estivesse preparado. Não deve emitir para os outros que este jogador se preparou (não mudou nada)", () => {
+    const currentPlayer = { ...anotherPlayer, id: player.playerId, ready: true };
+    const lobby: Lobby = { 
+      lobbyId: '123',
+      players: [
+        currentPlayer,
+        anotherPlayer
+      ]
+    };
+
+    createLobby(player, lobby);
 
     handleReady(player);
+
+    expect(emitPlayerReady).not.toHaveBeenCalled();
+
+    expect(lobby).toEqual({
+      lobbyId: '123',
+      players: [
+        { ...currentPlayer, ready: true },
+        anotherPlayer
+      ]
+     })
   });
 
-  test("Deve emitir um erro caso o jogador atual seja o líder", (done) => {
+  test("Deve emitir um erro caso o jogador atual não esteja em um lobby", () => {
+    const currentPlayer = { ...anotherPlayer, id: player.playerId, ready: true };
+    const lobby: Lobby = { 
+      lobbyId: '123',
+      players: [
+        currentPlayer,
+        anotherPlayer
+      ]
+    };
+
+    createLobby(player, lobby);
+    player.lobby = undefined;
+
+    handleReady(player);
+
+    expect(emitPlayerReadyError).toHaveBeenCalledWith('not-in-lobby');
+  });
+
+  test("Deve emitir um erro caso o jogador atual seja o líder", () => {
     const currentPlayer = { ...anotherPlayer, id: player.playerId };
     const lobby: Lobby = { 
       lobbyId: '123',
@@ -74,15 +119,12 @@ describe("handleReady", () => {
   
     createLobby(player, lobby);
 
-    clientSocket.on('player-ready-error', (type) => {
-      expect(type).toBe('leader');
-      done();
-    });
-
     handleReady(player);
+
+    expect(emitPlayerReadyError).toHaveBeenCalledWith('leader');
   });
 
-  test("Deve emitir um erro caso o jogador atual já esteja em jogo", (done) => {
+  test("Deve emitir um erro caso o jogador atual já esteja em jogo", () => {
     const currentPlayer = { ...anotherPlayer, id: player.playerId };
     const lobby: Lobby = { 
       lobbyId: '123',
@@ -103,11 +145,8 @@ describe("handleReady", () => {
 
     (player.lobby as Lobby).game = game;
 
-    clientSocket.on('player-ready-error', (type) => {
-      expect(type).toBe('in-game');
-      done();
-    });
-
     handleReady(player);
+
+    expect(emitPlayerReadyError).toHaveBeenCalledWith('in-game');
   });
 });
