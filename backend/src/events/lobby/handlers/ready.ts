@@ -1,7 +1,6 @@
 
 import Player from '../../../interfaces/Player';
 
-
 /**
  *  Evento enviado quando o jogador está preparado para começar a partida.
  *  Caso o jogador não estivesse preparado antes, e este esteja em uma sala de um jogo que ainda não está em andamento e não seja o
@@ -10,8 +9,6 @@ import Player from '../../../interfaces/Player';
  *
  *  @param player Objeto contendo informações do jogador que acaba de chamar o evento
  */
-// Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function handleReady(player: Player) {
   const playerInLobby = player.lobby?.players.find((lobbyPlayer) => lobbyPlayer.id === player.playerId);
 
@@ -29,7 +26,7 @@ export function handleReady(player: Player) {
     player.eventsEmitter.Lobby.emitPlayerReadyError('in-game');
     return;
   }
-  
+
   if (!playerInLobby.ready) {
     player.eventsEmitter.Lobby.emitPlayerReady(player.playerId);
     playerInLobby.ready = true;
