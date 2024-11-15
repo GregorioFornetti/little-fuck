@@ -56,6 +56,10 @@ export function handleLogout(player: Player) {
         round.cards.onMatch = round.cards.onMatch.filter(card => card.playerId !== player.playerId);
       }
 
+      if (round.cards.anulledCards.map(card => card.playerId).includes(player.playerId)) {
+        round.cards.anulledCards = round.cards.anulledCards.filter(card => card.playerId !== player.playerId);
+      }
+
       if (round.nextPlayerId === player.playerId) {
         round.nextPlayerId = getNextPlayerId(round.nextPlayerId, lobby);
       }
