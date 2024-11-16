@@ -11,7 +11,9 @@ import { generateInternalServerError } from '../../../events/general/functions/g
 jest.mock('../../../events/game/functions/startNewGame', () => ({
   startNewGame: jest.fn(),
 }));
-jest.mock('../../../events/general/functions/generateInternalServerError');
+jest.mock('../../../events/general/functions/generateInternalServerError', () => ({
+  generateInternalServerError: jest.fn()
+}));
 
 function createLobby(player: Player) {
   lobbys['123'] = {

@@ -14,7 +14,9 @@ import { endSpecialMatch } from '../../../events/match/functions/endSpecialMatch
 const emitWinRoundsNumberUpdate = jest.fn();
 const emitWinRoundsNumberError = jest.fn();
 
-jest.mock('../../../events/general/functions/generateInternalServerError');
+jest.mock('../../../events/general/functions/generateInternalServerError', () => ({
+  generateInternalServerError: jest.fn(),
+}));
 jest.mock('../../../events/match/functions/checkValidFinalGuess', () => ({
   checkValidFinalGuess: jest.fn(() => true),
 }));
