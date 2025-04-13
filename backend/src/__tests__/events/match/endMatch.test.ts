@@ -4,6 +4,7 @@ import i18n from '../../../plugins/i18n';
 import { generateInternalServerError } from '../../../events/general/functions/generateInternalServerError';
 import { endGame } from '../../../events/game/functions/endGame';
 import { startNewMatch } from '../../../events/match/functions/startNewMatch';
+import { createPlayer } from '../../../events/functions/createPlayer';
 import Timer from 'easytimer.js';
 import Lobby from '../../../interfaces/Lobby';
 
@@ -188,5 +189,16 @@ describe('endMatch', () => {
     endMatch(lobby);
 
     expect(generateInternalServerError).toHaveBeenCalledWith(lobby, new Error(i18n.t('COMMON.ERROR.NOT_IN_MATCH')));
+  });
+
+  test('Deve gerar erro interno se não conseguir criar o jogador', () => {
+    const lobby = createLobbyInMatch();
+    (createPlayer as jest.Mock).mockImplementationOnce(() => {
+      throw new Error('Erro ao criar jogador');
+    });
+
+    endMatch(lobby);
+
+    expect(generateInternalServerError).toHaveBeenCalledWith(lobby, new Error('Erro ao criar jogador'));
   });
 });

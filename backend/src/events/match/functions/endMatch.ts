@@ -25,43 +25,47 @@ export function endMatch(lobby: Lobby): void {
     return generateInternalServerError(lobby, new Error(i18n.t('COMMON.ERROR.NOT_IN_MATCH')));
   }
 
-  const player = createPlayer(io, lobby.players[0].id);
+  try {
+    const player = createPlayer(io, lobby.players[0].id);
 
-  const playersHealthUpdate: { [playerId: string]: number } = {};
-  for (const playerId in lobby.game.match.players) {
-    const playerInfo = lobby.game.match.players[playerId];
-    playersHealthUpdate[playerId] = playerInfo.numWinsNeeded === playerInfo.numWonRounds ? 0 : -1;
-    lobby.game.playersHealth[playerId] += playersHealthUpdate[playerId];
+    const playersHealthUpdate: { [playerId: string]: number } = {};
+    for (const playerId in lobby.game.match.players) {
+      const playerInfo = lobby.game.match.players[playerId];
+      playersHealthUpdate[playerId] = playerInfo.numWinsNeeded === playerInfo.numWonRounds ? 0 : -1;
+      lobby.game.playersHealth[playerId] += playersHealthUpdate[playerId];
 
-    if (lobby.game.playersHealth[playerId] <= 0 && !lobby.game.deadPlayersIds.includes(playerId)) {
-      lobby.game.deadPlayersIds.push(playerId);
+      if (lobby.game.playersHealth[playerId] <= 0 && !lobby.game.deadPlayersIds.includes(playerId)) {
+        lobby.game.deadPlayersIds.push(playerId);
+      }
     }
-  }
 
-  player.eventsEmitter.Match.emitEndMatch(playersHealthUpdate);
+    player.eventsEmitter.Match.emitEndMatch(playersHealthUpdate);
 
-  lobby.game.match = undefined;
+    lobby.game.match = undefined;
 
-  lobby.game.timer.stop();
-  lobby.game.timer = new Timer();
+    lobby.game.timer.stop();
+    lobby.game.timer = new Timer();
 
-  if (lobby.game.deadPlayersIds.length >= Object.keys(lobby.game.playersHealth).length - 1) {
-    // Só restou um ou nenhum jogador vivo, ou seja, o jogo acabou
-    lobby.game.timer.addEventListener('targetAchieved', () => {
-      endGame(lobby);
-    });
-    lobby.game.timer.start({ countdown: true, startValues: { seconds: 5 } });
+    if (lobby.game.deadPlayersIds.length >= Object.keys(lobby.game.playersHealth).length - 1) {
+      // Só restou um ou nenhum jogador vivo, ou seja, o jogo acabou
+      lobby.game.timer.addEventListener('targetAchieved', () => {
+        endGame(lobby);
+      });
+      lobby.game.timer.start({ countdown: true, startValues: { seconds: 5 } });
 
-    lobby.game.status = 'ending_game';
-  } else {
-    // Ainda existem mais de um jogador vivo, então uma nova partida será iniciada
-    lobby.game.timer.addEventListener('targetAchieved', () => {
-      startNewMatch(lobby);
-    });
-    lobby.game.timer.start({ countdown: true, startValues: { seconds: 5 } });
+      lobby.game.status = 'ending_game';
+    } else {
+      // Ainda existem mais de um jogador vivo, então uma nova partida será iniciada
+      lobby.game.timer.addEventListener('targetAchieved', () => {
+        startNewMatch(lobby);
+      });
+      lobby.game.timer.start({ countdown: true, startValues: { seconds: 5 } });
 
-    lobby.game.matchNumber++;
+      lobby.game.matchNumber++;
 
-    lobby.game.status = 'starting_match';
+      lobby.game.status = 'starting_match';
+    }
+  } catch (error) {
+    generateInternalServerError(lobby, error as Error);
   }
 }
