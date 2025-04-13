@@ -40,6 +40,9 @@ jest.mock('../../events/general/functions/generateInternalServerError.ts');
 jest.mock('../../index.ts', () => ({
   io: 'mocked io',
 }));
+jest.mock('../../events/round/functions/insertCard.ts', () => ({
+  insertCard: jest.fn(),
+}));
 
 describe('Testes de recebimento de mensagem / eventos pelo servidor', () => {
 
