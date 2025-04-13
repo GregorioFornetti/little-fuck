@@ -80,7 +80,7 @@ function createLobbyInRound(player: any) {
   };
 }
 
-describe('handleWinRoundsNumberResponse', () => {
+describe('handleSelectCard', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
