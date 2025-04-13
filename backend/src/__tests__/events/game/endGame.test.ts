@@ -1,6 +1,7 @@
 
 import { endGame } from '../../../events/game/functions/endGame';
 import { generateInternalServerError } from '../../../events/general/functions/generateInternalServerError';
+import { createPlayer } from '../../../events/functions/createPlayer';
 import Lobby from '../../../interfaces/Lobby';
 import Timer from 'easytimer.js';
 import i18n from '../../../plugins/i18n';
@@ -96,6 +97,19 @@ describe('endGame', () => {
     endGame(lobby);
 
     expect(generateInternalServerError).toHaveBeenCalledWith(lobby, new Error(i18n.t('COMMON.ERROR.NOT_IN_GAME')));
+    expect(emitEndGame).not.toHaveBeenCalled();
+  });
+
+  test('Caso ocorra erro ao gerar o jogador, deve gerar erro interno', () => {
+    const lobby = generateLobbyInGame();
+
+    (createPlayer as jest.Mock).mockImplementationOnce(() => {
+      throw new Error('Erro ao criar jogador');
+    });
+
+    endGame(lobby);
+
+    expect(generateInternalServerError).toHaveBeenCalledWith(lobby, new Error('Erro ao criar jogador'));
     expect(emitEndGame).not.toHaveBeenCalled();
   });
 });

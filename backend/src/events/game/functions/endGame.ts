@@ -19,17 +19,21 @@ export function endGame(lobby: Lobby): void {
     return generateInternalServerError(lobby, new Error(i18n.t('COMMON.ERROR.NOT_IN_GAME')));
   }
 
-  const player = createPlayer(io, lobby.players[0].id);
-  const playersRanks: string[] = lobby.game.deadPlayersIds;
+  try {
+    const player = createPlayer(io, lobby.players[0].id);
+    const playersRanks: string[] = lobby.game.deadPlayersIds;
 
-  for (const playerId in lobby.game?.playersHealth) {
-    if (lobby.game?.playersHealth[playerId] > 0) {
-      playersRanks.push(playerId); // Se tiver um jogador vivo este será colocado na lista de ranking na ultima posição (que será invertida e ele ficará em primeiro, o vencedor)
-      break;
+    for (const playerId in lobby.game?.playersHealth) {
+      if (lobby.game?.playersHealth[playerId] > 0) {
+        playersRanks.push(playerId); // Se tiver um jogador vivo este será colocado na lista de ranking na ultima posição (que será invertida e ele ficará em primeiro, o vencedor)
+        break;
+      }
     }
+
+    player.eventsEmitter.Game.emitEndGame(playersRanks.reverse());
+
+    lobby.game = undefined;
+  } catch (error) {
+    generateInternalServerError(lobby, error as Error);
   }
-
-  player.eventsEmitter.Game.emitEndGame(playersRanks.reverse());
-
-  lobby.game = undefined;
 }
