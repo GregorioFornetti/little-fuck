@@ -36,6 +36,9 @@ jest.mock('../../events/game/functions/startNewGame.ts', () => ({
 jest.mock('../../events/match/functions/startNewMatch.ts', () => ({
   startNewMatch: jest.fn(),
 }));
+jest.mock('../../events/match/functions/endSpecialMatch.ts', () => ({
+  endSpecialMatch: jest.fn(),
+}));
 jest.mock('../../events/general/functions/generateInternalServerError.ts');
 jest.mock('../../index.ts', () => ({
   io: 'mocked io',
