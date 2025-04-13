@@ -5,6 +5,7 @@ import { generateInternalServerError } from '../../../events/general/functions/g
 import { endRound } from '../../../events/round/functions/endRound';
 import { insertCard } from '../../../events/round/functions/insertCard';
 import { RoundCard } from '../../../interfaces/Lobby';
+import { createPlayer } from '../../../events/functions/createPlayer';
 import Lobby from '../../../interfaces/Lobby';
 import Timer from 'easytimer.js';
 
@@ -139,6 +140,14 @@ describe('endSpecialMatch', () => {
       ]
     });
 
+    expect(lobby.game!.match!.round!.cards).toEqual({
+      onMatch: [
+        { card: { value: 1, type: 'common' }, playerId: '1' },
+        { card: { value: 2, type: 'common' }, playerId: '2' },
+        { card: { value: 3, type: 'common' }, playerId: '3' }
+      ]
+    });
+
     expect(endRound).toHaveBeenCalledWith(lobby);
   });
 
@@ -163,7 +172,7 @@ describe('endSpecialMatch', () => {
   test('Deve gerar um erro interno se ocorrer um erro ao finalizar rodada', () => {
     const lobby = generateLobbyInMatch();
 
-    (endRound as jest.Mock).mockImplementation(() => {
+    (endRound as jest.Mock).mockImplementationOnce(() => {
       throw new Error('Error ending round');
     });
 
@@ -175,12 +184,12 @@ describe('endSpecialMatch', () => {
   test('Deve gerar um erro interno se ocorrer um erro ao criar o jogador', () => {
     const lobby = generateLobbyInMatch();
 
-    (emitTableUpdate as jest.Mock).mockImplementation(() => {
-      throw new Error('Error emitting table update');
+    (createPlayer as jest.Mock).mockImplementationOnce(() => {
+      throw new Error('Error creating player');
     });
 
     endSpecialMatch(lobby);
 
-    expect(generateInternalServerError).toHaveBeenCalledWith(lobby, new Error('Error emitting table update'));
+    expect(generateInternalServerError).toHaveBeenCalledWith(lobby, new Error('Error creating player'));
   });
 });
