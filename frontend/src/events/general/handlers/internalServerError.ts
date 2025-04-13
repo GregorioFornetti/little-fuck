@@ -1,4 +1,4 @@
-
+import { lobby } from '@/connection';
 /**
  *  Evento indicando que um erro ocorreu no servidor.
  *  Esse erro não era esperado, e provavelmente faria com que o servidor parasse, mas foi "contido".
@@ -6,5 +6,5 @@
  *  e um log desse evento será feito no servidor para posterior correção...
  */
 export function handleInternalServerError() {
-
+  lobby.value = null;
 }
