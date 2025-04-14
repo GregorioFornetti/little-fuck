@@ -12,7 +12,9 @@ const emitPlayerLogoutError = jest.fn();
 const emitPlayerLogout = jest.fn();
 const resetTimer = jest.fn();
 
-jest.mock('../../../events/general/functions/generateInternalServerError');
+jest.mock('../../../events/general/functions/generateInternalServerError', () => ({
+  generateInternalServerError: jest.fn(),
+}));
 jest.mock('../../../events/functions/getNextPlayerId', () => ({
   getNextPlayerId: jest.fn(() => '2'),
 }));

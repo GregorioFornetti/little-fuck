@@ -13,7 +13,9 @@ import { endRound } from '../../../events/round/functions/endRound';
 const emitTableUpdate = jest.fn();
 const emitSelectCardError = jest.fn();
 
-jest.mock('../../../events/general/functions/generateInternalServerError');
+jest.mock('../../../events/general/functions/generateInternalServerError', () => ({
+  generateInternalServerError: jest.fn()
+}));
 jest.mock('../../../events/functions/getNextPlayerId', () => ({
   getNextPlayerId: jest.fn(() => 'player2'),
 }));
