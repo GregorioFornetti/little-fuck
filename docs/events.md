@@ -350,6 +350,8 @@ Evento indicando que ocorreu um erro ao iniciar a partida. Esse erro pode ocorre
 
 
 ### reconnect
+> **Reconexão:** o frontend envia um id estável de jogador (uth.playerId, guardado no navegador) ao conectar. Se esse id já estiver em uma sala, o servidor responde com este evento econnect trazendo o estado atual da sala, e o jogador volta de onde parou (inclusive no meio de uma partida). Desconectar (ex: recarregar a página) **não** tira o jogador da sala: ele só é removido se ficar offline por mais de 10 minutos, ou se sair explicitamente pelo evento logout.
+
 
 Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
 

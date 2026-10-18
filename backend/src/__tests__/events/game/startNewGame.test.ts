@@ -43,7 +43,7 @@ describe('startNewGame', () => {
     expect(player.lobby?.game?.currentPlayerId).toBe(player?.lobby?.players[player.lobby.players.length - 1].id);
     expect(player.lobby?.game?.status).toBe('starting_match');
     expect(player.lobby?.game?.deadPlayersIds).toEqual([]);
-    expect(player.lobby?.game?.numRounds).toBe(1);
+    expect(player.lobby?.game?.numRounds).toBe(0);
     expect(player.lobby?.game?.playersHealth).toEqual({
       [player.playerId]: 3,
       [lobbyClientsSockets[0].id!]: 3

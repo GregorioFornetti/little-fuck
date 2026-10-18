@@ -5,6 +5,7 @@ import i18n from '../../../plugins/i18n';
 import { createPlayer } from '../../functions/createPlayer';
 import { io } from '../../..';
 import Timer from 'easytimer.js';
+import { PLAYER_ACTION_TIME_SECONDS } from '../../../global';
 import { generateAutomaticSelectCard } from './generateAutomaticSelectCard';
 
 /**
@@ -42,7 +43,7 @@ export function startNewRound(lobby: Lobby): void {
     lobby.game.status = 'waiting_select_card';
     lobby.game.timer.stop();
     lobby.game.timer = new Timer();
-    lobby.game.timer.start({ countdown: true, startValues: { seconds: 15 } });
+    lobby.game.timer.start({ countdown: true, startValues: { seconds: PLAYER_ACTION_TIME_SECONDS } });
     lobby.game.timer.addEventListener('targetAchieved', () => {
       generateAutomaticSelectCard(lobby);
     });

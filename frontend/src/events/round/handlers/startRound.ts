@@ -24,6 +24,8 @@ export function handleStartRound(firstPlayerId: string) {
     throw new Error(i18n.t('COMMON.ERROR.ROUND_ALREADY_STARTED'));
   }
 
+  lobby.value.game.lastRound = undefined;
+
   lobby.value.game.match.round = {
     cards: {
       onMatch: [],

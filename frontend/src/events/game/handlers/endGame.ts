@@ -7,7 +7,7 @@ import { i18n } from '@/plugins/i18n';
  *  @param playerRanks lista da classificação final dos jogadores. A primeira posição é o jogador vencedor,
  *  a segunda é o jogador que ficou em segundo lugar, e assim por diante.
  */
-export function handleEndGame(_playerRanks: string[]) {
+export function handleEndGame(playerRanks: string[]) {
   if (lobby.value === null) {
     throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
   }
@@ -16,5 +16,7 @@ export function handleEndGame(_playerRanks: string[]) {
     throw new Error(i18n.t('COMMON.ERROR.GAME_NOT_STARTED'));
   }
 
+  // Guarda a classificação para a tela de fim de jogo antes de encerrar o jogo
+  lobby.value.gameRanking = playerRanks;
   lobby.value.game = undefined;
 }

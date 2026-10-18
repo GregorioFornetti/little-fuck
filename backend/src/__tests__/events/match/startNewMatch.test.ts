@@ -223,15 +223,15 @@ describe('startNewMatch', () => {
     );
   });
 
-  test('O timer deve ser configurado corretamente, ou seja, o jogador atual deve realizar uma jogada automaticamente caso não faça em 15 segundos', () => {
+  test('O timer deve ser configurado corretamente, ou seja, o jogador atual deve realizar uma jogada automaticamente caso não faça em 18 segundos', () => {
 
     const lobby = generateLobbyInGame();
 
     startNewMatch(lobby);
 
     expect(lobby.game?.timer.getConfig().countdown).toBe(true);
-    expect(lobby.game?.timer.getTimeValues().seconds).toBe(15);
-    jest.advanceTimersByTime(15000);
+    expect(lobby.game?.timer.getTimeValues().seconds).toBe(18);
+    jest.advanceTimersByTime(18000);
 
     expect(generateAutomaticNumWinResponse).toHaveBeenCalledWith(lobby);
   });

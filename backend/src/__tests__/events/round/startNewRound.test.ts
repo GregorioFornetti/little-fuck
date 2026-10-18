@@ -120,8 +120,8 @@ describe('startNewRound', () => {
     expect(emitStartRound).toHaveBeenCalledWith(lobby.game?.match?.roundFirstPlayerId);
 
     expect(lobby.game?.timer.getConfig().countdown).toBe(true);
-    expect(lobby.game?.timer.getTimeValues().seconds).toBe(15);
-    jest.advanceTimersByTime(15000);
+    expect(lobby.game?.timer.getTimeValues().seconds).toBe(18);
+    jest.advanceTimersByTime(18000);
     expect(generateAutomaticSelectCard).toHaveBeenCalledWith(lobby);
   });
 

@@ -4,6 +4,7 @@ import i18n from '../../../plugins/i18n';
 import { createPlayer } from '../../functions/createPlayer';
 import { io } from '../../..';
 import Timer from 'easytimer.js';
+import { ROUND_END_TIME_SECONDS } from '../../../global';
 import { endMatch } from '../../match/functions/endMatch';
 import { startNewRound } from './startNewRound';
 
@@ -53,7 +54,7 @@ export function endRound(lobby: Lobby): void {
     lobby.game.timer.addEventListener('targetAchieved', () => {
       endMatch(lobby);
     });
-    lobby.game.timer.start({ countdown: true, startValues: { seconds: 5 } });
+    lobby.game.timer.start({ countdown: true, startValues: { seconds: ROUND_END_TIME_SECONDS } });
 
     lobby.game.roundNumber = 1;
 
@@ -64,7 +65,7 @@ export function endRound(lobby: Lobby): void {
     lobby.game.timer.addEventListener('targetAchieved', () => {
       startNewRound(lobby);
     });
-    lobby.game.timer.start({ countdown: true, startValues: { seconds: 5 } });
+    lobby.game.timer.start({ countdown: true, startValues: { seconds: ROUND_END_TIME_SECONDS } });
 
     lobby.game.roundNumber++;
 

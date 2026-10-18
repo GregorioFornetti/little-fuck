@@ -1,7 +1,12 @@
 import '../setupTests';
 import { handlePlayerLogout } from '@/events/general/handlers/playerLogout';
 import { i18n } from '@/plugins/i18n';
-import { lobby, socket } from '@/connection';
+import { lobby } from '@/connection';
+const connectionMock = jest.requireMock('@/connection') as { playerId?: string };
+
+const setCurrentPlayerId = (id: string) => {
+  connectionMock.playerId = id;
+};
 
 describe('handlePlayerLogout', () => {
   const leaderPlayer = {
@@ -20,7 +25,7 @@ describe('handlePlayerLogout', () => {
 
   test('Deve remover o jogador do lobby', () => {
 
-    socket.id = leaderPlayer.id;
+    setCurrentPlayerId(leaderPlayer.id);
     lobby.value = {
       lobbyId: '123',
       players: [leaderPlayer, anotherPlayer]
@@ -33,7 +38,7 @@ describe('handlePlayerLogout', () => {
   });
 
   test('Deve remover o jogador atual do lobby e definir o lobby atual como null', () => {
-    socket.id = leaderPlayer.id;
+    setCurrentPlayerId(leaderPlayer.id);
     lobby.value = {
       lobbyId: '123',
       players: [leaderPlayer, anotherPlayer, { ...anotherPlayer, id: '999' }]
@@ -55,7 +60,7 @@ describe('handlePlayerLogout', () => {
   });
 
   test('Deve emitir um erro se o jogador informado não estiver no lobby', () => {
-    socket.id = leaderPlayer.id;
+    setCurrentPlayerId(leaderPlayer.id);
     lobby.value = {
       lobbyId: '123',
       players: [leaderPlayer]
@@ -66,7 +71,7 @@ describe('handlePlayerLogout', () => {
   });
 
   test('Deve promover o primeiro jogador da lista a líder do lobby assim que líder atual sair', () => {
-    socket.id = anotherPlayer.id;
+    setCurrentPlayerId(anotherPlayer.id);
     lobby.value = {
       lobbyId: '123',
       players: [leaderPlayer, anotherPlayer]

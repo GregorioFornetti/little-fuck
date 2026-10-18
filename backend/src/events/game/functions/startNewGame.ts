@@ -32,7 +32,8 @@ export function startNewGame(lobby: Lobby): void {
     currentPlayerId: lobby.players[lobby.players.length - 1].id,
     status: 'starting_match',
     deadPlayersIds: [],
-    numRounds: 1,
+    // Comeca em 0 para que a primeira partida tenha 1 carta (partida especial), a segunda 2, e assim por diante
+    numRounds: 0,
     playersHealth,
     timer,
   };

@@ -25,4 +25,8 @@ export function handleEndMatch(playerHealthUpdate: { [playerId: string]: number 
   for (const playerId in playerHealthUpdate) {
     lobby.value.game.playersHealth[playerId] += playerHealthUpdate[playerId];
   }
+
+  lobby.value.game.match = undefined;
+  lobby.value.game.matchNumber += 1;
+  lobby.value.game.roundNumber = 1;
 }

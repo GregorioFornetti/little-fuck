@@ -93,6 +93,54 @@ describe('handleWinRoundsNumberUpdate', () => {
       .toThrow(Error(i18n.t('COMMON.ERROR.MATCH_NOT_STARTED')));
   });
 
+  test('Deve aceitar palpites durante a partida especial, mesmo com uma rodada existente', () => {
+    const round: Round = {
+      cards: {
+        onMatch: [{
+          card: { type: 'common', value: 7 },
+          playerId: anotherPlayer.id
+        }],
+        anulledCards: []
+      }
+    };
+
+    const match: Match = {
+      players: {
+        [leaderPlayer.id]: {
+          numCards: 1,
+          numWonRounds: 0
+        },
+        [anotherPlayer.id]: {
+          numCards: 1,
+          numWonRounds: 0
+        }
+      },
+      nextPlayerId: leaderPlayer.id,
+      currentPlayerCards: [],
+      numRounds: 1,
+      round
+    };
+
+    const game: Game = {
+      currentWaitTime: 1,
+      matchNumber: 1,
+      roundNumber: 1,
+      playersHealth: {},
+      match
+    };
+
+    lobby.value = {
+      lobbyId: '123',
+      game: game,
+      players: [leaderPlayer, anotherPlayer]
+    };
+
+    handleWinRoundsNumberUpdate(EXPECTED_PLAYER_NUM_WONS_ROUNDS, EXPECTED_NEXT_PLAYER_ID);
+
+    expect(lobby.value.game?.match?.players[leaderPlayer.id].numWinsNeeded)
+      .toEqual(EXPECTED_PLAYER_NUM_WONS_ROUNDS);
+    expect(lobby.value.game?.match?.nextPlayerId).toEqual(EXPECTED_NEXT_PLAYER_ID);
+  });
   test('Deve emitir um erro se estiver com uma rodada em andamento', () => {
     const round: Round = {
       cards: {
@@ -114,7 +162,7 @@ describe('handleWinRoundsNumberUpdate', () => {
       },
       nextPlayerId: leaderPlayer.id,
       currentPlayerCards: [],
-      numRounds: 1,
+      numRounds: 2,
       round
     };
 

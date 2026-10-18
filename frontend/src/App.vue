@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { socket } from './connection';
+import { lobby, socket } from './connection';
 import { ref } from 'vue';
 
 import HomePage from './components/pages/HomePage.vue';
+import LobbyPage from './components/pages/LobbyPage.vue';
+import GamePage from './components/pages/GamePage.vue';
+import EndGamePage from './components/pages/EndGamePage.vue';
 import LoadingSpinner from './components/LoadingSpinner.vue';
 
 const connectionStatus = ref < 'loading' | 'connected' | 'disconnected' > ('loading');
@@ -34,8 +37,14 @@ socket.on('connect_error', (err) => {
   >
     <h1>Não foi possível se conectar ao servidor.<br>Tente novamente mais tarde</h1>
   </div>
+  <!-- Game over: final ranking -->
+  <EndGamePage v-if="connectionStatus === 'connected' && lobby?.gameRanking" />
+  <!-- In a game -->
+  <GamePage v-else-if="connectionStatus === 'connected' && lobby?.game" />
+  <!-- In a lobby -->
+  <LobbyPage v-else-if="connectionStatus === 'connected' && lobby" />
   <!-- Connection success -->
-  <HomePage v-if="connectionStatus === 'connected'" />
+  <HomePage v-else-if="connectionStatus === 'connected'" />
 </template>
 
 <style scoped>

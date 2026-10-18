@@ -38,5 +38,6 @@ export function handleStartMatch(cards: Card[], firstPlayerId: string) {
     nextPlayerId: firstPlayerId
   };
 
+  lobby.value.game.lastRound = undefined;
   lobby.value.game.match = match;
 }

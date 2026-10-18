@@ -9,7 +9,8 @@ import { lobby } from '@/connection';
 
 jest.mock('@/connection', () => ({
   lobby: { value: null },
-  socket: {}
+  socket: {},
+  playerId: undefined
 }));
 
 const httpServer = createServer();

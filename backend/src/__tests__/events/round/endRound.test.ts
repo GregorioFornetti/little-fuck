@@ -155,8 +155,8 @@ describe('endRound', () => {
 
     // Testing timer
     expect(lobby?.game?.timer.getConfig().countdown).toBe(true);
-    expect(lobby?.game?.timer.getTimeValues().seconds).toBe(5);
-    jest.advanceTimersByTime(5000);
+    expect(lobby?.game?.timer.getTimeValues().seconds).toBe(10);
+    jest.advanceTimersByTime(10000);
     expect(endMatch).toHaveBeenCalledWith(lobby);
 
     expect(lobby.game!.roundNumber).toBe(1);
@@ -171,8 +171,8 @@ describe('endRound', () => {
 
     // Testing timer
     expect(lobby?.game?.timer.getConfig().countdown).toBe(true);
-    expect(lobby?.game?.timer.getTimeValues().seconds).toBe(5);
-    jest.advanceTimersByTime(5000);
+    expect(lobby?.game?.timer.getTimeValues().seconds).toBe(10);
+    jest.advanceTimersByTime(10000);
     expect(startNewRound).toHaveBeenCalledWith(lobby);
 
     expect(lobby.game!.roundNumber).toBe(2);

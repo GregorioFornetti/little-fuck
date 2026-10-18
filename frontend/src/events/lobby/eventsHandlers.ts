@@ -117,7 +117,17 @@ export default function addDefaultLobbyHandlers(socket: Socket) {
   const lobbyEventsHandlersAdder = new LobbyEventsHandlersAdder(socket);
 
   lobbyEventsHandlersAdder.joinLobbySuccess(handleJoinLobbySuccess);
-  lobbyEventsHandlersAdder.joinLobbyError(handleJoinLobbyError);
+  // O erro de entrar na sala é exibido pela interface (modal da HomePage).
+  // A interface registra seu próprio listener depois deste.
+  // Por isso o erro é apenas registrado aqui, sem lançá-lo.
+  // Lançar o erro interromperia os demais listeners do evento (ver Emitter do socket.io).
+  lobbyEventsHandlersAdder.joinLobbyError((type) => {
+    try {
+      handleJoinLobbyError(type);
+    } catch (error) {
+      console.error(error);
+    }
+  });
   lobbyEventsHandlersAdder.playerJoin(handlePlayerJoin);
   lobbyEventsHandlersAdder.playerReady(handlePlayerReady);
   lobbyEventsHandlersAdder.playerReadyError(handlePlayerReadyError);

@@ -45,5 +45,6 @@ export function handleStartSpecialMatch(cards: SpecialMatchCards, firstPlayerId:
     }
   };
 
+  lobby.value.game.lastRound = undefined;
   lobby.value.game.match = specialMatch;
 }

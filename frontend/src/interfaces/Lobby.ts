@@ -81,6 +81,18 @@ export interface Match {
 }
 
 /**
+ *  Interface que contém o resultado de uma rodada já finalizada, como as cartas que ficaram na mesa e o vencedor.
+ */
+export interface FinishedRound {
+    /** Cartas que ficaram na mesa ao final da rodada */
+    cards: RoundCards,
+    /** Id do jogador que venceu a rodada. Será um id qualquer do lobby em caso de empate */
+    winnerId: string,
+    /** Pontos ganhos pelo vencedor. Será 0 em caso de empate */
+    points: number
+}
+
+/**
  *  Interface que contém as informações de um jogo completo de "little fuck".
  *  Contém informações da quantidade de vidas dos jogadores, de partidas e rodadas em andamento
  */
@@ -96,7 +108,9 @@ export interface Game {
     /** Número da rodada atual */
     roundNumber: number,
     /** Informações da partida. Pode ser undefined se ainda não estiver ocorrendo uma partida */
-    match?: Match
+    match?: Match,
+    /** Resultado da última rodada finalizada, para exibir a mesa final antes da próxima rodada. Pode ser undefined se nenhuma rodada terminou ainda */
+    lastRound?: FinishedRound
 }
 
 /**
@@ -117,5 +131,7 @@ export interface Lobby {
         ready?: boolean
     }[],
     /** Informações do jogo. Pode ser undefined se ainda não estiver ocorrendo um jogo */
-    game?: Game
+    game?: Game,
+    /** Classificação final do último jogo, com ids de jogadores do vencedor ao primeiro eliminado. Pode ser undefined se nenhum jogo terminou */
+    gameRanking?: string[]
 }

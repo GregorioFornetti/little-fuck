@@ -25,6 +25,16 @@ export function handleEndRound(winnerId: string, points: number) {
     throw new Error(i18n.t('COMMON.ERROR.ROUND_NOT_STARTED'));
   }
 
+  const isLastRound = lobby.value.game.roundNumber >= lobby.value.game.match.numRounds;
+
+  // Guarda a mesa final e o vencedor para serem exibidos antes da próxima rodada
+  lobby.value.game.lastRound = {
+    cards: lobby.value.game.match.round.cards,
+    winnerId,
+    points
+  };
+
   lobby.value.game.match.round = undefined;
   lobby.value.game.match.players[winnerId].numWonRounds += points;
+  lobby.value.game.roundNumber = isLastRound ? 1 : lobby.value.game.roundNumber + 1;
 }

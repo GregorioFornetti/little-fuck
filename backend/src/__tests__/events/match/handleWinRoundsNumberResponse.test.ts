@@ -168,8 +168,8 @@ describe('handleWinRoundsNumberResponse', () => {
 
     // Testing timer
     expect(player.lobby?.game?.timer.getConfig().countdown).toBe(true);
-    expect(player.lobby?.game?.timer.getTimeValues().seconds).toBe(15);
-    jest.advanceTimersByTime(15000);
+    expect(player.lobby?.game?.timer.getTimeValues().seconds).toBe(18);
+    jest.advanceTimersByTime(18000);
     expect(generateAutomaticNumWinResponse).toHaveBeenCalledWith(player.lobby!);
   });
 

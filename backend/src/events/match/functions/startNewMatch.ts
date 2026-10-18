@@ -12,6 +12,7 @@ import { createPlayer } from '../../functions/createPlayer';
 import { io } from '../../..';
 import { insertCard } from '../../round/functions/insertCard';
 import Timer from 'easytimer.js';
+import { PLAYER_ACTION_TIME_SECONDS } from '../../../global';
 import { generateAutomaticNumWinResponse } from './generateAutomaticNumWinResponse';
 
 /**
@@ -84,7 +85,7 @@ export function startNewMatch(lobby: Lobby): void {
     timer.addEventListener('targetAchieved', () => {
       generateAutomaticNumWinResponse(lobby);
     });
-    timer.start({ countdown: true, startValues: { seconds: 15 } });
+    timer.start({ countdown: true, startValues: { seconds: PLAYER_ACTION_TIME_SECONDS } });
     lobby.game.timer = timer;
 
   } catch (error) {

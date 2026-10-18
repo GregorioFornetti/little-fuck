@@ -6,6 +6,7 @@ import { getNextPlayerId } from '../../functions/getNextPlayerId';
 import { endRound } from '../functions/endRound';
 import { generateAutomaticSelectCard } from '../functions/generateAutomaticSelectCard';
 import Timer from 'easytimer.js';
+import { PLAYER_ACTION_TIME_SECONDS } from '../../../global';
 
 /**
  *  Evento enviado para selecionar a carta que o jogador jogará na rodada atual.
@@ -45,9 +46,12 @@ export function handleSelectCard(player: Player, cardIndex: number): void {
   try {
     lobby.game.timer.stop();
 
+    // A carta jogada é descartada da mão do jogador
+    const [playedCard] = lobby.game.match.players[player.playerId].cards.splice(cardIndex, 1);
+
     const newTableCards = insertCard(
       lobby.game.match.round.cards,
-      { card: lobby.game.match.players[player.playerId].cards[cardIndex], playerId: player.playerId }
+      { card: playedCard, playerId: player.playerId }
     );
     lobby.game.match.round.cards = newTableCards;
 
@@ -55,17 +59,19 @@ export function handleSelectCard(player: Player, cardIndex: number): void {
     if (lobby.game.match.roundFirstPlayerId === lobby.game.match.round.nextPlayerId) {
       // O último jogador acabou de selecionar a carta, então é hora de finalizar a rodada
       lobby.game.match.round.nextPlayerId = undefined;
+      // A mesa deve ser atualizada antes de finalizar a rodada, pois `endRound` limpa a rodada atual
+      player.eventsEmitter.Round.emitTableUpdate(newTableCards, undefined);
       endRound(lobby);
     } else {
       // Ainda há jogadores que precisam selecionar cartas. Deve iniciar um timer para selecionar uma carta automaticamente caso o jogador não selecione a tempo
       lobby.game.timer = new Timer();
-      lobby.game.timer.start({ countdown: true, startValues: { seconds: 15 } });
+      lobby.game.timer.start({ countdown: true, startValues: { seconds: PLAYER_ACTION_TIME_SECONDS } });
       lobby.game.timer.addEventListener('targetAchieved', () => {
         generateAutomaticSelectCard(lobby);
       });
-    }
 
-    player.eventsEmitter.Round.emitTableUpdate(newTableCards, lobby.game.match.round.nextPlayerId);
+      player.eventsEmitter.Round.emitTableUpdate(newTableCards, lobby.game.match.round.nextPlayerId);
+    }
   } catch (error) {
     generateInternalServerError(player.lobby, error as Error);
   }

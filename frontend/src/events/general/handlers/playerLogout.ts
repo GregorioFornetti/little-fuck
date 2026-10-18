@@ -1,5 +1,5 @@
 
-import { lobby, socket } from '@/connection';
+import { lobby, playerId } from '@/connection';
 import { i18n } from '@/plugins/i18n';
 
 /**
@@ -20,11 +20,11 @@ export function handlePlayerLogout(id: string) {
   const isLeader = lobby.value.players[playerIndex].leader;
   lobby.value.players.splice(playerIndex, 1);
 
-  if (isLeader) {
+  if (isLeader && lobby.value.players.length > 0) {
     lobby.value.players[0].leader = true;
   }
 
-  if (socket.id === id) {
+  if (playerId === id) {
     lobby.value = null;
   }
 }

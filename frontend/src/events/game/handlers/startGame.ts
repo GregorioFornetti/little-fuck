@@ -32,5 +32,6 @@ export function handleStartGame() {
     playersHealth
   };
 
+  lobby.value.gameRanking = undefined;
   lobby.value.game = game;
 }

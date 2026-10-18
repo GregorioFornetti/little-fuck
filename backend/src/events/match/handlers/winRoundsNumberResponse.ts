@@ -1,4 +1,5 @@
 import Timer from 'easytimer.js';
+import { PLAYER_ACTION_TIME_SECONDS } from '../../../global';
 import Player from '../../../interfaces/Player';
 import { getNextPlayerId } from '../../functions/getNextPlayerId';
 import { generateInternalServerError } from '../../general/functions/generateInternalServerError';
@@ -86,7 +87,7 @@ export function handleWinRoundsNumberResponse(player: Player, numWinsRounds: num
       }
     } else {
       // Ainda restam palpites a serem feitos... É preciso cadastrar o timer para palpite automático do próximo player
-      lobby.game.timer.start({ countdown: true, startValues: { seconds: 15 } });
+      lobby.game.timer.start({ countdown: true, startValues: { seconds: PLAYER_ACTION_TIME_SECONDS } });
       lobby.game.timer.addEventListener('targetAchieved', () => {
         generateAutomaticNumWinResponse(lobby);
       });

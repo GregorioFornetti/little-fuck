@@ -12,5 +12,5 @@ import Lobby from '../../../interfaces/Lobby';
 // Remover comentário abaixo quando implementar a função, juntamente com esse comentário atual
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function updateTimer(lobby: Lobby): Timer {
-
+  return lobby.game?.timer ?? new Timer();
 }

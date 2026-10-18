@@ -23,16 +23,20 @@ export function handleWinRoundsNumberUpdate(numWinRounds: number, nextPlayerId?:
     throw new Error(i18n.t('COMMON.ERROR.MATCH_NOT_STARTED'));
   }
 
-  if (lobby.value.game.match.round) {
+  const match = lobby.value.game.match;
+
+  // Na partida especial (1 carta, sem ver a própria carta) já existe uma rodada com as cartas dos outros jogadores.
+  // Mesmo assim, os palpites ainda estão em andamento nessa fase.
+  const isSpecialMatch = match.numRounds === 1 && match.currentPlayerCards.length === 0;
+
+  if (match.round && !isSpecialMatch) {
     throw new Error(i18n.t('COMMON.ERROR.ROUND_ALREADY_STARTED'));
   }
 
-  if (!lobby.value.game.match.nextPlayerId) {
+  if (!match.nextPlayerId) {
     throw new Error(i18n.t('COMMON.ERROR.NO_MATCH_NEXT_PLAYER'));
   }
 
-  const match = lobby.value.game.match;
-
-  match.players[lobby.value.game.match.nextPlayerId].numWinsNeeded = numWinRounds;
+  match.players[match.nextPlayerId].numWinsNeeded = numWinRounds;
   match.nextPlayerId = nextPlayerId;
 }

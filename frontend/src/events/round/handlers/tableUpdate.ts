@@ -1,5 +1,5 @@
 import type { RoundCards } from '@/interfaces/Lobby';
-import { lobby } from '@/connection';
+import { lobby, playerId } from '@/connection';
 import { i18n } from '@/plugins/i18n';
 
 /**
@@ -22,11 +22,35 @@ export function handleTableUpdate(cards: RoundCards, nextPlayerId?: string) {
     throw new Error(i18n.t('COMMON.ERROR.MATCH_NOT_STARTED'));
   }
 
-  if (!lobby.value.game.match.round) {
+  const match = lobby.value.game.match;
+
+  if (!match.round) {
     throw new Error(i18n.t('COMMON.ERROR.ROUND_NOT_STARTED'));
   }
 
-  const round = lobby.value.game.match.round;
+  const round = match.round;
+
+  // O jogador que acabou de jogar é o que deveria jogar antes dessa atualização.
+  // A carta jogada por ele é descartada: sai da contagem de cartas dele.
+  // Se for o jogador atual, a carta também sai da sua mão.
+  const playedCard = [...cards.onMatch, ...cards.anulledCards]
+    .find((roundCard) => roundCard.playerId === round.nextPlayerId);
+
+  if (playedCard) {
+    const playerMatch = match.players[playedCard.playerId];
+    if (playerMatch && playerMatch.numCards > 0) {
+      playerMatch.numCards -= 1;
+    }
+
+    if (playedCard.playerId === playerId) {
+      const cardIndex = match.currentPlayerCards.findIndex(
+        (card) => card.type === playedCard.card.type && card.value === playedCard.card.value
+      );
+      if (cardIndex !== -1) {
+        match.currentPlayerCards.splice(cardIndex, 1);
+      }
+    }
+  }
 
   round.cards = cards;
   round.nextPlayerId = nextPlayerId;

@@ -165,6 +165,7 @@ describe('handleSelectCard', () => {
       { card: { type: 'common', value: 1 }, playerId: player.playerId }
     );
     expect(player.lobby?.game?.match?.round?.cards).toBe('updated-cards');
+    expect(player.lobby?.game?.match?.players[player.playerId].cards).toEqual([]);
   });
 
   test('Selecionar corretamente quando ainda existem jogadores a palpitar deve enviar mensagem com a carta atual e o id do próximo jogador que deve palpitar. Também deve adicionar um timer para selecionar automático do próximo jogador. O status deve ser mantido "waiting_select_card"', () => {
@@ -182,8 +183,8 @@ describe('handleSelectCard', () => {
 
     // Testing timer
     expect(player.lobby?.game?.timer.getConfig().countdown).toBe(true);
-    expect(player.lobby?.game?.timer.getTimeValues().seconds).toBe(15);
-    jest.advanceTimersByTime(15000);
+    expect(player.lobby?.game?.timer.getTimeValues().seconds).toBe(18);
+    jest.advanceTimersByTime(18000);
     expect(generateAutomaticSelectCard).toHaveBeenCalledWith(player.lobby!);
   });
 

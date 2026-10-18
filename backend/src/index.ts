@@ -3,6 +3,10 @@ import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import addEventsListeners from './events/addEventsListeners';
+import EventsEmitter from './events/Emitter';
+import type Lobby from './interfaces/Lobby';
+import { buildClientLobby } from './events/lobby/functions/buildClientLobby';
+import { cancelOfflineRemoval } from './events/general/functions/offlineRemoval';
 import { players } from './global';
 
 dotenv.config();
@@ -20,8 +24,32 @@ const port = process.env.PORT || 3000;
 app.use(process.env.SERVER_PATH || '/', express.static('../frontend/dist'));
 
 io.on('connection', (socket) => {
-  players[socket.id] = { socket: socket };
-  addEventsListeners(io, socket);
+  // O frontend envia um id estável (guardado no navegador).
+  // É ele que reconhece o jogador ao reconectar. Sem ele, o id do socket é usado como antes.
+  const authPlayerId = socket.handshake.auth?.playerId;
+  const playerId = typeof authPlayerId === 'string' && authPlayerId.length > 0 ? authPlayerId : socket.id;
+
+  const existing = players[playerId];
+  if (existing && existing.socket.id !== socket.id) {
+    // Uma conexão mais nova assumiu o lugar da anterior (ex: página recarregada).
+    existing.socket.disconnect(true);
+  }
+
+  players[playerId] = { socket: socket, lobby: existing?.lobby };
+  socket.join(playerId);
+
+  // Reconectou: cancela a remoção por offline e limpa a marcação
+  cancelOfflineRemoval(playerId);
+  players[playerId].offlineSince = undefined;
+
+  addEventsListeners(io, socket, playerId);
+
+  if (existing?.lobby) {
+    // O jogador já estava em uma sala: devolve o estado atual para ele voltar de onde parou
+    const clientLobby = buildClientLobby(existing.lobby, playerId);
+    new EventsEmitter(io, socket, existing.lobby.lobbyId).Lobby
+      .emitReconnect(clientLobby as unknown as Lobby);
+  }
 });
 
 server.listen(port, () => {

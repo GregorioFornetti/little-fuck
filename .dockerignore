@@ -1,0 +1,14 @@
+.git
+.github
+.vscode
+**/node_modules
+**/dist
+**/.tmp
+**/.npm-cache
+frontend/src/__tests__
+backend/src/__tests__
+docs
+images
+*.md
+LICENSE
+docker-compose.yml
