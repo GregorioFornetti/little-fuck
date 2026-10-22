@@ -77,7 +77,9 @@
     "WAITING_FOR_PLAYERS": "Waiting for players to be ready ({ready} of {total})",
     "ALL_READY": "Everyone is ready! You can start the game.",
     "WAITING_FOR_LEADER": "Waiting for the leader to start the game",
-    "GAME_STARTED": "The game has started!"
+    "GAME_STARTED": "The game has started!",
+    "COPY_LINK": "Copy link",
+    "LINK_LABEL": "Game link"
   },
   "GAME": {
     "MATCH": "Match {n}",
@@ -117,5 +119,23 @@
     "LEAVE_TEXT": "Are you sure you want to leave? This action is irreversible: you will lose your spot in the room and cannot come back to this game.",
     "LEAVE_CONFIRM": "Yes, leave the game",
     "LEAVE_CANCEL": "Cancel"
+  },
+  "OPTIONS": {
+    "TITLE": "Game options",
+    "BUTTON": "Options",
+    "INITIAL_LIVES": "Initial lives",
+    "ACTION_TIME": "Time to guess/play a card (seconds)",
+    "ROUND_END_TIME": "Pause between rounds (seconds)",
+    "LEADER_ONLY": "Only the room leader can change the options.",
+    "APPLIES_BEFORE_START": "Options apply to the next game and can only be changed before it starts.",
+    "CLOSE": "Close",
+    "INVALID": "Invalid options!",
+    "ERROR_NOT_LEADER": "Only the room leader can change the options!",
+    "ERROR_ALREADY_IN_GAME": "The game has already started! Options can no longer be changed.",
+    "ERROR_GENERIC": "Could not change the options.",
+    "CARD_TYPE": "Card type",
+    "CARD_TYPE_NUMBERED": "Numbered cards",
+    "CARD_TYPE_MANILHA_VELHA": "Manilha velha (truco deck)",
+    "CARD_TYPE_MANILHA_VELHA_DESC": "Truco deck (40 cards). Manilhas, strongest to weakest: four of clubs (Zap), seven of hearts, ace of spades and seven of diamonds. Then: 3s, 2s, aces, kings, jacks, queens, 7s, 6s, 5s and 4s."
   }
 }

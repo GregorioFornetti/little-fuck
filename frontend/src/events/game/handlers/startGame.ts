@@ -1,8 +1,8 @@
 import type { Game } from '@/interfaces/Lobby';
 import { lobby } from '@/connection';
 import { i18n } from '@/plugins/i18n';
+import { getLobbyOptions } from '@/components/pages/gameState';
 
-const INITIAL_HEALTH = 3;
 const INITIAL_WAIT_TIME = 5;
 const INITIAL_MATCH_NUMBER = 1;
 const INITIAL_ROUND_NUMBER = 1;
@@ -20,8 +20,9 @@ export function handleStartGame() {
   }
 
   const players = lobby.value.players as Array<{ id: string }>;
+  const initialHealth = getLobbyOptions(lobby.value).initialHealth;
   const playersHealth = players.reduce<Record<string, number>>((playersHealth, player) => {
-    playersHealth[player.id] = INITIAL_HEALTH;
+    playersHealth[player.id] = initialHealth;
     return playersHealth;
   }, {});
 

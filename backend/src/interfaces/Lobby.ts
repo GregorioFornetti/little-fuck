@@ -3,11 +3,17 @@ import Timer from 'easytimer.js';
 /**
  *  Interface que contém as informações
  */
+export type CardSuit = 'clubs'|'hearts'|'spades'|'diamonds';
+
 export interface Card {
     /** Tipo da carta */
     type: 'common',
     /** O poder da carta. Cartas com valores mais altos ganham das outras com valores mais baixos. */
-    value: number
+    value: number,
+    /** Naipe da carta. Presente apenas nas cartas do tipo manilha velha */
+    suit?: CardSuit,
+    /** Rótulo da carta (4, 5, 6, 7, Q, J, K, A, 2, 3). Presente apenas nas cartas do tipo manilha velha */
+    label?: string
 }
 
 /**
@@ -104,6 +110,22 @@ export interface Game {
 /**
  *  Interface que contém as informações de um lobby, por exemplo, jogadores, informações do jogo em andamento, etc.
  */
+/**
+ *  Opções de jogo configuráveis pelo líder da sala antes do jogo começar.
+ */
+export type CardType = 'numbered'|'manilha-velha';
+
+export interface GameOptions {
+    /** Quantidade de vidas que cada jogador começa o jogo */
+    initialHealth: number,
+    /** Segundos que um jogador tem para palpitar ou jogar uma carta antes da ação automática */
+    playerActionTimeSeconds: number,
+    /** Segundos que a mesa final de uma rodada fica visível antes da próxima rodada */
+    roundEndTimeSeconds: number,
+    /** Tipo de cartas do jogo: numeradas (padrão) ou manilha velha */
+    cardType: CardType
+}
+
 interface Lobby {
     /** Identficador único do lobby atual */
     lobbyId: string,
@@ -119,6 +141,8 @@ interface Lobby {
         ready?: boolean
     }[],
     /** Informações do jogo. Pode ser undefined se ainda não estiver ocorrendo um jogo */
-    game?: Game
+    game?: Game,
+    /** Opções do jogo definidas pelo líder. Pode ser undefined em salas antigas, usando os valores padrão */
+    options?: GameOptions
 }
 export default Lobby;

@@ -54,7 +54,7 @@ export function endRound(lobby: Lobby): void {
     lobby.game.timer.addEventListener('targetAchieved', () => {
       endMatch(lobby);
     });
-    lobby.game.timer.start({ countdown: true, startValues: { seconds: ROUND_END_TIME_SECONDS } });
+    lobby.game.timer.start({ countdown: true, startValues: { seconds: lobby.options?.roundEndTimeSeconds ?? ROUND_END_TIME_SECONDS } });
 
     lobby.game.roundNumber = 1;
 
@@ -65,7 +65,7 @@ export function endRound(lobby: Lobby): void {
     lobby.game.timer.addEventListener('targetAchieved', () => {
       startNewRound(lobby);
     });
-    lobby.game.timer.start({ countdown: true, startValues: { seconds: ROUND_END_TIME_SECONDS } });
+    lobby.game.timer.start({ countdown: true, startValues: { seconds: lobby.options?.roundEndTimeSeconds ?? ROUND_END_TIME_SECONDS } });
 
     lobby.game.roundNumber++;
 

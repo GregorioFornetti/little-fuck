@@ -1,4 +1,4 @@
-import Lobby from '../../interfaces/Lobby';
+import Lobby, { GameOptions } from '../../interfaces/Lobby';
 import EmitterBase from '../EmitterBase';
 
 /**
@@ -104,5 +104,25 @@ export default class LobbyEventsEmitter extends EmitterBase {
      */
   public emitReconnect(lobby: Lobby) {
     this.emitToUser('reconnect', lobby);
+  }
+
+  /**
+   *  Evento enviado para todos os jogadores da sala quando o líder altera as opções do jogo.
+   *
+   *  @param options novas opções de jogo da sala
+   */
+  public emitOptionsUpdate(options: GameOptions) {
+    this.emitToLobby('options-update', options);
+  }
+
+  /**
+   *  Evento enviado para um usuário indicando que ocorreu um erro ao alterar as opções do jogo.
+   *  Isso pode ocorrer caso o solicitante não esteja em uma sala, não seja o líder, o jogo já tenha
+   *  começado ou as opções enviadas sejam inválidas.
+   *
+   *  @param type tipo de erro que ocorreu ao tentar alterar as opções
+   */
+  public emitOptionsError(type: 'not-leader'|'already-in-game'|'not-in-lobby'|'invalid-options') {
+    this.emitToUser('options-error', type);
   }
 }

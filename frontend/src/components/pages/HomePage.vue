@@ -10,6 +10,7 @@ import AppHeader from '../AppHeader.vue';
 import HowToPlayModal from '../HowToPlayModal.vue';
 
 import LoadingSpinner from '../LoadingSpinner.vue';
+import { getRoomCodeFromUrl } from '@/roomLink';
 import type { Lobby } from '@/interfaces/Lobby';
 
 type JoinLobbyErrorType = 'lobby-in-game'|'inexistent-lobby'|'no-name'|'repeated-name'|'player-already-in-lobby'
@@ -34,6 +35,16 @@ const errorMessageKeyMap: Record<JoinLobbyErrorType, string> = {
 };
 
 const errorMessage = computed(() => t(errorMessageKeyMap[errorType.value]));
+
+// Ao abrir por um link de convite (/<codigo-da-sala>), o modal de entrar já abre com o código preenchido pelo link.
+// O jogador só precisa informar o nome.
+const joinLinkCode = ref<string | null>(
+  typeof window === 'undefined' ? null : getRoomCodeFromUrl(window.location.pathname)
+);
+if (joinLinkCode.value) {
+  joinLobbyCode.value = joinLinkCode.value;
+  joinLobbyModalStatus.value = 'input';
+}
 
 const openCreateLobbyModal = () => {
   createLobbyModalStatus.value = 'input';
@@ -60,6 +71,7 @@ const closeJoinLobbyModal = () => {
   joinLobbyModalStatus.value = 'closed';
   joinLobbyCode.value = '';
   joinLobbyName.value = '';
+  joinLinkCode.value = null;
 };
 
 const createLobby = () => {
@@ -207,6 +219,7 @@ eventsListenersAdder.lobby.joinLobbyError((errorTypeParam: JoinLobbyErrorType) =
         class="flex gap-y-5 flex-col"
       >
         <ModalInput
+          v-if="!joinLinkCode"
           v-model="joinLobbyCode"
           :label="t('HOME.ROOM_CODE')"
         />

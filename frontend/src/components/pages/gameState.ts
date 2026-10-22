@@ -1,4 +1,25 @@
-import type { Game, Lobby, Match } from '@/interfaces/Lobby';
+import type { Game, GameOptions, Lobby, Match } from '@/interfaces/Lobby';
+
+/** Default game options, mirroring the backend defaults. */
+export const DEFAULT_GAME_OPTIONS: GameOptions = {
+  initialHealth: 3,
+  playerActionTimeSeconds: 18,
+  roundEndTimeSeconds: 10,
+  cardType: 'numbered'
+};
+
+/** The lobby options, falling back to the defaults for lobbies created without them. */
+export function getLobbyOptions(lobby: Lobby | null | undefined): GameOptions {
+  return { ...DEFAULT_GAME_OPTIONS, ...lobby?.options };
+}
+
+/** True for the four manilhas of the manilha velha deck: 4 of clubs (Zap), 7 of hearts, ace of spades and 7 of diamonds. */
+export function isManilhaCard(card: { label?: string; suit?: string } | undefined): boolean {
+  if (!card?.label || !card?.suit) return false;
+  return (card.label === '4' && card.suit === 'clubs') ||
+    (card.label === '7' && (card.suit === 'hearts' || card.suit === 'diamonds')) ||
+    (card.label === 'A' && card.suit === 'spades');
+}
 
 export interface RankingRow {
   position: number;
@@ -74,11 +95,21 @@ export const ROUND_END_TIME_SECONDS = 10;
 export function getCountdownSeconds(
   phase: GamePhase,
   turnPlayerId: string | undefined,
-  showingFinishedRound = false
+  showingFinishedRound = false,
+  options: GameOptions = DEFAULT_GAME_OPTIONS
 ): number {
   const playerMustAct = turnPlayerId !== undefined && (phase === 'guessing' || phase === 'round');
-  if (playerMustAct) return ACTION_TIME_SECONDS;
-  if (phase === 'transition' && showingFinishedRound) return ROUND_END_TIME_SECONDS;
+  if (playerMustAct) {
+    // Mostra alguns segundos a menos que o tempo do backend.
+    // Assim o contador termina antes da ação automática (ver TIMER_SAFETY_MARGIN_SECONDS).
+    return Math.max(
+      1,
+      (options.playerActionTimeSeconds ?? BACKEND_ACTION_TIME_SECONDS) - TIMER_SAFETY_MARGIN_SECONDS
+    );
+  }
+  if (phase === 'transition' && showingFinishedRound) {
+    return options.roundEndTimeSeconds ?? ROUND_END_TIME_SECONDS;
+  }
   return TRANSITION_TIME_SECONDS;
 }
 

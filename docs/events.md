@@ -326,6 +326,30 @@ Evento para tentativa de início de jogo. Para que o jogo comece, é preciso que
 
 
 
+### update-options
+
+**Emitido pelo cliente (apenas o líder, antes do jogo começar)**
+
+Evento chamado quando o líder deseja alterar as opções do jogo da sala (vidas iniciais e tempos). Caso seja o líder, o jogo ainda não tenha começado e as opções sejam válidas (vidas de 1 a 10, tempo de ação de 5 a 60 segundos e pausa entre rodadas de 3 a 30 segundos), as opções da sala serão atualizadas e todos os jogadores da sala receberão o evento `options-update`.\
+Caso contrário, o solicitante receberá o evento `options-error`.
+
+**Parâmetros**
+
+| Nome | Tipo | Descrição |
+| --- | --- | --- |
+| options | object | Novas opções: `initialHealth`, `playerActionTimeSeconds`, `roundEndTimeSeconds` e `cardType` (`numbered` ou `manilha-velha`) |
+
+### options-update
+
+**Emitido pelo servidor**
+
+Evento enviado para todos os jogadores da sala indicando que as opções do jogo foram alteradas pelo líder. Os parâmetros são as novas opções (`initialHealth`, `playerActionTimeSeconds`, `roundEndTimeSeconds` e `cardType` (`numbered` ou `manilha-velha`)).
+
+### options-error
+
+**Emitido pelo servidor**
+
+Evento enviado para um usuário indicando que ocorreu um erro ao tentar alterar as opções do jogo. Os possíveis tipos de erro são: `not-leader`, `already-in-game`, `not-in-lobby` e `invalid-options`.
 ### start-game-error
 
 Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)

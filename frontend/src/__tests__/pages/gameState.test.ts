@@ -4,10 +4,13 @@ import {
   BACKEND_ACTION_TIME_SECONDS,
   TIMER_SAFETY_MARGIN_SECONDS,
   buildRankingRows,
+  DEFAULT_GAME_OPTIONS,
   getCountdownKey,
   getCountdownSeconds,
   getForbiddenGuess,
+  getLobbyOptions,
   getGamePhase,
+  isManilhaCard,
   getTurnPlayerId,
   isSpecialMatch,
   ROUND_END_TIME_SECONDS,
@@ -118,6 +121,35 @@ describe('gameState', () => {
     };
     expect(getCountdownKey(gameWith(cardPlayed))).not.toBe(getCountdownKey(gameWith(roundMatch)));
     expect(getCountdownKey(undefined)).toBe('no-game');
+  });
+
+  test('countdown follows the lobby options for action time and round pause', () => {
+    const options = { initialHealth: 5, playerActionTimeSeconds: 30, roundEndTimeSeconds: 20, cardType: 'manilha-velha' as const };
+    // 30s no backend, menos a margem de segurança de 3s no frontend
+    expect(getCountdownSeconds('guessing', 'p1', false, options)).toBe(27);
+    expect(getCountdownSeconds('round', 'p2', false, options)).toBe(27);
+    expect(getCountdownSeconds('transition', undefined, true, options)).toBe(20);
+    expect(getLobbyOptions(null)).toEqual(DEFAULT_GAME_OPTIONS);
+    expect(getLobbyOptions({ lobbyId: 'x', players: [], options })).toEqual(options);
+  });
+
+  test('lobby options fall back to numbered cards for lobbies without a card type', () => {
+    const legacyOptions = { initialHealth: 5, playerActionTimeSeconds: 30, roundEndTimeSeconds: 20 };
+    expect(getLobbyOptions({ lobbyId: 'x', players: [], options: legacyOptions as never }))
+      .toEqual({ ...legacyOptions, cardType: 'numbered' });
+    expect(DEFAULT_GAME_OPTIONS.cardType).toBe('numbered');
+  });
+
+  test('isManilhaCard only matches the four manilhas', () => {
+    expect(isManilhaCard({ label: '4', suit: 'clubs' })).toBe(true); // Zap
+    expect(isManilhaCard({ label: '7', suit: 'hearts' })).toBe(true);
+    expect(isManilhaCard({ label: 'A', suit: 'spades' })).toBe(true);
+    expect(isManilhaCard({ label: '7', suit: 'diamonds' })).toBe(true);
+    expect(isManilhaCard({ label: '7', suit: 'clubs' })).toBe(false);
+    expect(isManilhaCard({ label: '4', suit: 'hearts' })).toBe(false);
+    expect(isManilhaCard({ label: '3', suit: 'clubs' })).toBe(false);
+    expect(isManilhaCard({ value: 14 } as never)).toBe(false);
+    expect(isManilhaCard(undefined)).toBe(false);
   });
 
   test('ranking puts the survivor first and the first eliminated last', () => {

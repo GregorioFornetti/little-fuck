@@ -65,7 +65,7 @@ export function handleSelectCard(player: Player, cardIndex: number): void {
     } else {
       // Ainda há jogadores que precisam selecionar cartas. Deve iniciar um timer para selecionar uma carta automaticamente caso o jogador não selecione a tempo
       lobby.game.timer = new Timer();
-      lobby.game.timer.start({ countdown: true, startValues: { seconds: PLAYER_ACTION_TIME_SECONDS } });
+      lobby.game.timer.start({ countdown: true, startValues: { seconds: lobby.options?.playerActionTimeSeconds ?? PLAYER_ACTION_TIME_SECONDS } });
       lobby.game.timer.addEventListener('targetAchieved', () => {
         generateAutomaticSelectCard(lobby);
       });

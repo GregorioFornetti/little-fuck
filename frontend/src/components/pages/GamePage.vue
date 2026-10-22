@@ -8,6 +8,7 @@ import RoundTable from '../RoundTable.vue';
 import { findCurrentPlayer } from './lobbyReady';
 import {
   getCountdownKey,
+  getLobbyOptions,
   getCountdownSeconds,
   getForbiddenGuess,
   getGamePhase,
@@ -45,12 +46,12 @@ const lastRoundWinnerName = computed(() =>
 const now = ref(Date.now());
 const deadline = ref(Date.now());
 const windowSeconds = ref(
-  getCountdownSeconds(phase.value, turnPlayerId.value, lastRound.value !== undefined)
+  getCountdownSeconds(phase.value, turnPlayerId.value, lastRound.value !== undefined, getLobbyOptions(lobby.value))
 );
 const countdownKey = computed(() => getCountdownKey(game.value));
 
 watch(countdownKey, () => {
-  windowSeconds.value = getCountdownSeconds(phase.value, turnPlayerId.value, lastRound.value !== undefined);
+  windowSeconds.value = getCountdownSeconds(phase.value, turnPlayerId.value, lastRound.value !== undefined, getLobbyOptions(lobby.value));
   now.value = Date.now();
   deadline.value = now.value + windowSeconds.value * 1000;
 }, { immediate: true });
@@ -352,6 +353,8 @@ const playCard = (cardIndex: number) => {
               v-for="(card, index) in match?.currentPlayerCards ?? []"
               :key="index"
               :value="card.value"
+              :label="card.label"
+              :suit="card.suit"
               interactive
               :disabled="!isMyTurn"
               @click="playCard(index)"
@@ -373,6 +376,8 @@ const playCard = (cardIndex: number) => {
             v-for="(card, index) in match?.currentPlayerCards ?? []"
             :key="index"
             :value="card.value"
+              :label="card.label"
+              :suit="card.suit"
           />
         </div>
       </section>
@@ -389,7 +394,11 @@ const playCard = (cardIndex: number) => {
             :key="roundCard.playerId"
             class="flex flex-col items-center gap-1"
           >
-            <PlayingCard :value="roundCard.card.value" />
+            <PlayingCard
+           :value="roundCard.card.value"
+            :label="roundCard.card.label"
+            :suit="roundCard.card.suit"
+          />
             <span class="max-w-16 truncate text-xs text-emerald-100/80">{{ playerName(roundCard.playerId) }}</span>
           </div>
         </div>

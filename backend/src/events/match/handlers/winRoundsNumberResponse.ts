@@ -87,7 +87,7 @@ export function handleWinRoundsNumberResponse(player: Player, numWinsRounds: num
       }
     } else {
       // Ainda restam palpites a serem feitos... É preciso cadastrar o timer para palpite automático do próximo player
-      lobby.game.timer.start({ countdown: true, startValues: { seconds: PLAYER_ACTION_TIME_SECONDS } });
+      lobby.game.timer.start({ countdown: true, startValues: { seconds: lobby.options?.playerActionTimeSeconds ?? PLAYER_ACTION_TIME_SECONDS } });
       lobby.game.timer.addEventListener('targetAchieved', () => {
         generateAutomaticNumWinResponse(lobby);
       });

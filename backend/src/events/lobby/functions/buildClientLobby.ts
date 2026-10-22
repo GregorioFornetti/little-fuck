@@ -9,6 +9,7 @@ import { insertCard } from '../../round/functions/insertCard';
 export interface ClientLobby {
   lobbyId: string,
   players: Lobby['players'],
+  options?: Lobby['options'],
   game?: {
     playersHealth: { [playerId: string]: number },
     currentWaitTime: number,
@@ -43,7 +44,8 @@ export interface ClientLobby {
 export function buildClientLobby(lobby: Lobby, playerId: string): ClientLobby {
   const clientLobby: ClientLobby = {
     lobbyId: lobby.lobbyId,
-    players: lobby.players.map((player) => ({ ...player }))
+    players: lobby.players.map((player) => ({ ...player })),
+    options: lobby.options ? { ...lobby.options } : undefined
   };
 
   const game = lobby.game;

@@ -6,6 +6,7 @@ import { getNextPlayerId } from '../../functions/getNextPlayerId';
 import { generateInternalServerError } from '../../general/functions/generateInternalServerError';
 import { getNextMatchNumCards } from './getNextMatchNumCards';
 import { getDefaultCards } from '../../functions/getDefaultCards';
+import { getManilhaVelhaCards } from '../../functions/getManilhaVelhaCards';
 import { getPlayersCards } from './getPlayersCards';
 import { Match } from '../../../interfaces/Lobby';
 import { createPlayer } from '../../functions/createPlayer';
@@ -33,7 +34,7 @@ export function startNewMatch(lobby: Lobby): void {
     lobby.game.currentPlayerId = getNextPlayerId(lobby.game.currentPlayerId, lobby);
 
     const alivePlayersIds = getAlivePlayersIds(lobby);
-    const defaultCards = getDefaultCards();
+    const defaultCards = lobby.options?.cardType === 'manilha-velha' ? getManilhaVelhaCards() : getDefaultCards();
     lobby.game.numRounds = getNextMatchNumCards(lobby.game.numRounds, alivePlayersIds, defaultCards);
 
     lobby.game.status = 'waiting_num_win_response';
@@ -85,7 +86,7 @@ export function startNewMatch(lobby: Lobby): void {
     timer.addEventListener('targetAchieved', () => {
       generateAutomaticNumWinResponse(lobby);
     });
-    timer.start({ countdown: true, startValues: { seconds: PLAYER_ACTION_TIME_SECONDS } });
+    timer.start({ countdown: true, startValues: { seconds: lobby.options?.playerActionTimeSeconds ?? PLAYER_ACTION_TIME_SECONDS } });
     lobby.game.timer = timer;
 
   } catch (error) {

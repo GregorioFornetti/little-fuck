@@ -77,7 +77,9 @@
     "WAITING_FOR_PLAYERS": "Aguardando os jogadores ficarem prontos ({ready} de {total})",
     "ALL_READY": "Todos estão prontos! Você já pode iniciar o jogo.",
     "WAITING_FOR_LEADER": "Aguardando o líder iniciar o jogo",
-    "GAME_STARTED": "O jogo começou!"
+    "GAME_STARTED": "O jogo começou!",
+    "COPY_LINK": "Copiar link",
+    "LINK_LABEL": "Link do jogo"
   },
   "GAME": {
     "MATCH": "Partida {n}",
@@ -117,5 +119,23 @@
     "LEAVE_TEXT": "Tem certeza que deseja sair? Essa ação é irreversível: você perderá sua vaga na sala e não poderá voltar para este jogo.",
     "LEAVE_CONFIRM": "Sim, sair do jogo",
     "LEAVE_CANCEL": "Cancelar"
+  },
+  "OPTIONS": {
+    "TITLE": "Opções do jogo",
+    "BUTTON": "Opções",
+    "INITIAL_LIVES": "Vidas iniciais",
+    "ACTION_TIME": "Tempo para palpitar/jogar (segundos)",
+    "ROUND_END_TIME": "Pausa entre rodadas (segundos)",
+    "LEADER_ONLY": "Apenas o líder da sala pode alterar as opções.",
+    "APPLIES_BEFORE_START": "As opções valem para o próximo jogo e só podem ser alteradas antes dele começar.",
+    "CLOSE": "Fechar",
+    "INVALID": "Opções inválidas!",
+    "ERROR_NOT_LEADER": "Apenas o líder da sala pode alterar as opções!",
+    "ERROR_ALREADY_IN_GAME": "O jogo já começou! As opções não podem mais ser alteradas.",
+    "ERROR_GENERIC": "Não foi possível alterar as opções.",
+    "CARD_TYPE": "Tipo de cartas",
+    "CARD_TYPE_NUMBERED": "Cartas numeradas",
+    "CARD_TYPE_MANILHA_VELHA": "Manilha velha",
+    "CARD_TYPE_MANILHA_VELHA_DESC": "Baralho de truco (40 cartas). Manilhas, da mais forte para a mais fraca: 4 de paus (Zap), 7 de copas, ás de espadas e 7 de ouros. Depois: 3, 2, ases, reis, valetes, damas, 7, 6, 5 e 4."
   }
 }

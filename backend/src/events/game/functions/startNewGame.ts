@@ -4,6 +4,7 @@ import { startNewMatch } from '../../match/functions/startNewMatch';
 import Lobby from '../../../interfaces/Lobby';
 import { io } from '../../../index';
 import { createPlayer } from '../../functions/createPlayer';
+import { DEFAULT_GAME_OPTIONS } from '../../../global';
 
 /**
  *  Função que começa um jogo de "little-fuck". Essa função é responsável por:
@@ -17,7 +18,7 @@ export function startNewGame(lobby: Lobby): void {
 
   const playersHealth: { [playerId: string]: number} = {};
   for (const player of lobby.players) {
-    playersHealth[player.id] = 3;
+    playersHealth[player.id] = lobby.options?.initialHealth ?? DEFAULT_GAME_OPTIONS.initialHealth;
   }
 
   const timer = new Timer();

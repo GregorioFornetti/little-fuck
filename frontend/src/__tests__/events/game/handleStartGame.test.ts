@@ -48,6 +48,27 @@ describe('handleStartGame', () => {
     expect(game).toEqual(expectedOutput);
   });
 
+  test('Deve iniciar o jogo com as vidas iniciais das opções do lobby', () => {
+    lobby.value = {
+      lobbyId: '123',
+      players: [leaderPlayer, anotherPlayer],
+      options: {
+        initialHealth: 1,
+        playerActionTimeSeconds: 18,
+        roundEndTimeSeconds: 10,
+        cardType: 'numbered'
+      }
+    };
+
+    handleStartGame();
+
+    const game = lobby.value.game as Game;
+    expect(game.playersHealth).toEqual({
+      123: 1,
+      12345: 1
+    });
+  });
+
   test('Deve emitir um erro se o jogador atual não estiver em um lobby', () => {
     expect(() => handleStartGame()).toThrow(Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY')));
   });

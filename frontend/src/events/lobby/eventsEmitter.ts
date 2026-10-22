@@ -1,5 +1,6 @@
 
 import EventsEmitterBase from '../EventsEmitterBase';
+import type { GameOptions } from '@/interfaces/Lobby';
 
 /**
  *  Objetos dessa classe emitem eventos a respeito de um lobby (sala).
@@ -65,5 +66,16 @@ export default class LobbyEventsEmitter extends EventsEmitterBase {
      */
   public emitStartGameRequest() {
     this.socket.emit('start-game-request');
+  }
+
+  /**
+   *  Evento enviado pelo líder ao alterar as opções do jogo da sala (apenas antes do jogo começar).
+   *  Em caso de sucesso, todos na sala recebem options-update com as novas opções.
+   *  Caso contrário, o solicitante recebe options-error.
+   *
+   *  @param options novas opções de jogo desejadas
+   */
+  public emitUpdateOptions(options: GameOptions) {
+    this.socket.emit('update-options', options);
   }
 }

@@ -4,10 +4,16 @@ import { useI18n } from 'vue-i18n';
 import { eventsEmitter, lobby, playerId } from '@/connection';
 import AppHeader from '../AppHeader.vue';
 import { areAllPlayersReady, findCurrentPlayer, readyProgress } from './lobbyReady';
+import { buildRoomLink } from '@/roomLink';
+import LobbyOptionsModal from '../LobbyOptionsModal.vue';
 
 const { t } = useI18n();
 
 const copyStatus = ref<'idle' | 'copied' | 'failed'>('idle');
+
+const roomLink = computed(() =>
+  lobby.value ? buildRoomLink(lobby.value.lobbyId, window.location.origin) : ''
+);
 let copyStatusTimer: ReturnType<typeof setTimeout> | undefined;
 
 const currentPlayer = computed(() =>
@@ -21,6 +27,7 @@ const progress = computed(() =>
   lobby.value ? readyProgress(lobby.value.players) : { ready: 0, total: 0 }
 );
 const gameStarted = computed(() => lobby.value?.game !== undefined);
+const optionsModalOpen = ref(false);
 
 const setCopyStatus = (status: 'copied' | 'failed') => {
   copyStatus.value = status;
@@ -30,9 +37,8 @@ const setCopyStatus = (status: 'copied' | 'failed') => {
   }, 2000);
 };
 
-const copyLobbyCode = async () => {
-  if (!lobby.value) return;
-  const code = lobby.value.lobbyId;
+const copyRoomLink = async () => {
+  const code = roomLink.value;
   try {
     await navigator.clipboard.writeText(code);
     setCopyStatus('copied');
@@ -89,17 +95,19 @@ onBeforeUnmount(() => {
       <!-- Lobby code -->
       <section class="mt-6 rounded-lg bg-black/25 p-4">
         <p class="text-sm text-emerald-100/80">
-          {{ t('LOBBY.CODE_LABEL') }}
+          {{ t('LOBBY.LINK_LABEL') }}
         </p>
         <div class="mt-2 flex flex-wrap items-center gap-3">
-          <code class="break-all rounded bg-white/10 px-3 py-2 font-mono text-sm text-white sm:text-base">{{ lobby.lobbyId }}</code>
           <button
             type="button"
             class="rounded-full bg-amber-400 px-5 py-2 text-sm font-bold text-emerald-950 hover:bg-amber-300 focus:outline-none focus:ring-4 focus:ring-amber-200/60"
-            @click="copyLobbyCode"
+            @click="copyRoomLink"
           >
-            {{ t('LOBBY.COPY') }}
+            {{ t('LOBBY.COPY_LINK') }}
           </button>
+          <p class="w-full break-all text-xs text-emerald-100/70">
+            {{ roomLink }}
+          </p>
           <span
             v-if="copyStatus === 'copied'"
             role="status"
@@ -156,6 +164,16 @@ onBeforeUnmount(() => {
         </ul>
       </section>
 
+      <div class="mt-6">
+        <button
+          type="button"
+          class="w-full rounded-full border-2 border-white/70 px-10 py-3 font-serif text-lg font-bold text-white hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/30 sm:w-auto"
+          @click="optionsModalOpen = true"
+        >
+          {{ t('OPTIONS.BUTTON') }}
+        </button>
+      </div>
+
       <!-- Actions -->
       <section class="mt-8">
         <p
@@ -204,4 +222,9 @@ onBeforeUnmount(() => {
       </section>
     </main>
   </div>
+  <LobbyOptionsModal
+    :show="optionsModalOpen"
+    :is-leader="isLeader"
+    :close-modal="() => { optionsModalOpen = false; }"
+  />
 </template>

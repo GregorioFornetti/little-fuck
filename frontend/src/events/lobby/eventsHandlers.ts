@@ -1,8 +1,10 @@
 
-import type { Lobby } from '@/interfaces/Lobby';
+import type { GameOptions, Lobby } from '@/interfaces/Lobby';
 import EventsListenersAdderBase from '../EventsListenersAdderBase';
 
 import { handleJoinLobbyError } from './handlers/joinLobbyError';
+import { handleOptionsUpdate } from './handlers/optionsUpdate';
+import { handleOptionsError } from './handlers/optionsError';
 import { handleJoinLobbySuccess } from './handlers/joinLobbySuccess';
 import { handlePlayerJoin } from './handlers/playerJoin';
 import { handlePlayerReady } from './handlers/playerReady';
@@ -111,6 +113,14 @@ export class LobbyEventsHandlersAdder extends EventsListenersAdderBase {
   public reconnect(handlerFunction: (lobby: Lobby) => void): void {
     this.socket.on('reconnect', handlerFunction);
   }
+
+  public optionsUpdate(handlerFunction: (options: GameOptions) => void): void {
+    this.socket.on('options-update', handlerFunction);
+  }
+
+  public optionsError(handlerFunction: (type: 'not-leader'|'already-in-game'|'not-in-lobby'|'invalid-options') => void): void {
+    this.socket.on('options-error', handlerFunction);
+  }
 }
 
 export default function addDefaultLobbyHandlers(socket: Socket) {
@@ -134,5 +144,17 @@ export default function addDefaultLobbyHandlers(socket: Socket) {
   lobbyEventsHandlersAdder.playerUnready(handlePlayerUnready);
   lobbyEventsHandlersAdder.playerUnreadyError(handlePlayerUnreadyError);
   lobbyEventsHandlersAdder.reconnect(handleReconnect);
+  lobbyEventsHandlersAdder.optionsUpdate(handleOptionsUpdate);
+  // O erro ao alterar as opções é exibido pela interface (modal de opções).
+  // A interface registra seu próprio listener depois deste.
+  // Por isso o erro é apenas registrado aqui, sem lançá-lo.
+  // Lançar o erro interromperia os demais listeners do evento (ver Emitter do socket.io).
+  lobbyEventsHandlersAdder.optionsError((type) => {
+    try {
+      handleOptionsError(type);
+    } catch (error) {
+      console.error(error);
+    }
+  });
   lobbyEventsHandlersAdder.startGameError(handleStartGameError);
 }

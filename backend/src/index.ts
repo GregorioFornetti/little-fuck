@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'node:path';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
@@ -22,6 +23,12 @@ const io = new Server(server, {
 const port = process.env.PORT || 3000;
 
 app.use(process.env.SERVER_PATH || '/', express.static('../frontend/dist'));
+
+// Links de convite (/<codigo-da-sala>) e qualquer outra rota do frontend caem no index.html.
+// O socket.io intercepta suas próprias rotas antes do Express, então isso não o afeta.
+app.get(`${process.env.SERVER_PATH || ''}/*`, (_request, response) => {
+  response.sendFile(path.resolve(__dirname, '../../frontend/dist/index.html'));
+});
 
 io.on('connection', (socket) => {
   // O frontend envia um id estável (guardado no navegador).

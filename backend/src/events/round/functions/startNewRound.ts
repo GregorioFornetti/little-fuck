@@ -43,7 +43,7 @@ export function startNewRound(lobby: Lobby): void {
     lobby.game.status = 'waiting_select_card';
     lobby.game.timer.stop();
     lobby.game.timer = new Timer();
-    lobby.game.timer.start({ countdown: true, startValues: { seconds: PLAYER_ACTION_TIME_SECONDS } });
+    lobby.game.timer.start({ countdown: true, startValues: { seconds: lobby.options?.playerActionTimeSeconds ?? PLAYER_ACTION_TIME_SECONDS } });
     lobby.game.timer.addEventListener('targetAchieved', () => {
       generateAutomaticSelectCard(lobby);
     });

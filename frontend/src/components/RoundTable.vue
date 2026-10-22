@@ -36,7 +36,11 @@ const isEmpty = computed(
         class="flex flex-col items-center gap-1"
       >
         <div :class="winnerId === roundCard.playerId ? 'rounded-md ring-4 ring-amber-300' : ''">
-          <PlayingCard :value="roundCard.card.value" />
+          <PlayingCard
+           :value="roundCard.card.value"
+            :label="roundCard.card.label"
+            :suit="roundCard.card.suit"
+          />
         </div>
         <span class="max-w-16 truncate text-xs text-emerald-100/80">{{ playerName(roundCard.playerId) }}</span>
       </div>
@@ -47,6 +51,8 @@ const isEmpty = computed(
       >
         <PlayingCard
           :value="roundCard.card.value"
+          :label="roundCard.card.label"
+          :suit="roundCard.card.suit"
           dimmed
         />
         <span class="max-w-16 truncate text-xs text-white/50">{{ playerName(roundCard.playerId) }}</span>
