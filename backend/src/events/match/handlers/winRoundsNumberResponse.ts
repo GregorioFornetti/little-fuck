@@ -8,6 +8,7 @@ import { generateAutomaticNumWinResponse } from '../functions/generateAutomaticN
 import Lobby from '../../../interfaces/Lobby';
 import { endSpecialMatch } from '../functions/endSpecialMatch';
 import { startNewRound } from '../../round/functions/startNewRound';
+import { scheduleBotTurn } from '../../bot/scheduleBotTurn';
 
 /**
  *  Mensagem que o cliente enviará para indicar o seu palpite.
@@ -94,6 +95,8 @@ export function handleWinRoundsNumberResponse(player: Player, numWinsRounds: num
     }
 
     player.eventsEmitter.Match.emitWinRoundsNumberUpdate(numWinsRounds, lobby.game.match.nextPlayerId);
+
+    scheduleBotTurn(lobby);
 
   } catch (error) {
     generateInternalServerError(lobby, error as Error);

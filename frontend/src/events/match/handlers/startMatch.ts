@@ -8,7 +8,7 @@ import { i18n } from '@/plugins/i18n';
  *  @param cards cartas que o jogador atual possui
  *  @param firstPlayerId id do jogador que deve começar a partida
  */
-export function handleStartMatch(cards: Card[], firstPlayerId: string) {
+export function handleStartMatch(cards: Card[], firstPlayerId: string, turnedCard?: Card) {
   if (lobby.value === null) {
     throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
   }
@@ -35,9 +35,13 @@ export function handleStartMatch(cards: Card[], firstPlayerId: string) {
     players: playersMatch,
     currentPlayerCards: cards,
     numRounds: cards.length,
-    nextPlayerId: firstPlayerId
+    nextPlayerId: firstPlayerId,
+    turnedCard
   };
 
   lobby.value.game.lastRound = undefined;
+  lobby.value.game.lastMatchSummary = undefined;
+  lobby.value.game.currentRoundWinners = [];
+  lobby.value.game.currentRounds = [];
   lobby.value.game.match = match;
 }

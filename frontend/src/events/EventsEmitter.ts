@@ -4,6 +4,7 @@ import GameEventsEmitter from './game/eventsEmitter';
 import MatchEventsEmitter from './match/eventsEmitter';
 import RoundEventsEmitter from './round/eventsEmitter';
 import GeneralEventsEmitter from './general/eventsEmitter';
+import PowerupEventsEmitter from './powerup/eventsEmitter';
 import type { Socket } from 'socket.io-client';
 
 /**
@@ -17,6 +18,7 @@ export default class EventsEmitter {
   public match: MatchEventsEmitter;
   public round: RoundEventsEmitter;
   public general: GeneralEventsEmitter;
+  public powerup: PowerupEventsEmitter;
 
   constructor(socket: Socket) {
     this.lobby = new LobbyEventsEmitter(socket);
@@ -24,5 +26,6 @@ export default class EventsEmitter {
     this.match = new MatchEventsEmitter(socket);
     this.round = new RoundEventsEmitter(socket);
     this.general = new GeneralEventsEmitter(socket);
+    this.powerup = new PowerupEventsEmitter(socket);
   }
 }

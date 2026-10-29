@@ -37,6 +37,11 @@ export function handleTableUpdate(cards: RoundCards, nextPlayerId?: string) {
     .find((roundCard) => roundCard.playerId === round.nextPlayerId);
 
   if (playedCard) {
+    // A carta jogada consome qualquer modificador de força pendente daquele jogador
+    if (match.pendingStrength) {
+      delete match.pendingStrength[playedCard.playerId];
+    }
+
     const playerMatch = match.players[playedCard.playerId];
     if (playerMatch && playerMatch.numCards > 0) {
       playerMatch.numCards -= 1;

@@ -1,4 +1,5 @@
 import { lobby } from '@/connection';
+import { buildMatchSummary } from '@/components/pages/gameState';
 import { i18n } from '@/plugins/i18n';
 
 /**
@@ -21,6 +22,27 @@ export function handleEndMatch(playerHealthUpdate: { [playerId: string]: number 
   if (!lobby.value.game.match) {
     throw new Error(i18n.t('COMMON.ERROR.MATCH_NOT_STARTED'));
   }
+
+  // Guarda o resumo da partida para exibição entre partidas e no histórico do jogo
+  const summary = buildMatchSummary(
+    lobby.value.game.match,
+    playerHealthUpdate,
+    lobby.value.players.map((player) => player.id)
+  );
+  lobby.value.game.lastMatchSummary = summary;
+  lobby.value.game.history = [
+    ...(lobby.value.game.history ?? []),
+    {
+      matchNumber: lobby.value.game.matchNumber,
+      rows: summary,
+      roundWinners: lobby.value.game.currentRoundWinners ?? [],
+      rounds: lobby.value.game.currentRounds ?? [],
+      turnedCard: lobby.value.game.match.turnedCard,
+      cardType: lobby.value.options?.cardType
+    }
+  ];
+  lobby.value.game.currentRoundWinners = [];
+  lobby.value.game.currentRounds = [];
 
   for (const playerId in playerHealthUpdate) {
     lobby.value.game.playersHealth[playerId] += playerHealthUpdate[playerId];

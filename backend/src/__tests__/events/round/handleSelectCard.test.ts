@@ -162,7 +162,8 @@ describe('handleSelectCard', () => {
     expect(oldTimer.isRunning()).toBe(false);
     expect(insertCard).toHaveBeenCalledWith(
       { onMatch: [], anulledCards: [] },
-      { card: { type: 'common', value: 1 }, playerId: player.playerId }
+      { card: { type: 'common', value: 1 }, playerId: player.playerId },
+      false
     );
     expect(player.lobby?.game?.match?.round?.cards).toBe('updated-cards');
     expect(player.lobby?.game?.match?.players[player.playerId].cards).toEqual([]);

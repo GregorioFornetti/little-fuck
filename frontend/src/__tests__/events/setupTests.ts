@@ -9,6 +9,8 @@ import { lobby } from '@/connection';
 
 jest.mock('@/connection', () => ({
   lobby: { value: null },
+  playerPowerups: { value: [] },
+  peekedCard: { value: null },
   socket: {},
   playerId: undefined
 }));

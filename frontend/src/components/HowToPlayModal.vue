@@ -13,10 +13,18 @@ const { t } = useI18n();
 const sections = [
   'OBJECTIVE',
   'CARDS',
+  'CARD_TYPES',
   'MATCHES',
   'GUESS',
   'ROUNDS',
   'SPECIAL'
+] as const;
+
+const cardTypes = [
+  'NUMBERED',
+  'MANILHA_VELHA',
+  'MANILHA_NOVA',
+  'MANILHA_PARAGUAIA'
 ] as const;
 </script>
 
@@ -38,9 +46,27 @@ const sections = [
           <h4 class="mb-1 font-serif text-lg font-bold text-emerald-900 dark:text-emerald-300">
             {{ t(`HOME.HOW_TO_PLAY_CONTENT.${section}_TITLE`) }}
           </h4>
-          <p class="leading-relaxed text-gray-700 dark:text-gray-200">
+          <p
+            v-if="section !== 'CARD_TYPES'"
+            class="leading-relaxed text-gray-700 dark:text-gray-200">
             {{ t(`HOME.HOW_TO_PLAY_CONTENT.${section}`) }}
           </p>
+          <div
+            v-if="section === 'CARD_TYPES'"
+            class="mt-2 space-y-3"
+          >
+            <div
+              v-for="cardType in cardTypes"
+              :key="cardType"
+            >
+              <h5 class="font-semibold text-emerald-800 dark:text-emerald-200">
+                {{ t(`HOME.HOW_TO_PLAY_CONTENT.CARD_TYPES.${cardType}_TITLE`) }}
+              </h5>
+              <p class="leading-relaxed text-gray-700 dark:text-gray-200">
+                {{ t(`HOME.HOW_TO_PLAY_CONTENT.CARD_TYPES.${cardType}`) }}
+              </p>
+            </div>
+          </div>
         </section>
       </div>
     </template>

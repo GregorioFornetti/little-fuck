@@ -9,6 +9,8 @@ const props = defineProps<{
   label?: string;
   /** Suit for manilha velha cards. */
   suit?: CardSuit;
+  /** Whether this card is a manilha in the current match. Defaults to the fixed manilha velha manilhas. */
+  manilha?: boolean;
   /** Cards 13-16 are the trumps (manilhas), shown in red. */
   interactive?: boolean;
   disabled?: boolean;
@@ -25,8 +27,9 @@ const suitGlyphs: Record<CardSuit, string> = {
 };
 
 const isRedSuit = computed(() => props.suit === 'hearts' || props.suit === 'diamonds');
-const manilha = computed(() => isManilhaCard(props));
+const manilha = computed(() => props.manilha ?? isManilhaCard(props));
 const suited = computed(() => props.label !== undefined && props.suit !== undefined);
+const valueSize = computed(() => (props.value >= 100 ? 'text-sm' : props.value >= 10 ? 'text-xl' : 'text-2xl'));
 </script>
 
 <template>
@@ -34,12 +37,12 @@ const suited = computed(() => props.label !== undefined && props.suit !== undefi
     :is="interactive ? 'button' : 'div'"
     :type="interactive ? 'button' : undefined"
     :disabled="interactive ? disabled : undefined"
-    class="flex h-24 w-16 shrink-0 items-center justify-center rounded-md bg-white font-serif text-2xl font-bold shadow-lg"
+    class="card-enter flex h-24 w-16 shrink-0 items-center justify-center overflow-hidden rounded-md bg-white px-0.5 text-center font-serif font-bold leading-none shadow-lg"
     :class="[
-      manilha ? 'bg-amber-100 ring-4 ring-amber-400' : '',
+      manilha ? 'manilha-glow bg-amber-100 ring-4 ring-amber-400' : '',
       !suited && value >= 13 ? 'text-red-700' : '',
       !suited && value < 13 ? 'text-gray-900' : '',
-      suited && !manilha ? (isRedSuit ? 'text-red-700' : 'text-gray-900') : '',
+      suited ? '' : valueSize,
       manilha ? (isRedSuit ? 'text-red-700' : 'text-gray-900') : '',
       dimmed ? 'opacity-50' : '',
       interactive && !disabled ? 'hover:bg-amber-100 focus:outline-none focus:ring-4 focus:ring-amber-300' : '',
@@ -49,14 +52,21 @@ const suited = computed(() => props.label !== undefined && props.suit !== undefi
   >
     <span
       v-if="suited"
-      class="flex flex-col items-center leading-none"
+      class="relative flex h-full w-full flex-col items-center justify-center leading-none"
     >
-      <span>{{ label }}</span>
-      <span class="text-xl">{{ suitGlyphs[suit as CardSuit] }}</span>
+      <span class="absolute left-1 top-1 flex flex-col items-center text-sm">
+        <span>{{ label }}</span>
+        <span class="text-xs">{{ suitGlyphs[suit as CardSuit] }}</span>
+      </span>
+      <span class="text-4xl">{{ suitGlyphs[suit as CardSuit] }}</span>
       <span
         v-if="manilha"
-        class="mt-1 font-sans text-[9px] font-bold uppercase tracking-wide text-amber-700"
+        class="mt-0.5 font-sans text-[9px] font-bold uppercase tracking-wide text-amber-700"
       >Manilha</span>
+      <span class="absolute bottom-1 right-1 flex rotate-180 flex-col items-center text-sm">
+        <span>{{ label }}</span>
+        <span class="text-xs">{{ suitGlyphs[suit as CardSuit] }}</span>
+      </span>
     </span>
     <span v-else>{{ value }}</span>
   </component>

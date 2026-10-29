@@ -27,7 +27,8 @@ jest.mock('../../../events/match/functions/getNextMatchNumCards', () => ({
   getNextMatchNumCards: jest.fn((_numRounds, _alivePlayersIds, _defaultCards) => 2)
 }));
 jest.mock('../../../events/functions/getDefaultCards', () => ({
-  getDefaultCards: jest.fn(() => 'mocked default cards')
+  getDefaultCards: jest.fn(() => 'mocked default cards'),
+  getNumberedCards: jest.fn(() => 'mocked default cards')
 }));
 jest.mock('../../../events/match/functions/getPlayersCards', () => ({
   getPlayersCards: jest.fn((_alivePlayersIds, _defaultCards, _numRounds) => ({
@@ -167,7 +168,8 @@ describe('startNewMatch', () => {
 
     expect(emitStartMatch).toHaveBeenCalledWith(
       getPlayersCards(getAlivePlayersIds(lobby), getDefaultCards(), 2),
-      lobby.game!.currentPlayerId
+      lobby.game!.currentPlayerId,
+      undefined
     );
   });
 
@@ -219,7 +221,8 @@ describe('startNewMatch', () => {
           ]
         }
       },
-      lobby.game!.currentPlayerId
+      lobby.game!.currentPlayerId,
+      undefined
     );
   });
 

@@ -337,19 +337,74 @@ Caso contrário, o solicitante receberá o evento `options-error`.
 
 | Nome | Tipo | Descrição |
 | --- | --- | --- |
-| options | object | Novas opções: `initialHealth`, `playerActionTimeSeconds`, `roundEndTimeSeconds` e `cardType` (`numbered` ou `manilha-velha`) |
+| options | object | Novas opções: `initialHealth`, `playerActionTimeSeconds`, `roundEndTimeSeconds` e `cardType` (`numbered`, `manilha-velha`, `manilha-nova` ou `manilha-paraguaia`), além de `customCards` opcional (valores de 1 a 999 das cartas numeradas) e `theme` opcional (`classic`, `midnight`, `wine` ou `charcoal`), além de `cardBack` opcional (`classic`, `stripes`, `lozenges` ou `dots`) |
 
 ### options-update
 
 **Emitido pelo servidor**
 
-Evento enviado para todos os jogadores da sala indicando que as opções do jogo foram alteradas pelo líder. Os parâmetros são as novas opções (`initialHealth`, `playerActionTimeSeconds`, `roundEndTimeSeconds` e `cardType` (`numbered` ou `manilha-velha`)).
+Evento enviado para todos os jogadores da sala indicando que as opções do jogo foram alteradas pelo líder. Os parâmetros são as novas opções (`initialHealth`, `playerActionTimeSeconds`, `roundEndTimeSeconds` e `cardType` (`numbered`, `manilha-velha`, `manilha-nova` ou `manilha-paraguaia`), além de `customCards` opcional (valores de 1 a 999 das cartas numeradas) e `theme` opcional (`classic`, `midnight`, `wine` ou `charcoal`), além de `cardBack` opcional (`classic`, `stripes`, `lozenges` ou `dots`)).
 
 ### options-error
 
 **Emitido pelo servidor**
 
 Evento enviado para um usuário indicando que ocorreu um erro ao tentar alterar as opções do jogo. Os possíveis tipos de erro são: `not-leader`, `already-in-game`, `not-in-lobby` e `invalid-options`.
+### add-bot
+
+**Emitido pelo cliente**
+
+Evento chamado quando o líder deseja adicionar um bot na sala. Apenas o líder pode adicionar, apenas antes do jogo começar e apenas se a sala não estiver cheia (máximo de 10 jogadores entre humanos e bots). O bot entra sempre pronto para jogar. Em caso de sucesso, todos os jogadores da sala receberão o evento `bot-added`. Caso contrário, o solicitante receberá o evento `bot-error`.
+
+Sem parâmetros.
+
+### bot-added
+
+**Emitido pelo servidor**
+
+Evento enviado para todos os jogadores da sala indicando que um bot foi adicionado. O parâmetro é o objeto do bot (`id`, `name`, `leader`, `ready` e `bot`).
+
+### remove-bot
+
+**Emitido pelo cliente**
+
+Evento chamado quando o líder deseja remover um bot da sala, antes do jogo começar. Em caso de sucesso, todos os jogadores da sala receberão o evento `bot-removed`. Caso contrário, o solicitante receberá o evento `bot-error`.
+
+| Parâmetro | Tipo   | Descrição              |
+| --------- | ------ | ---------------------- |
+| botId     | string | Id do bot a ser removido |
+
+### bot-removed
+
+**Emitido pelo servidor**
+
+Evento enviado para todos os jogadores da sala indicando que um bot foi removido. O parâmetro é o id do bot removido.
+
+### bot-error
+
+**Emitido pelo servidor**
+
+Evento enviado para um usuário indicando que ocorreu um erro ao adicionar ou remover um bot. Os possíveis tipos de erro são: `not-leader`, `already-in-game`, `not-in-lobby`, `lobby-full` e `bot-not-found`.
+
+### rematch-request
+
+**Emitido pelo cliente**
+
+Evento chamado quando o líder, ao final de um jogo, deseja uma revanche. Todos os jogadores voltam para a sala pelo evento `rematch`, com o status de prontidão resetado (bots continuam prontos). Caso haja um jogo em andamento, o solicitante receberá o evento `rematch-error`.
+
+Sem parâmetros.
+
+### rematch
+
+**Emitido pelo servidor**
+
+Evento enviado para todos os jogadores da sala indicando que uma revanche foi pedida pelo líder. Todos devem limpar o jogo e o ranking e voltar para a sala.
+
+### rematch-error
+
+**Emitido pelo servidor**
+
+Evento enviado para um usuário indicando que ocorreu um erro ao pedir uma revanche. Os possíveis tipos de erro são: `not-leader`, `already-in-game` e `not-in-lobby`.
 ### start-game-error
 
 Servidor ----> Cliente (servidor envia uma mensagem à um cliente específico)
@@ -960,3 +1015,65 @@ Esse evento sempre será chamado logo em seguida da chamada de qualquer outro ev
 #### Parâmetros
 
 - lobby: um objeto (JSON) contendo as informações "cru" do lobby no servidor. Pode ser indefinido caso não tenha nenhuma informação de lobby para ser informada.
+### use-powerup
+
+Cliente ----> Servidor
+
+#### Descrição
+
+Evento que um jogador emite para usar um powerup que possui. Os powerups são configurados nas opções do lobby (tipos habilitados, quantidade por concessão e momento da concessão: início de cada partida ou apenas no início do jogo), são concedidos aleatoriamente (podendo repetir) e acumulam entre partidas enquanto não forem usados.
+
+#### Parâmetros
+
+- data: objeto com `type` (um de `swap-cards`, `cancel-card`, `reverse-card-strengths`, `random-card`, `hide-card-strength`, `increase-card-strength`, `decrease-card-strength`) e `targetPlayerId` opcional (obrigatório para `swap-cards`, `hide-card-strength`, `increase-card-strength` e `decrease-card-strength`).
+
+Efeitos: `swap-cards` troca as mãos do jogador com o alvo (fase de palpites); `cancel-card` faz o jogador da vez pular a rodada; `reverse-card-strengths` inverte a força das cartas na rodada; `random-card` força o jogador da vez a jogar uma carta aleatória; `hide-card-strength` esconde uma carta já jogada na mesa até o fim da rodada; `increase-card-strength`/`decrease-card-strength` somam/subtraem 5 da próxima carta jogada pelo alvo.
+
+### powerups-update
+
+Servidor ----> Cliente (específico)
+
+Envia ao jogador a sua própria lista de powerups e um objeto com a quantidade de powerups de cada jogador do lobby.
+
+### powerup-used
+
+Servidor ----> Lobby
+
+Indica que um powerup foi usado, com `type`, `userId`, `targetPlayerId` opcional e `pendingStrengthTotal` para os powerups de força.
+
+### powerup-error
+
+Servidor ----> Cliente (específico)
+
+Indica que o uso foi rejeitado (por exemplo `no-powerup`, `invalid-phase`, `invalid-target`). O powerup não é consumido nesse caso.
+
+### hand-update
+
+Servidor ----> Cliente (específico)
+
+Envia a nova mão do jogador após uma troca de cartas (`swap-cards`).
+### peek-result
+
+Servidor ----> Cliente (específico)
+
+Evento enviado apenas ao jogador que usou o poder `peek-card`, revelando uma carta aleatória da mão do jogador alvo. Parâmetros: `card` (a carta revelada) e `targetPlayerId`.
+
+### update-appearance
+
+Cliente ----> Servidor
+
+Evento que um jogador emite na sala (antes do jogo começar) para alterar a própria aparência. Parâmetros: objeto com `emote` e `color`. Nenhum jogador pode usar o mesmo emote ou a mesma cor de outro jogador da sala; cada jogador recebe automaticamente um emote e uma cor livres ao entrar na sala.
+
+### appearance-update
+
+Servidor ----> Lobby
+
+Indica que um jogador alterou a própria aparência. Parâmetros: `playerId`, `emote` e `color`.
+
+### appearance-error
+
+Servidor ----> Cliente (específico)
+
+Indica que a alteração de aparência foi rejeitada (`emote-taken`, `color-taken`, `invalid-appearance`, `already-in-game` ou `not-in-lobby`).
+
+Observação: o poder `shield` é passivo — ele não é ativado pelo jogador; quando o dono perderia uma vida no fim de uma partida, um `shield` guardado é consumido automaticamente e a perda é bloqueada (avisado pelo evento `powerup-used`).

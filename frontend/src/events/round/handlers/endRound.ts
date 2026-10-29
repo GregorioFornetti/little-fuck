@@ -28,11 +28,26 @@ export function handleEndRound(winnerId: string, points: number) {
   const isLastRound = lobby.value.game.roundNumber >= lobby.value.game.match.numRounds;
 
   // Guarda a mesa final e o vencedor para serem exibidos antes da próxima rodada
+  // A mesa final é revelada: cartas escondidas por poderes voltam a aparecer
+  const anyHidden = [...lobby.value.game.match.round.cards.onMatch, ...lobby.value.game.match.round.cards.anulledCards].some((roundCard) => roundCard.hidden);
+  const revealedCards = !anyHidden ? lobby.value.game.match.round.cards : {
+    onMatch: lobby.value.game.match.round.cards.onMatch.map((roundCard) => ({ ...roundCard, hidden: false })),
+    anulledCards: lobby.value.game.match.round.cards.anulledCards.map((roundCard) => ({ ...roundCard, hidden: false }))
+  };
   lobby.value.game.lastRound = {
-    cards: lobby.value.game.match.round.cards,
+    cards: revealedCards,
     winnerId,
     points
   };
+
+  lobby.value.game.currentRounds = [
+    ...(lobby.value.game.currentRounds ?? []),
+    { cards: lobby.value.game.match.round.cards, winnerId, points }
+  ];
+  lobby.value.game.currentRoundWinners = [
+    ...(lobby.value.game.currentRoundWinners ?? []),
+    { winnerId, points }
+  ];
 
   lobby.value.game.match.round = undefined;
   lobby.value.game.match.players[winnerId].numWonRounds += points;

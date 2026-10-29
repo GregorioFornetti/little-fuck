@@ -9,3 +9,165 @@
     radial-gradient(ellipse at center, #22784a 0%, #175e36 48%, #0d3d22 78%, #082a17 100%);
   box-shadow: inset 0 0 180px rgba(0, 0, 0, 0.55);
 }
+
+/* Alternative table themes, chosen by the leader in the lobby options. */
+.card-table.theme-midnight {
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 42%, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 55%),
+    radial-gradient(ellipse at center, #274b73 0%, #1b3657 48%, #101f38 78%, #0a1526 100%);
+}
+.card-table.theme-wine {
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 42%, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 55%),
+    radial-gradient(ellipse at center, #8a2f3b 0%, #671f2a 48%, #42121c 78%, #2a0a11 100%);
+}
+.card-table.theme-charcoal {
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 42%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 55%),
+    radial-gradient(ellipse at center, #4b5563 0%, #343c47 48%, #1e242c 78%, #12161c 100%);
+}
+
+/* Back of a hidden card; its color follows the table theme. */
+.card-back {
+  background: #065f46;
+}
+.theme-midnight .card-back {
+  background: #1d4e79;
+}
+.theme-wine .card-back {
+  background: #7e2231;
+}
+.theme-charcoal .card-back {
+  background: #4b5563;
+}
+
+/* Cards slide up and fade in when they appear (hand, table, flipped card). */
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.card-enter {
+  animation: card-enter 220ms ease-out;
+}
+
+/* Manilhas gently pulse so they stand out on the table. */
+@keyframes manilha-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.55), 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(251, 191, 36, 0.18), 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  }
+}
+.manilha-glow {
+  animation: manilha-glow 1600ms ease-in-out infinite;
+}
+
+/* Confetti pieces on the end-game celebration. */
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(-4vh) rotate(0deg);
+  }
+  100% {
+    opacity: 0.85;
+    transform: translateY(105vh) rotate(640deg);
+  }
+}
+.confetti-piece {
+  animation-name: confetti-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-enter,
+  .manilha-glow,
+  .confetti-piece {
+    animation: none;
+  }
+}
+
+/* Selectable card-back patterns, combined with the theme color underneath. */
+.card-back.back-stripes {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.22) 0 6px,
+    rgba(255, 255, 255, 0) 6px 12px
+  );
+}
+.card-back.back-lozenges {
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.28) 2.5px, rgba(255, 255, 255, 0) 3.5px),
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.18) 2.5px, rgba(0, 0, 0, 0) 3.5px);
+  background-size: 18px 18px;
+  background-position: 0 0, 9px 9px;
+}
+.card-back.back-dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.3) 2px, rgba(255, 255, 255, 0) 3px);
+  background-size: 14px 14px;
+}
+
+/* Cards of the player's hand, fanned with a slight rotation. */
+.fan-card {
+  transition: transform 160ms ease-out;
+}
+.fan-card:hover {
+  transform: rotate(0deg) translateY(-14px) !important;
+  z-index: 30;
+}
+
+/* A heart cracks and fades right when a life is lost. */
+@keyframes heart-break {
+  0% {
+    opacity: 1;
+    transform: scale(1.5) rotate(-8deg);
+  }
+  60% {
+    opacity: 0.9;
+    transform: scale(1.1) rotate(6deg);
+  }
+  100% {
+    opacity: 0.25;
+    transform: scale(0.9) rotate(0deg);
+  }
+}
+.heart-break {
+  display: inline-block;
+  animation: heart-break 1200ms ease-out forwards;
+}
+
+/* A guess pops in above the player when it is made. */
+@keyframes guess-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.6);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.12);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.guess-pop {
+  display: inline-block;
+  animation: guess-pop 260ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fan-card,
+  .heart-break,
+  .guess-pop {
+    animation: none;
+    transition: none;
+  }
+}

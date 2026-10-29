@@ -5,6 +5,7 @@ import GameEventsEmitter from './game/eventsEmitter';
 import MatchEventsEmitter from './match/eventsEmitter';
 import RoundEventsEmitter from './round/eventsEmitter';
 import GeneralEventsEmitter from './general/eventsEmitter';
+import PowerupEventsEmitter from './powerup/eventsEmitter';
 
 /**
  *  Classe para emissão de eventos (enviar mensagens aos clientes).
@@ -17,6 +18,7 @@ export default class EventsEmitter {
   public Match: MatchEventsEmitter;
   public Round: RoundEventsEmitter;
   public General: GeneralEventsEmitter;
+  public Powerup: PowerupEventsEmitter;
 
   constructor(io: Server, socket: Socket|ClientSocket, lobbyId?: string) {
     this.Lobby = new LobbyEventsEmitter(io, socket, lobbyId);
@@ -24,5 +26,6 @@ export default class EventsEmitter {
     this.Match = new MatchEventsEmitter(io, socket, lobbyId);
     this.Round = new RoundEventsEmitter(io, socket, lobbyId);
     this.General = new GeneralEventsEmitter(io, socket, lobbyId);
+    this.Powerup = new PowerupEventsEmitter(io, socket, lobbyId);
   }
 }

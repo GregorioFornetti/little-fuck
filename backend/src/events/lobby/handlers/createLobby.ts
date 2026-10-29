@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import Player from '../../../interfaces/Player';
 import Lobby from '../../../interfaces/Lobby';
 import { DEFAULT_GAME_OPTIONS, lobbys, players } from '../../../global';
+import { assignFreeAppearance } from '../functions/appearance';
 
 /**
  *  Evento chamado quando um usuário deseja criar um lobby. O lobby é uma sala em que vários jogadores podem se conectar a partir de um código.
@@ -37,6 +38,7 @@ export function handleCreateLobby(player: Player, name: string) {
     ],
     options: { ...DEFAULT_GAME_OPTIONS }
   };
+  assignFreeAppearance(lobby, lobby.players[0]);
   lobbys[lobby.lobbyId] = lobby;
   players[player.playerId] = { socket: player.socket, lobby: lobby };
 

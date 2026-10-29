@@ -5,6 +5,7 @@ import { insertCard } from '../functions/insertCard';
 import { getNextPlayerId } from '../../functions/getNextPlayerId';
 import { endRound } from '../functions/endRound';
 import { generateAutomaticSelectCard } from '../functions/generateAutomaticSelectCard';
+import { scheduleBotTurn } from '../../bot/scheduleBotTurn';
 import Timer from 'easytimer.js';
 import { PLAYER_ACTION_TIME_SECONDS } from '../../../global';
 
@@ -47,11 +48,19 @@ export function handleSelectCard(player: Player, cardIndex: number): void {
     lobby.game.timer.stop();
 
     // A carta jogada é descartada da mão do jogador
-    const [playedCard] = lobby.game.match.players[player.playerId].cards.splice(cardIndex, 1);
+    const [splicedCard] = lobby.game.match.players[player.playerId].cards.splice(cardIndex, 1);
+
+    // Modificadores de força pendentes (poderes increase/decrease) valem para esta carta
+    const pendingDelta = lobby.game.match.pendingStrength?.[player.playerId] ?? 0;
+    const playedCard = pendingDelta !== 0 ? { ...splicedCard, value: splicedCard.value + pendingDelta } : splicedCard;
+    if (lobby.game.match.pendingStrength) {
+      delete lobby.game.match.pendingStrength[player.playerId];
+    }
 
     const newTableCards = insertCard(
       lobby.game.match.round.cards,
-      { card: playedCard, playerId: player.playerId }
+      { card: playedCard, playerId: player.playerId },
+      lobby.game.match.round.reversed === true
     );
     lobby.game.match.round.cards = newTableCards;
 
@@ -72,6 +81,8 @@ export function handleSelectCard(player: Player, cardIndex: number): void {
 
       player.eventsEmitter.Round.emitTableUpdate(newTableCards, lobby.game.match.round.nextPlayerId);
     }
+
+    scheduleBotTurn(lobby);
   } catch (error) {
     generateInternalServerError(player.lobby, error as Error);
   }

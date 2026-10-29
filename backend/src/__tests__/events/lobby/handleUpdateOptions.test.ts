@@ -28,6 +28,26 @@ describe('handleUpdateOptions', () => {
     handleUpdateOptions(player, validOptions);
   });
 
+  test('líder pode escolher o tipo de cartas manilha nova', (done) => {
+    clientSocket.on('options-update', (options: unknown) => {
+      expect(options).toEqual({ ...validOptions, cardType: 'manilha-nova' });
+      done();
+    });
+
+    createLobby();
+    handleUpdateOptions(player, { ...validOptions, cardType: 'manilha-nova' });
+  });
+
+  test('líder pode escolher o tipo de cartas manilha paraguaia', (done) => {
+    clientSocket.on('options-update', (options: unknown) => {
+      expect(options).toEqual({ ...validOptions, cardType: 'manilha-paraguaia' });
+      done();
+    });
+
+    createLobby();
+    handleUpdateOptions(player, { ...validOptions, cardType: 'manilha-paraguaia' });
+  });
+
   test('jogador que não é líder não pode alterar as opções', (done) => {
     clientSocket.on('options-error', (errorType: string) => {
       expect(errorType).toBe('not-leader');
@@ -74,6 +94,53 @@ describe('handleUpdateOptions', () => {
     handleUpdateOptions(player, { ...validOptions, cardType: 'truco' as never });
   });
 
+  test('líder pode personalizar as cartas numeradas e cartas inválidas são rejeitadas', (done) => {
+    let errors = 0;
+    clientSocket.on('options-update', (options: unknown) => {
+      expect(options).toEqual({ ...validOptions, customCards: [1, 2, 999] });
+    });
+    clientSocket.on('options-error', (errorType: string) => {
+      expect(errorType).toBe('invalid-options');
+      errors++;
+      if (errors === 3) done();
+    });
+
+    createLobby();
+    handleUpdateOptions(player, { ...validOptions, customCards: [1, 2, 999] });
+    handleUpdateOptions(player, { ...validOptions, customCards: [] });
+    handleUpdateOptions(player, { ...validOptions, customCards: [0] });
+    handleUpdateOptions(player, { ...validOptions, customCards: [1000] });
+  });
+  test('líder pode escolher o tema da mesa e temas inválidos são rejeitados', (done) => {
+    let errors = 0;
+    clientSocket.on('options-update', (options: unknown) => {
+      expect(options).toEqual({ ...validOptions, theme: 'wine' });
+    });
+    clientSocket.on('options-error', (errorType: string) => {
+      expect(errorType).toBe('invalid-options');
+      errors++;
+      if (errors === 1) done();
+    });
+
+    createLobby();
+    handleUpdateOptions(player, { ...validOptions, theme: 'wine' });
+    handleUpdateOptions(player, { ...validOptions, theme: 'neon' as never });
+  });
+  test('líder pode escolher o verso das cartas e versos inválidos são rejeitados', (done) => {
+    let errors = 0;
+    clientSocket.on('options-update', (options: unknown) => {
+      expect(options).toEqual({ ...validOptions, cardBack: 'stripes' });
+    });
+    clientSocket.on('options-error', (errorType: string) => {
+      expect(errorType).toBe('invalid-options');
+      errors++;
+      if (errors === 1) done();
+    });
+
+    createLobby();
+    handleUpdateOptions(player, { ...validOptions, cardBack: 'stripes' });
+    handleUpdateOptions(player, { ...validOptions, cardBack: 'xadrez' as never });
+  });
   test('jogador fora de uma sala recebe erro', (done) => {
     clientSocket.on('options-error', (errorType: string) => {
       expect(errorType).toBe('not-in-lobby');

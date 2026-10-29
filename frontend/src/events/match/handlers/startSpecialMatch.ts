@@ -1,4 +1,4 @@
-import type { Match, PlayerMatch, SpecialMatchCards } from '@/interfaces/Lobby';
+import type { Card, Match, PlayerMatch, SpecialMatchCards } from '@/interfaces/Lobby';
 import { lobby } from '@/connection';
 import { i18n } from '@/plugins/i18n';
 
@@ -12,7 +12,7 @@ import { i18n } from '@/plugins/i18n';
  *  @param cards cartas de todos os outros jogadores, menos a própria carta
  *  @param firstPlayerId id do jogador que deve começar palpitando
  */
-export function handleStartSpecialMatch(cards: SpecialMatchCards, firstPlayerId: string) {
+export function handleStartSpecialMatch(cards: SpecialMatchCards, firstPlayerId: string, turnedCard?: Card) {
   if (lobby.value === null) {
     throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
   }
@@ -40,11 +40,15 @@ export function handleStartSpecialMatch(cards: SpecialMatchCards, firstPlayerId:
     currentPlayerCards: [],
     numRounds: 1,
     nextPlayerId: firstPlayerId,
+    turnedCard,
     round: {
       cards
     }
   };
 
   lobby.value.game.lastRound = undefined;
+  lobby.value.game.lastMatchSummary = undefined;
+  lobby.value.game.currentRoundWinners = [];
+  lobby.value.game.currentRounds = [];
   lobby.value.game.match = specialMatch;
 }

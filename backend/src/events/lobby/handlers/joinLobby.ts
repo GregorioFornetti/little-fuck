@@ -1,6 +1,7 @@
 import Player from '../../../interfaces/Player';
 import { lobbys, players } from '../../../global';
 import EventsEmitter from '../../Emitter';
+import { assignFreeAppearance } from '../functions/appearance';
 
 /**
  *  Evento chamado quando um usuário deseja se conectar a um lobby.
@@ -48,14 +49,18 @@ export function handleJoinLobby(player: Player, lobbyId: string, name: string) {
 
   player.eventsEmitter.Lobby.emitJoinLobbySuccess(currentLobby);
 
-  currentLobby.players.push({
+  const newPlayer = {
     id: player.playerId,
     name: formattedName,
     leader: false,
-    ready: false
-  });
+    ready: false,
+    emote: undefined as string | undefined,
+    color: undefined as string | undefined
+  };
+  assignFreeAppearance(currentLobby, newPlayer);
+  currentLobby.players.push(newPlayer);
 
   players[player.playerId] = { lobby: currentLobby, socket: player.socket };
 
-  player.eventsEmitter.Lobby.emitPlayerJoin(player.playerId, formattedName);
+  player.eventsEmitter.Lobby.emitPlayerJoin(player.playerId, formattedName, newPlayer.emote, newPlayer.color);
 }

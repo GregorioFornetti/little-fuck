@@ -16,7 +16,7 @@ export class MatchEventsHandlersAdder extends EventsListenersAdderBase {
      *
      *  @param handlerFunction função que será chamada quando o evento for recebido
      */
-  public startMatch(handlerFunction: (cards: Card[], firstPlayerId: string) => void): void {
+  public startMatch(handlerFunction: (cards: Card[], firstPlayerId: string, turnedCard?: Card) => void): void {
     this.socket.on('start-match', handlerFunction);
   }
 
@@ -64,7 +64,7 @@ export class MatchEventsHandlersAdder extends EventsListenersAdderBase {
      *
      *  @param handlerFunction função que será chamada quando o evento for recebido
      */
-  public startSpecialMatch(handlerFunction: (cards: SpecialMatchCards, firstPlayerId: string) => void): void {
+  public startSpecialMatch(handlerFunction: (cards: SpecialMatchCards, firstPlayerId: string, turnedCard?: Card) => void): void {
     this.socket.on('start-special-match', handlerFunction);
   }
 }

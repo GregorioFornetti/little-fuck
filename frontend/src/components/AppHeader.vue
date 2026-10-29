@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { setLocale, type AvailableLocale } from '@/plugins/i18n';
 import { eventsEmitter, lobby } from '@/connection';
@@ -15,6 +15,24 @@ const options: { value: AvailableLocale; label: string }[] = [
 ];
 
 const showLeaveModal = ref(false);
+
+const isFullscreen = ref(false);
+const syncFullscreen = () => {
+  isFullscreen.value = document.fullscreenElement !== null;
+};
+const toggleFullscreen = async () => {
+  try {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    } else {
+      await document.documentElement.requestFullscreen();
+    }
+  } catch {
+    // Fullscreen may be unavailable (ex: iframe permissions). Nothing to do.
+  }
+};
+onMounted(() => document.addEventListener('fullscreenchange', syncFullscreen));
+onBeforeUnmount(() => document.removeEventListener('fullscreenchange', syncFullscreen));
 
 const confirmLeave = () => {
   showLeaveModal.value = false;
@@ -50,6 +68,17 @@ const confirmLeave = () => {
           @click="showLeaveModal = true"
         >
           {{ t('GAME.LEAVE_GAME') }}
+        </button>
+
+        <button
+          type="button"
+          :aria-pressed="isFullscreen"
+          :aria-label="t('HOME.FULLSCREEN')"
+          :title="t('HOME.FULLSCREEN')"
+          class="rounded-full border border-white/30 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/20"
+          @click="toggleFullscreen"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" /></svg>
         </button>
 
         <div

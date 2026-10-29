@@ -14,6 +14,15 @@ import { endRound } from '../../round/functions/endRound';
  *
  *  @param lobby Objeto contendo informações do lobby
  */
+const applyPendingStrength = (lobby: Lobby, playerId: string) => {
+  const card = lobby.game!.match!.players[playerId].cards[0];
+  const delta = lobby.game!.match!.pendingStrength?.[playerId] ?? 0;
+  if (lobby.game!.match!.pendingStrength) {
+    delete lobby.game!.match!.pendingStrength[playerId];
+  }
+  return delta !== 0 ? { ...card, value: card.value + delta } : card;
+};
+
 export function endSpecialMatch(lobby: Lobby): void {
   if (!lobby.game) {
     return generateInternalServerError(lobby, new Error(i18n.t('COMMON.ERROR.NOT_IN_GAME')));
@@ -36,7 +45,7 @@ export function endSpecialMatch(lobby: Lobby): void {
     for (const playerId in lobby.game.match.players) {
       lobby.game.match.round.cards = insertCard(
         lobby.game.match.round.cards,
-        { card: lobby.game.match.players[playerId].cards[0], playerId: playerId }
+        { card: applyPendingStrength(lobby, playerId), playerId: playerId }
       );
     }
 

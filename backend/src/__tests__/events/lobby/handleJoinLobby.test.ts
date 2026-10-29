@@ -221,7 +221,7 @@ describe('handleJoinLobby', () => {
         addPlayerToLobby(player, lobbyServerSockets[1], 'player3');
 
         lobbyClientsSockets[1].on('join-lobby-success', (lobby: Lobby) => {
-          expect(lobby).toEqual({ lobbyId: '123', players: [{ id: player.playerId, name: 'player1', leader: true, ready: false }, { id: lobbyServerSockets[0].id, name: 'player2', leader: false, ready: false }] });
+          expect(lobby).toEqual({ lobbyId: '123', players: [{ id: player.playerId, name: 'player1', leader: true, ready: false }, { id: lobbyServerSockets[0].id, name: 'player2', leader: false, ready: false, emote: '🦊', color: '#e63946' }] });
           done();
         });
       });

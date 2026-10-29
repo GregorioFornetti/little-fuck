@@ -5,12 +5,22 @@ import {
   TIMER_SAFETY_MARGIN_SECONDS,
   buildRankingRows,
   DEFAULT_GAME_OPTIONS,
+  DEFAULT_NUMBERED_CARDS,
+  groupNumberedCards,
+  getCardBackClass,
+  withCardCount,
+  withRenamedCardValue,
   getCountdownKey,
   getCountdownSeconds,
   getForbiddenGuess,
   getLobbyOptions,
   getGamePhase,
   isManilhaCard,
+  isManilhaCardInMatch,
+  getManilhaNovaRank,
+  getManilhaRankBelow,
+  getManilhaMode,
+  isManilhaInRound,
   getTurnPlayerId,
   isSpecialMatch,
   ROUND_END_TIME_SECONDS,
@@ -130,14 +140,46 @@ describe('gameState', () => {
     expect(getCountdownSeconds('round', 'p2', false, options)).toBe(27);
     expect(getCountdownSeconds('transition', undefined, true, options)).toBe(20);
     expect(getLobbyOptions(null)).toEqual(DEFAULT_GAME_OPTIONS);
-    expect(getLobbyOptions({ lobbyId: 'x', players: [], options })).toEqual(options);
+    expect(getLobbyOptions({ lobbyId: 'x', players: [], options }))
+      .toEqual({ ...options, customCards: DEFAULT_NUMBERED_CARDS, theme: 'classic', cardBack: 'classic', powerups: { enabled: [], perGrant: 1, grantTiming: 'match' } });
   });
 
   test('lobby options fall back to numbered cards for lobbies without a card type', () => {
     const legacyOptions = { initialHealth: 5, playerActionTimeSeconds: 30, roundEndTimeSeconds: 20 };
     expect(getLobbyOptions({ lobbyId: 'x', players: [], options: legacyOptions as never }))
-      .toEqual({ ...legacyOptions, cardType: 'numbered' });
+      .toEqual({ ...legacyOptions, cardType: 'numbered', customCards: DEFAULT_NUMBERED_CARDS, theme: 'classic', cardBack: 'classic', powerups: { enabled: [], perGrant: 1, grantTiming: 'match' } });
     expect(DEFAULT_GAME_OPTIONS.cardType).toBe('numbered');
+  });
+
+  test('default numbered cards are four copies of 1 to 12 plus one each of 13 to 16', () => {
+    expect(DEFAULT_NUMBERED_CARDS).toHaveLength(52);
+    expect(DEFAULT_NUMBERED_CARDS.filter((value) => value === 1)).toHaveLength(4);
+    expect(DEFAULT_NUMBERED_CARDS.filter((value) => value === 12)).toHaveLength(4);
+    expect(DEFAULT_NUMBERED_CARDS.filter((value) => value >= 13)).toEqual([13, 14, 15, 16]);
+    expect(DEFAULT_GAME_OPTIONS.customCards).toEqual(DEFAULT_NUMBERED_CARDS);
+  });
+
+  test('numbered cards are grouped by strength with their counts', () => {
+    expect(groupNumberedCards([5, 1, 5, 13, 1, 5])).toEqual([
+      { value: 1, count: 2 },
+      { value: 5, count: 3 },
+      { value: 13, count: 1 }
+    ]);
+    const groups = groupNumberedCards(DEFAULT_NUMBERED_CARDS);
+    expect(groups).toHaveLength(16);
+    expect(groups[0]).toEqual({ value: 1, count: 4 });
+    expect(groups[15]).toEqual({ value: 16, count: 1 });
+
+    expect(withCardCount([1, 1, 5], 1, 4)).toEqual([1, 1, 1, 1, 5]);
+    expect(withCardCount([1, 1, 5], 5, 1)).toEqual([1, 1, 5]);
+    expect(withRenamedCardValue([1, 1, 5], 1, 5)).toEqual([5, 5, 5]);
+  });
+
+  test('card back classes combine the design pattern', () => {
+    expect(getCardBackClass(undefined)).toBe('card-back');
+    expect(getCardBackClass({ cardBack: 'classic' })).toBe('card-back');
+    expect(getCardBackClass({ cardBack: 'stripes' })).toBe('card-back back-stripes');
+    expect(getCardBackClass({ cardBack: 'dots' })).toBe('card-back back-dots');
   });
 
   test('isManilhaCard only matches the four manilhas', () => {
@@ -150,6 +192,54 @@ describe('gameState', () => {
     expect(isManilhaCard({ label: '3', suit: 'clubs' })).toBe(false);
     expect(isManilhaCard({ value: 14 } as never)).toBe(false);
     expect(isManilhaCard(undefined)).toBe(false);
+  });
+
+  test('manilha rank is one level above the turned card, wrapping from 3 to 4', () => {
+    expect(getManilhaNovaRank('2')).toBe('3');
+    expect(getManilhaNovaRank('3')).toBe('4');
+    expect(getManilhaNovaRank('K')).toBe('A');
+    expect(getManilhaNovaRank('Q')).toBe('J');
+    expect(getManilhaNovaRank('4')).toBe('5');
+    expect(getManilhaNovaRank(undefined)).toBeNull();
+  });
+
+  test('isManilhaCardInMatch follows the turned card when there is one', () => {
+    const turned = { label: '2', suit: 'spades' };
+    expect(isManilhaCardInMatch({ label: '3', suit: 'diamonds' }, turned)).toBe(true);
+    expect(isManilhaCardInMatch({ label: '3', suit: 'clubs' }, turned)).toBe(true);
+    expect(isManilhaCardInMatch({ label: '2', suit: 'clubs' }, turned)).toBe(false);
+    // The fixed manilhas of the manilha velha deck do not apply here
+    expect(isManilhaCardInMatch({ label: '4', suit: 'clubs' }, turned)).toBe(false);
+    expect(isManilhaCardInMatch({ label: '7', suit: 'hearts' }, turned)).toBe(false);
+    // Without a turned card, the fixed manilhas apply
+    expect(isManilhaCardInMatch({ label: '4', suit: 'clubs' }, undefined)).toBe(true);
+    expect(isManilhaCardInMatch({ label: '3', suit: 'clubs' }, undefined)).toBe(false);
+  });
+
+  test('manilha paraguaia rotates the manilhas every round in a three-round cycle', () => {
+    const turned = { label: '2', suit: 'spades' };
+    const paraguaia = (card: { label: string; suit: string }, round: number) =>
+      isManilhaInRound(card, getManilhaMode('manilha-paraguaia', turned, round), turned);
+
+    // Round 1: above the flipped card (3s), like manilha nova
+    expect(paraguaia({ label: '3', suit: 'diamonds' }, 1)).toBe(true);
+    expect(paraguaia({ label: 'A', suit: 'clubs' }, 1)).toBe(false);
+    // Round 2: below the flipped card (aces)
+    expect(paraguaia({ label: 'A', suit: 'diamonds' }, 2)).toBe(true);
+    expect(paraguaia({ label: '3', suit: 'clubs' }, 2)).toBe(false);
+    // Round 3: fixed manilhas of manilha velha
+    expect(paraguaia({ label: '4', suit: 'clubs' }, 3)).toBe(true);
+    expect(paraguaia({ label: '7', suit: 'hearts' }, 3)).toBe(true);
+    expect(paraguaia({ label: 'A', suit: 'clubs' }, 3)).toBe(false);
+    // The cycle repeats
+    expect(paraguaia({ label: '3', suit: 'clubs' }, 4)).toBe(true);
+    expect(paraguaia({ label: 'A', suit: 'clubs' }, 5)).toBe(true);
+    expect(paraguaia({ label: '4', suit: 'clubs' }, 6)).toBe(true);
+
+    expect(getManilhaMode('manilha-nova', turned, 2)).toBe('above');
+    expect(getManilhaMode('manilha-velha', undefined, 2)).toBe('fixed');
+    expect(getManilhaRankBelow('4')).toBe('3');
+    expect(getManilhaRankBelow('2')).toBe('A');
   });
 
   test('ranking puts the survivor first and the first eliminated last', () => {

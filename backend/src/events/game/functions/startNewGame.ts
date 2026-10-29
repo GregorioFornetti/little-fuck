@@ -1,6 +1,7 @@
 
 import Timer from 'easytimer.js';
 import { startNewMatch } from '../../match/functions/startNewMatch';
+import { grantPowerupsIfNeeded } from '../../powerup/functions/grantPowerups';
 import Lobby from '../../../interfaces/Lobby';
 import { io } from '../../../index';
 import { createPlayer } from '../../functions/createPlayer';
@@ -24,7 +25,8 @@ export function startNewGame(lobby: Lobby): void {
   const timer = new Timer();
   timer.start({ countdown: true, startValues: { seconds: 5 } });
   timer.addEventListener('targetAchieved', () => {
-    startNewMatch(lobby);
+    grantPowerupsIfNeeded(lobby, 'game');
+  startNewMatch(lobby);
   });
 
   lobby.game = {

@@ -63,6 +63,61 @@ describe('handleEndMatch', () => {
     });
   });
 
+  test('Deve guardar o resumo da partida e registrá-la no histórico', () => {
+    const match: Match = {
+      numRounds: 2,
+      currentPlayerCards: [],
+      players: {
+        [leaderPlayer.id]: { numCards: 0, numWonRounds: 1, numWinsNeeded: 1 },
+        [anotherPlayer.id]: { numCards: 0, numWonRounds: 2, numWinsNeeded: 0 }
+      }
+    };
+
+    const game: Game = {
+      currentWaitTime: 1,
+      matchNumber: 3,
+      roundNumber: 1,
+      playersHealth: {
+        [leaderPlayer.id]: INITIAL_HEALTH,
+        [anotherPlayer.id]: INITIAL_HEALTH
+      },
+      match,
+      currentRoundWinners: [
+        { winnerId: anotherPlayer.id, points: 1 },
+        { winnerId: leaderPlayer.id, points: 1 }
+      ]
+    };
+
+    lobby.value = {
+      lobbyId: '123',
+      game: game,
+      players: [leaderPlayer, anotherPlayer]
+    };
+
+    handleEndMatch({
+      [leaderPlayer.id]: 0,
+      [anotherPlayer.id]: NEGATIVE_HEALTH_MOD
+    });
+
+    const expectedRows = [
+      { playerId: leaderPlayer.id, guessed: 1, won: 1, healthDelta: 0 },
+      { playerId: anotherPlayer.id, guessed: 0, won: 2, healthDelta: NEGATIVE_HEALTH_MOD }
+    ];
+    expect(lobby.value.game?.lastMatchSummary).toEqual(expectedRows);
+    expect(lobby.value.game?.history).toEqual([
+      {
+        matchNumber: 3,
+        rows: expectedRows,
+        roundWinners: [
+          { winnerId: anotherPlayer.id, points: 1 },
+          { winnerId: leaderPlayer.id, points: 1 }
+        ],
+        rounds: []
+      }
+    ]);
+    expect(lobby.value.game?.currentRoundWinners).toEqual([]);
+  });
+
   test('Deve emitir um erro se o jogador atual não estiver em um lobby', () => {
     expect(() => handleEndMatch({}))
       .toThrow(Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY')));

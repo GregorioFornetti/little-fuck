@@ -21,3 +21,25 @@ export function getDefaultCards(): Card[] {
 
   return cards;
 }
+
+/**
+ *  Monta o baralho das cartas numeradas de um jogo.
+ *  Sem cartas personalizadas, usa as cartas padrão do jogo. Se o baralho tiver
+ *  menos cartas do que jogadores, cartas de valor 1 são adicionadas até que
+ *  haja pelo menos uma carta para cada jogador.
+ *
+ *  @param customCards valores das cartas personalizadas escolhidas pelo líder
+ *  @param numPlayers quantidade de jogadores que receberão cartas
+ *  @returns o baralho de cartas numeradas do jogo
+ */
+export function getNumberedCards(customCards?: number[], numPlayers = 0): Card[] {
+  const cards: Card[] = customCards && customCards.length > 0
+    ? customCards.map((value) => ({ value, type: 'common' as const }))
+    : getDefaultCards();
+
+  while (cards.length < numPlayers) {
+    cards.push({ value: 1, type: 'common' });
+  }
+
+  return cards;
+}

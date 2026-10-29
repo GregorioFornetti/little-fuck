@@ -4,6 +4,7 @@ import { GameEventsHandlersAdder } from './game/eventsHandlers';
 import { MatchEventsHandlersAdder } from './match/eventsHandlers';
 import { RoundEventsHandlersAdder } from './round/eventsHandlers';
 import { GeneralEventsHandlersAdder } from './general/eventsHandlers';
+import { PowerupEventsHandlersAdder } from './powerup/eventsHandlers';
 import type { Socket } from 'socket.io-client';;
 
 /**
@@ -20,6 +21,7 @@ export default class EventsListenersAdder {
   public match: MatchEventsHandlersAdder;
   public round: RoundEventsHandlersAdder;
   public general: GeneralEventsHandlersAdder;
+  public powerup: PowerupEventsHandlersAdder;
 
   constructor(socket: Socket) {
     this.lobby = new LobbyEventsHandlersAdder(socket);
@@ -27,5 +29,6 @@ export default class EventsListenersAdder {
     this.match = new MatchEventsHandlersAdder(socket);
     this.round = new RoundEventsHandlersAdder(socket);
     this.general = new GeneralEventsHandlersAdder(socket);
+    this.powerup = new PowerupEventsHandlersAdder(socket);
   }
 }

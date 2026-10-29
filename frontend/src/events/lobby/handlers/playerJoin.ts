@@ -8,7 +8,7 @@ import { i18n } from '@/plugins/i18n';
  *  @param id id do jogador que acabou de entrar na sala
  *  @param name nome do jogador que acabou de entrar na sala
  */
-export function handlePlayerJoin(id: string, name: string) {
+export function handlePlayerJoin(id: string, name: string, emote?: string, color?: string) {
   if (lobby.value === null) {
     throw new Error(i18n.t('COMMON.ERROR.NOT_IN_LOBBY'));
   }
@@ -21,6 +21,8 @@ export function handlePlayerJoin(id: string, name: string) {
     id,
     name,
     leader: false,
-    ready: false
+    ready: false,
+    emote,
+    color
   });
 }

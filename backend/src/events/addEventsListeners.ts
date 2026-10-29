@@ -3,6 +3,7 @@ import gameEventsHandlers from './game/eventsHandlers';
 import matchEventsHandlers from './match/eventsHandlers';
 import roundEventsHandlers from './round/eventsHandlers';
 import generalEventsHandlers from './general/eventsHandlers';
+import powerupEventsHandlers from './powerup/eventsHandlers';
 import { Socket, Server } from 'socket.io';
 import Player from '../interfaces/Player';
 import { createPlayer } from './functions/createPlayer';
@@ -21,7 +22,8 @@ export default function addEventsListeners(io: Server, socket: Socket, playerId:
     ...gameEventsHandlers,
     ...matchEventsHandlers,
     ...roundEventsHandlers,
-    ...generalEventsHandlers
+    ...generalEventsHandlers,
+    ...powerupEventsHandlers
   };
 
   Object.entries(eventsHandlers).forEach(([eventName, eventHandler]) => {

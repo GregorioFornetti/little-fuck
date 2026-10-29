@@ -1,5 +1,37 @@
 import { Card, CardSuit } from '../../interfaces/Lobby';
 
+export const TRUCO_SUITS: CardSuit[] = ['clubs', 'hearts', 'spades', 'diamonds'];
+
+/** Força das cartas comuns de truco, da mais fraca (4) para a mais forte (3) */
+export const TRUCO_COMMON_STRENGTH: { [label: string]: number } = {
+  '4': 1,
+  '5': 2,
+  '6': 3,
+  '7': 4,
+  'Q': 5,
+  'J': 6,
+  'K': 7,
+  'A': 8,
+  '2': 9,
+  '3': 10
+};
+
+/** Monta as 40 cartas do baralho de truco usando a função de força informada. */
+export function buildTrucoCards(strength: (label: string, suit: CardSuit) => number): Card[] {
+  const cards: Card[] = [];
+  for (const label of Object.keys(TRUCO_COMMON_STRENGTH)) {
+    for (const suit of TRUCO_SUITS) {
+      cards.push({
+        value: strength(label, suit),
+        type: 'common',
+        suit,
+        label
+      });
+    }
+  }
+  return cards;
+}
+
 /**
  *  Cartas do tipo "manilha velha" (baralho de truco, 40 cartas: sem 8, 9 e 10).
  *
@@ -15,22 +47,6 @@ import { Card, CardSuit } from '../../interfaces/Lobby';
  *  @returns uma lista contendo todas as cartas do tipo manilha velha
  */
 export function getManilhaVelhaCards(): Card[] {
-  const suits: CardSuit[] = ['clubs', 'hearts', 'spades', 'diamonds'];
-
-  // Força das cartas comuns, da mais fraca (4) para a mais forte (3)
-  const commonStrength: { [label: string]: number } = {
-    '4': 1,
-    '5': 2,
-    '6': 3,
-    '7': 4,
-    'Q': 5,
-    'J': 6,
-    'K': 7,
-    'A': 8,
-    '2': 9,
-    '3': 10
-  };
-
   // Força das manilhas, todas acima das cartas comuns: 7 de ouros, Ás de espadas, 7 de copas e Zap
   const manilhaStrength = (label: string, suit: CardSuit): number | undefined => {
     if (label === '7' && suit === 'diamonds') return 11;
@@ -40,17 +56,7 @@ export function getManilhaVelhaCards(): Card[] {
     return undefined;
   };
 
-  const cards: Card[] = [];
-  for (const label of Object.keys(commonStrength)) {
-    for (const suit of suits) {
-      cards.push({
-        value: manilhaStrength(label, suit) ?? commonStrength[label],
-        type: 'common',
-        suit,
-        label
-      });
-    }
-  }
-
-  return cards;
+  return buildTrucoCards(
+    (label, suit) => manilhaStrength(label, suit) ?? TRUCO_COMMON_STRENGTH[label]
+  );
 }

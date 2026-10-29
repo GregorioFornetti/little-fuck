@@ -72,7 +72,14 @@ export function handleLogout(player: Player) {
     lobby.players.splice(playerIndex, 1);
 
     if (wasLeader && lobby.players.length > 0) {
-      lobby.players[0].leader = true;
+      // Bots nunca viram líderes: a liderança passa para o próximo humano
+      const nextLeader = lobby.players.find(p => !p.bot);
+      if (nextLeader) {
+        nextLeader.leader = true;
+      } else {
+        // Só restaram bots na sala, então ela deixa de existir
+        lobby.players.length = 0;
+      }
     }
 
     if (lobby.players.length === 0) {

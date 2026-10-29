@@ -7,6 +7,7 @@ import { io } from '../../..';
 import Timer from 'easytimer.js';
 import { endGame } from '../../game/functions/endGame';
 import { startNewMatch } from './startNewMatch';
+import { emitPowerupsUpdate } from '../../powerup/functions/grantPowerups';
 
 /**
  *  Função que finaliza uma partida de "little-fuck". Essa função é responsável por:
@@ -29,9 +30,23 @@ export function endMatch(lobby: Lobby): void {
     const player = createPlayer(io, lobby.players[0].id);
 
     const playersHealthUpdate: { [playerId: string]: number } = {};
+    const shieldedPlayerIds: string[] = [];
     for (const playerId in lobby.game.match.players) {
       const playerInfo = lobby.game.match.players[playerId];
       playersHealthUpdate[playerId] = playerInfo.numWinsNeeded === playerInfo.numWonRounds ? 0 : -1;
+      if (playersHealthUpdate[playerId] < 0) {
+        // Poder shield: bloqueia automaticamente a perda de uma vida, uma vez por escudo guardado.
+        const lobbyPlayer = lobby.players.find((p) => p.id === playerId);
+        const shieldIndex = lobbyPlayer?.powerups?.indexOf('shield') ?? -1;
+        if (lobbyPlayer && shieldIndex >= 0) {
+          lobbyPlayer.powerups = [
+            ...(lobbyPlayer.powerups ?? []).slice(0, shieldIndex),
+            ...(lobbyPlayer.powerups ?? []).slice(shieldIndex + 1)
+          ];
+          playersHealthUpdate[playerId] = 0;
+          shieldedPlayerIds.push(playerId);
+        }
+      }
       lobby.game.playersHealth[playerId] += playersHealthUpdate[playerId];
 
       if (lobby.game.playersHealth[playerId] <= 0 && !lobby.game.deadPlayersIds.includes(playerId)) {
@@ -40,6 +55,13 @@ export function endMatch(lobby: Lobby): void {
     }
 
     player.eventsEmitter.Match.emitEndMatch(playersHealthUpdate);
+
+    if (shieldedPlayerIds.length > 0) {
+      for (const shieldedPlayerId of shieldedPlayerIds) {
+        player.eventsEmitter.Powerup.emitPowerupUsed({ type: 'shield', userId: shieldedPlayerId });
+      }
+      emitPowerupsUpdate(lobby);
+    }
 
     lobby.game.match = undefined;
 

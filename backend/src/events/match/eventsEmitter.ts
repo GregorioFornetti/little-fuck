@@ -20,12 +20,13 @@ export default class MatchEventsEmitter extends EmitterBase {
      *  @param cards Cartas que cada jogador possui. A chave é o id do jogador e o valor é um array de cartas.
      *  @param firstPlayerId Id do jogador que deve começar fazendo o primeiro palpite.
      */
-  public emitStartMatch(cards: { [playerId: string]: Card[] }, firstPlayerId: string) {
-    const playersInfos: { [playerId: string]: { cards: Card[], firstPlayerId: string}} = {};
+  public emitStartMatch(cards: { [playerId: string]: Card[] }, firstPlayerId: string, turnedCard?: Card) {
+    const playersInfos: { [playerId: string]: { cards: Card[], firstPlayerId: string, turnedCard?: Card}} = {};
     for (const playerId in cards) {
       playersInfos[playerId] = {
         cards: cards[playerId],
-        firstPlayerId
+        firstPlayerId,
+        turnedCard
       };
     }
     this.emitToSpecificLobbyPlayers('start-match', playersInfos);
@@ -80,12 +81,13 @@ export default class MatchEventsEmitter extends EmitterBase {
      *  dos outros jogadores, exceto a sua própria carta.
      *  @param firstPlayerId id do jogador que deve começar fazendo o primeiro palpite.
      */
-  public emitStartSpecialMatch(cards: { [playerId: string]: SpecialMatchCards }, firstPlayerId: string) {
-    const playersInfos: { [playerId: string]: { cards: SpecialMatchCards, firstPlayerId: string}} = {};
+  public emitStartSpecialMatch(cards: { [playerId: string]: SpecialMatchCards }, firstPlayerId: string, turnedCard?: Card) {
+    const playersInfos: { [playerId: string]: { cards: SpecialMatchCards, firstPlayerId: string, turnedCard?: Card}} = {};
     for (const playerId in cards) {
       playersInfos[playerId] = {
         cards: cards[playerId],
-        firstPlayerId
+        firstPlayerId,
+        turnedCard
       };
     }
     this.emitToSpecificLobbyPlayers('start-special-match', playersInfos);

@@ -1,12 +1,13 @@
 
-import Lobby, { SpecialMatchCards } from '../../../interfaces/Lobby';
+import Lobby, { Card, SpecialMatchCards } from '../../../interfaces/Lobby';
 import i18n from '../../../plugins/i18n';
 import { getAlivePlayersIds } from '../../functions/getAlivePlayersIds';
 import { getNextPlayerId } from '../../functions/getNextPlayerId';
 import { generateInternalServerError } from '../../general/functions/generateInternalServerError';
 import { getNextMatchNumCards } from './getNextMatchNumCards';
-import { getDefaultCards } from '../../functions/getDefaultCards';
+import { getNumberedCards } from '../../functions/getDefaultCards';
 import { getManilhaVelhaCards } from '../../functions/getManilhaVelhaCards';
+import { getManilhaNovaCards } from '../../functions/getManilhaNovaCards';
 import { getPlayersCards } from './getPlayersCards';
 import { Match } from '../../../interfaces/Lobby';
 import { createPlayer } from '../../functions/createPlayer';
@@ -15,6 +16,8 @@ import { insertCard } from '../../round/functions/insertCard';
 import Timer from 'easytimer.js';
 import { PLAYER_ACTION_TIME_SECONDS } from '../../../global';
 import { generateAutomaticNumWinResponse } from './generateAutomaticNumWinResponse';
+import { scheduleBotTurn } from '../../bot/scheduleBotTurn';
+import { grantPowerupsIfNeeded } from '../../powerup/functions/grantPowerups';
 
 /**
  *  Função que começa uma partida de "little-fuck". Essa função é responsável por:
@@ -34,7 +37,19 @@ export function startNewMatch(lobby: Lobby): void {
     lobby.game.currentPlayerId = getNextPlayerId(lobby.game.currentPlayerId, lobby);
 
     const alivePlayersIds = getAlivePlayersIds(lobby);
-    const defaultCards = lobby.options?.cardType === 'manilha-velha' ? getManilhaVelhaCards() : getDefaultCards();
+    // Na manilha nova, uma carta é virada no início da partida e sai do baralho.
+    // Ela define as manilhas da partida e é a mesma para todos os jogadores.
+    let turnedCard: Card | undefined;
+    let defaultCards;
+    if (lobby.options?.cardType === 'manilha-nova' || lobby.options?.cardType === 'manilha-paraguaia') {
+      const manilhaNova = getManilhaNovaCards();
+      turnedCard = manilhaNova.turnedCard;
+      defaultCards = manilhaNova.cards;
+    } else if (lobby.options?.cardType === 'manilha-velha') {
+      defaultCards = getManilhaVelhaCards();
+    } else {
+      defaultCards = getNumberedCards(lobby.options?.customCards, alivePlayersIds.length);
+    }
     lobby.game.numRounds = getNextMatchNumCards(lobby.game.numRounds, alivePlayersIds, defaultCards);
 
     lobby.game.status = 'waiting_num_win_response';
@@ -51,7 +66,8 @@ export function startNewMatch(lobby: Lobby): void {
     lobby.game.match = {
       nextPlayerId: lobby.game.currentPlayerId,
       roundFirstPlayerId: lobby.game.currentPlayerId,
-      players: matchPlayers
+      players: matchPlayers,
+      turnedCard
     };
 
     // Envia as mensagens para os jogadores sobre o início da partida (infos de carta e quem deve começar a palpitar)
@@ -75,10 +91,10 @@ export function startNewMatch(lobby: Lobby): void {
           );
         }
       }
-      player.eventsEmitter.Match.emitStartSpecialMatch(playersSpecialMatchCards, lobby.game.currentPlayerId);
+      player.eventsEmitter.Match.emitStartSpecialMatch(playersSpecialMatchCards, lobby.game.currentPlayerId, turnedCard);
     } else {
       // Se tiver mais de uma carta, então é uma partida comum, ou seja, os jogadores não podem ver as cartas dos outros jogadores (apenas são informados as suas próprias cartas)
-      player.eventsEmitter.Match.emitStartMatch(playersCards, lobby.game.currentPlayerId);
+      player.eventsEmitter.Match.emitStartMatch(playersCards, lobby.game.currentPlayerId, turnedCard);
     }
 
     // Cadastra um timer para que o primeiro jogador faça o palpite automaticamente caso ele não palpite a tempo
@@ -88,6 +104,9 @@ export function startNewMatch(lobby: Lobby): void {
     });
     timer.start({ countdown: true, startValues: { seconds: lobby.options?.playerActionTimeSeconds ?? PLAYER_ACTION_TIME_SECONDS } });
     lobby.game.timer = timer;
+
+    grantPowerupsIfNeeded(lobby, 'match');
+    scheduleBotTurn(lobby);
 
   } catch (error) {
     generateInternalServerError(lobby, error as Error);

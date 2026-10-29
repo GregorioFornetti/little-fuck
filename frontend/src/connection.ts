@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 import { ref } from 'vue';
 import EventsEmitter from './events/EventsEmitter';
 import EventsListenersAdder from './events/EventsListenersAdder';
-import type { Lobby } from './interfaces/Lobby';
+import type { Card, Lobby, PowerupType } from './interfaces/Lobby';
 import addDefaultEventsListeners from './events/addDefaultEventsListeners';
 
 const PLAYER_ID_STORAGE_KEY = 'little-fuck-player-id';
@@ -54,7 +54,11 @@ socket.connect();
 const eventsEmitter = new EventsEmitter(socket);
 const eventsListenersAdder = new EventsListenersAdder(socket);
 const lobby = ref<Lobby|null>(null);
+/** Poderes guardados do próprio jogador (atualizado pelo evento powerups-update) */
+const playerPowerups = ref<PowerupType[]>([]);
+/** Carta revelada pelo poder peek-card (visível apenas para quem usou) */
+const peekedCard = ref<{ card: Card, targetPlayerId: string } | null>(null);
 
 addDefaultEventsListeners(socket);
 
-export { socket, eventsEmitter, eventsListenersAdder, lobby, playerId };
+export { socket, eventsEmitter, eventsListenersAdder, lobby, playerId, playerPowerups, peekedCard };

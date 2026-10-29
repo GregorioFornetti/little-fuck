@@ -24,6 +24,8 @@ export interface RoundCard {
     card: Card,
     /** ID do jogador que colocou essa carta na mesa */
     playerId: string
+    /** Verdadeiro se a força desta carta está escondida dos jogadores (poder hide-card-strength) */
+    hidden?: boolean
 }
 
 /**
@@ -55,12 +57,18 @@ export interface Round {
     cards: RoundCards,
     /** Id do jogador que deve jogar a carta atualmente. undefined caso todas já tenham jogado suas cartas */
     nextPlayerId?: string
+    /** Verdadeiro se a força das cartas está invertida nesta rodada (poder reverse-card-strengths) */
+    reversed?: boolean,
+    /** Jogadores que tiveram a jogada cancelada nesta rodada (poder cancel-card) */
+    skippedPlayerIds?: string[]
 }
 
 /**
  *  Interface que contém as informações de uma partida, como as cartas dos jogadores, os seus palpites, etc.
  */
 export interface Match {
+    /** Modificadores de força pendentes (poderes increase/decrease), aplicados na próxima carta jogada de cada jogador */
+    pendingStrength?: { [playerId: string]: number },
     /** Informações de cada jogadores na partida */
     players: {
         [playerId: string]: {
@@ -76,6 +84,9 @@ export interface Match {
     nextPlayerId?: string,
     /** Id do jogador que deve jogar (ou jogou) a primeira carta da rodada que estiver em andamento */
     roundFirstPlayerId?: string,
+    /** Informações da rodada. Pode ser undefined se ainda não estiver ocorrendo uma rodada */
+    /** Carta virada no início da partida (apenas no tipo manilha nova). Define quais são as manilhas da partida */
+    turnedCard?: Card,
     /** Informações da rodada. Pode ser undefined se ainda não estiver ocorrendo uma rodada */
     round?: Round
 }
@@ -113,7 +124,22 @@ export interface Game {
 /**
  *  Opções de jogo configuráveis pelo líder da sala antes do jogo começar.
  */
-export type CardType = 'numbered'|'manilha-velha';
+export type PowerupType = 'swap-cards'|'cancel-card'|'reverse-card-strengths'|'random-card'|'hide-card-strength'|'increase-card-strength'|'decrease-card-strength'|'peek-card'|'shield';
+
+export interface PowerupOptions {
+    /** Poderes ativados pelo líder para o jogo */
+    enabled: PowerupType[],
+    /** Quantidade de poderes aleatórios que cada jogador recebe por vez */
+    perGrant: number,
+    /** Quando os poderes são dados: no início de cada partida ou apenas no início do jogo */
+    grantTiming: 'match'|'game'
+}
+
+export type CardBackDesign = 'classic'|'stripes'|'lozenges'|'dots';
+
+export type TableTheme = 'classic'|'midnight'|'wine'|'charcoal';
+
+export type CardType = 'numbered'|'manilha-velha'|'manilha-nova'|'manilha-paraguaia';
 
 export interface GameOptions {
     /** Quantidade de vidas que cada jogador começa o jogo */
@@ -124,6 +150,14 @@ export interface GameOptions {
     roundEndTimeSeconds: number,
     /** Tipo de cartas do jogo: numeradas (padrão) ou manilha velha */
     cardType: CardType
+    /** Cartas numeradas personalizadas do jogo (apenas no tipo numbered). Sem ela, as cartas padrão são usadas */
+    customCards?: number[],
+    /** Tema visual da mesa de jogo */
+    theme?: TableTheme,
+    /** Desenho do verso das cartas */
+    cardBack?: CardBackDesign,
+    /** Configurações dos poderes do jogo. Pode ser undefined em salas antigas (sem poderes) */
+    powerups?: PowerupOptions,
 }
 
 interface Lobby {
@@ -137,6 +171,16 @@ interface Lobby {
         name: string,
         /** Verdadeiro se for o líder da sala. */
         leader: boolean,
+        /** Verdadeiro se for um bot (jogador controlado pelo computador). Pode ser undefined para jogadores humanos */
+        bot?: boolean,
+        /** Emote (emoji) que representa o jogador. Único dentro da sala */
+        emote?: string,
+        /** Cor que representa o jogador (hex). Única dentro da sala */
+        color?: string,
+        /** Poderes que o jogador possui guardados. Só vem preenchido para o próprio jogador */
+        powerups?: PowerupType[],
+        /** Quantidade de poderes guardados (visível para todos) */
+        powerupCount?: number,
         /** Verdadeiro se o jogador estiver pronto. Pode ser undefined caso jogo esteja em andamento */
         ready?: boolean
     }[],

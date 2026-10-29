@@ -10,7 +10,10 @@ import { RoundCard, RoundCards } from '../../../interfaces/Lobby';
  *
  *  @returns Retorna um novo objeto de cartas (mesa) da rodada atual, com a carta inserida
  */
-export function insertCard(cards: RoundCards, toInsertRoundCard: RoundCard): RoundCards {
+export function insertCard(cards: RoundCards, toInsertRoundCard: RoundCard, reversed = false): RoundCards {
+  // Com a força invertida (poder reverse-card-strengths), a carta mais fraca vence:
+  // basta inverter o sinal dos valores para reaproveitar a mesma ordenação
+  const effective = (roundCard: RoundCard) => reversed ? -roundCard.card.value : roundCard.card.value;
 
   const newRoundCards: RoundCards = {
     onMatch: [],
@@ -22,13 +25,13 @@ export function insertCard(cards: RoundCards, toInsertRoundCard: RoundCard): Rou
   for (let i = 0; i < cards.onMatch.length; i++) {
     const currentRoundCard = cards.onMatch[i];
     if (!cardPlaceFound) {
-      if (toInsertRoundCard.card.value === currentRoundCard.card.value) {
+      if (effective(toInsertRoundCard) === effective(currentRoundCard)) {
         // Ocorreu um empate, então a carta atual e a carta que estava na partida irão para a lista de cartas anuladas
         annuledCard = currentRoundCard;
         cardPlaceFound = true;
         continue; // É preciso usar o continue para não inserir a carta que empatou na lista de cartas em partida
       }
-      else if (toInsertRoundCard.card.value > currentRoundCard.card.value) {
+      else if (effective(toInsertRoundCard) > effective(currentRoundCard)) {
         // Encontramos o lugar da carta deverá ser inserida
         newRoundCards.onMatch.push(toInsertRoundCard);
         cardPlaceFound = true;
@@ -47,7 +50,7 @@ export function insertCard(cards: RoundCards, toInsertRoundCard: RoundCard): Rou
 
     for (let i = 0; i < cards.anulledCards.length; i++) {
       const currentRoundCard = cards.anulledCards[i];
-      if (!annuledCardPlaceFound && annuledCard.card.value > currentRoundCard.card.value) {
+      if (!annuledCardPlaceFound && effective(annuledCard) > effective(currentRoundCard)) {
         // Encontramos o lugar da carta deverá ser inserida
         newRoundCards.anulledCards.push(annuledCard);
         newRoundCards.anulledCards.push(toInsertRoundCard);

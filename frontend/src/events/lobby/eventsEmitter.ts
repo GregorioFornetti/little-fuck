@@ -78,4 +78,41 @@ export default class LobbyEventsEmitter extends EventsEmitterBase {
   public emitUpdateOptions(options: GameOptions) {
     this.socket.emit('update-options', options);
   }
+  /**
+   *  Evento enviado pelo líder para adicionar um bot na sala (apenas antes do jogo começar).
+   *  Todos na sala recebem bot-added com as informações do bot.
+   */
+  public emitAddBot() {
+    this.socket.emit('add-bot');
+  }
+
+  /**
+   *  Evento enviado pelo líder para remover um bot da sala (apenas antes do jogo começar).
+   *  Todos na sala recebem bot-removed com o id do bot.
+   *
+   *  @param botId id do bot a ser removido
+   */
+  public emitRemoveBot(botId: string) {
+    this.socket.emit('remove-bot', botId);
+  }
+
+  /**
+   *  Evento enviado pelo líder ao final de um jogo para pedir uma revanche.
+   *  Todos na sala recebem rematch e voltam para a sala.
+   */
+  public emitRematchRequest() {
+    this.socket.emit('rematch-request');
+  }
+
+  /**
+   *  Evento enviado pelo jogador para alterar a própria aparência (emote e cor) na sala.
+   *  Em caso de sucesso, todos na sala recebem appearance-update.
+   *  Caso contrário, o solicitante recebe appearance-error.
+   *
+   *  @param emote novo emote desejado
+   *  @param color nova cor desejada
+   */
+  public emitUpdateAppearance(emote: string, color: string) {
+    this.socket.emit('update-appearance', { emote, color });
+  }
 }

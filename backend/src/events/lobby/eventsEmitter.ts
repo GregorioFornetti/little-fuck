@@ -37,8 +37,8 @@ export default class LobbyEventsEmitter extends EmitterBase {
      *  @param id identificador único do jogador que acaba de entrar na sala
      *  @param name nome do jogador que acaba de entrar na sala
      */
-  public emitPlayerJoin(id: string, name: string) {
-    this.emitToLobby('player-join', id, name);
+  public emitPlayerJoin(id: string, name: string, emote?: string, color?: string) {
+    this.emitToLobby('player-join', id, name, emote, color);
   }
 
   /**
@@ -124,5 +124,69 @@ export default class LobbyEventsEmitter extends EmitterBase {
    */
   public emitOptionsError(type: 'not-leader'|'already-in-game'|'not-in-lobby'|'invalid-options') {
     this.emitToUser('options-error', type);
+  }
+  /**
+   *  Evento enviado para todos os jogadores da sala indicando que um bot foi adicionado.
+   *
+   *  @param bot informações do bot adicionado
+   */
+  public emitBotAdded(bot: Lobby['players'][number]) {
+    this.emitToLobby('bot-added', bot);
+  }
+
+  /**
+   *  Evento enviado para todos os jogadores da sala indicando que um bot foi removido.
+   *
+   *  @param botId identificador único do bot removido
+   */
+  public emitBotRemoved(botId: string) {
+    this.emitToLobby('bot-removed', botId);
+  }
+
+  /**
+   *  Evento enviado para um usuário indicando que ocorreu um erro ao adicionar ou remover um bot.
+   *
+   *  @param type tipo de erro que ocorreu
+   */
+  public emitBotError(type: 'not-leader'|'already-in-game'|'not-in-lobby'|'lobby-full'|'bot-not-found') {
+    this.emitToUser('bot-error', type);
+  }
+
+  /**
+   *  Evento enviado para todos os jogadores da sala indicando que o líder pediu uma revanche.
+   *  Todos devem voltar para a sala, com os status de prontidão resetados.
+   */
+  public emitRematch() {
+    this.emitToLobby('rematch');
+  }
+
+  /**
+   *  Evento enviado para um usuário indicando que ocorreu um erro ao pedir uma revanche.
+   *
+   *  @param type tipo de erro que ocorreu
+   */
+  public emitRematchError(type: 'not-leader'|'already-in-game'|'not-in-lobby') {
+    this.emitToUser('rematch-error', type);
+  }
+
+  /**
+   *  Evento enviado para todos os jogadores da sala indicando que um jogador
+   *  alterou a própria aparência (emote e cor).
+   *
+   *  @param playerId id do jogador que alterou a aparência
+   *  @param emote novo emote do jogador
+   *  @param color nova cor do jogador
+   */
+  public emitAppearanceUpdate(playerId: string, emote: string, color: string) {
+    this.emitToLobby('appearance-update', playerId, emote, color);
+  }
+
+  /**
+   *  Evento enviado para um usuário indicando que ocorreu um erro ao alterar a aparência.
+   *
+   *  @param type tipo de erro que ocorreu
+   */
+  public emitAppearanceError(type: 'emote-taken'|'color-taken'|'invalid-appearance'|'already-in-game'|'not-in-lobby') {
+    this.emitToUser('appearance-error', type);
   }
 }

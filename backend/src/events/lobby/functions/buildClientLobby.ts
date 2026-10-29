@@ -24,6 +24,9 @@ export interface ClientLobby {
         }
       },
       currentPlayerCards: Card[],
+      turnedCard?: Card,
+      reversed?: boolean,
+      pendingStrength?: { [playerId: string]: number },
       numRounds: number,
       nextPlayerId?: string,
       round?: {
@@ -44,7 +47,11 @@ export interface ClientLobby {
 export function buildClientLobby(lobby: Lobby, playerId: string): ClientLobby {
   const clientLobby: ClientLobby = {
     lobbyId: lobby.lobbyId,
-    players: lobby.players.map((player) => ({ ...player })),
+    players: lobby.players.map((player) => ({
+      ...player,
+      powerups: player.id === playerId ? [...(player.powerups ?? [])] : undefined,
+      powerupCount: player.powerups?.length ?? 0
+    })),
     options: lobby.options ? { ...lobby.options } : undefined
   };
 
@@ -93,6 +100,9 @@ export function buildClientLobby(lobby: Lobby, playerId: string): ClientLobby {
   clientLobby.game.match = {
     players,
     currentPlayerCards: isSpecialMatch ? [] : [...(match.players[playerId]?.cards ?? [])],
+    turnedCard: match.turnedCard,
+    reversed: match.round?.reversed ?? false,
+    pendingStrength: { ...(match.pendingStrength ?? {}) },
     numRounds: game.numRounds,
     nextPlayerId: match.nextPlayerId,
     round: roundCards
